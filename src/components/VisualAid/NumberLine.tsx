@@ -122,12 +122,12 @@ export function NumberLine({ firstNumber, secondNumber, gameMode, showExplanatio
           {gameMode === 'addition' ? (
             <>
               Start at 0, jump forward {firstNumber} spots, then jump forward {secondNumber} more spots.<br />
-              Where do you land? That's your answer!
+              Where do you land? That&apos;s your answer!
             </>
           ) : (
             <>
               Start at {firstNumber}, jump backward {secondNumber} spots.<br />
-              Where do you land? That's your answer!
+              Where do you land? That&apos;s your answer!
             </>
           )}
         </div>

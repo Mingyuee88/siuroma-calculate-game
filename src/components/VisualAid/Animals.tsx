@@ -10,8 +10,6 @@ interface AnimalsProps {
 const animals = ['🐶', '🐱', '🐰', '🐻', '🐼', '🦊', '🐨', '🐯'];
 
 export function Animals({ firstNumber, secondNumber, gameMode, showExplanation = true }: AnimalsProps) {
-  const result = gameMode === 'addition' ? firstNumber + secondNumber : firstNumber - secondNumber;
-
   if (gameMode === 'addition') {
     return (
       <div className="flex flex-col items-center">

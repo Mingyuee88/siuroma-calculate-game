@@ -1,7 +1,5 @@
 'use client';
 
-import { getColorFromNumber } from '@/lib/utils';
-
 interface BlocksProps {
   firstNumber: number;
   secondNumber: number;
@@ -10,8 +8,6 @@ interface BlocksProps {
 }
 
 export function Blocks({ firstNumber, secondNumber, gameMode, showExplanation = true }: BlocksProps) {
-  const result = gameMode === 'addition' ? firstNumber + secondNumber : firstNumber - secondNumber;
-
   if (gameMode === 'addition') {
     return (
       <div className="flex flex-col items-center">
