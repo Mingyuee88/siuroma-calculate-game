@@ -236,7 +236,7 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-600">Age Level:</p>
+                    <p className="text-gray-600">Age Level(Difficulty):</p>
                     <p className="font-semibold">
                       {isAdaptiveMode
                         ? "Adaptive (Auto-adjusts)"
