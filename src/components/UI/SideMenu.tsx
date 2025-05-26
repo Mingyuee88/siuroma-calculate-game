@@ -2,7 +2,12 @@
 
 import { Menu, X } from 'lucide-react';
 import { VisualAid } from './VisualAid';
+// 在顶部添加这些 import
+import { signOut } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
 
+// 同时导入 auth 对象
+import { auth } from '../../firebase';
 interface SideMenuProps {
   isMenuOpen: boolean;
   setIsMenuOpen: (isOpen: boolean) => void;
@@ -34,6 +39,18 @@ export function SideMenu({
   isAdaptiveMode,
   enableAdaptiveMode,
 }: SideMenuProps) {
+  const router = useRouter();
+
+const handleLogout = async () => {
+  try {
+    await signOut(auth);
+    // 注销成功，跳转到登录页
+    router.push('/');
+  } catch (error) {
+    console.error('登出失败:', error);
+    alert('登出失败，请重试');
+  }
+};
   return (
     <>
       {/* Menu Toggle Button */}
@@ -46,7 +63,7 @@ export function SideMenu({
 
       {/* Side Menu */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-40 ${
+        className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-40 overflow-y-auto ${
           isMenuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -191,6 +208,12 @@ export function SideMenu({
             showExplanation={false}
             showSelector={true}
           />
+          <button
+  onClick={handleLogout}
+  className="w-full mt-6 px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+>
+  Logout
+</button>
         </div>
       </div>
     </>
