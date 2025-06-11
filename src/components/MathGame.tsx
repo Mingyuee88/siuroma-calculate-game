@@ -6,17 +6,37 @@ import { Score } from "./UI/Score";
 import { SideMenu } from "./UI/SideMenu";
 import { VisualAid } from "./UI/VisualAid";
 import { getRandomNumber, calculateResult } from "@/lib/utils";
+
 import { useLanguage } from "@/lib/i18n/LanguageContext";
+
+import { AnswerOptions } from "./UI/AnswerOptions";
+
 
 interface MathGameProps {
   initialDifficulty?: number;
+  userId?: string;
+  isAdmin?: boolean;
 }
 
-export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
-  const { t } = useLanguage();
-  const [gameMode, setGameMode] = useState<"addition" | "subtraction">(
-    "addition"
-  );
+
+interface UserStats {
+  userId: string;
+  Username: string;
+  correctAnswers: number;
+  totalQuestions: number;
+  accuracy: number;
+  currentrank: number;
+}
+
+
+
+
+export function MathGame({ 
+  initialDifficulty = 1, 
+  userId = 'user123',
+  isAdmin = false 
+}: MathGameProps) {
+  const [gameMode, setGameMode] = useState<"addition" | "subtraction">("addition");
   const [difficulty, setDifficulty] = useState(initialDifficulty);
   const [firstNumber, setFirstNumber] = useState(0);
   const [secondNumber, setSecondNumber] = useState(0);
@@ -25,9 +45,7 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
   const [score, setScore] = useState(0);
   const [consecutiveCorrect, setConsecutiveCorrect] = useState(0);
   const [showExplanation, setShowExplanation] = useState(false);
-  const [visualStyle, setVisualStyle] = useState<
-    "blocks" | "animals" | "shapes" | "numberLine"
-  >("blocks");
+  const [visualStyle, setVisualStyle] = useState<"blocks" | "animals" | "shapes" | "numberLine">("blocks");
   const [isInitialized, setIsInitialized] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(true);
   const [isAdaptiveMode, setIsAdaptiveMode] = useState(false);
@@ -41,40 +59,82 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
   const [sessionStartTime, setSessionStartTime] = useState<number | null>(null);
   const [sessionDuration, setSessionDuration] = useState<number>(0);
 
+  // Answer options for ABCD format
+  const [options, setOptions] = useState<{ label: string; value: number }[]>([]);
+  const [correctAnswer, setCorrectAnswer] = useState(0);
+  const [hasTriedThisQuestion, setHasTriedThisQuestion] = useState(false);
+
+  // User statistics
+  const [userStats, setUserStats] = useState<UserStats>({
+    userId: userId,
+    Username: 'Current User',
+    correctAnswers: 0,
+    totalQuestions: 0,
+    accuracy: 0,
+    currentrank: 0
+  });
+
+  // Mock leaderboard data - in real app, this would come from a database
+  const [allUsers] = useState<UserStats[]>([
+    { userId: '1', Username: 'Alice', correctAnswers: 28, totalQuestions: 35, accuracy: 80, currentrank: 1 },
+    { userId: '2', Username: 'Bob', correctAnswers: 25, totalQuestions: 30, accuracy: 83.3, currentrank: 2 },
+    { userId: '3', Username: 'Charlie', correctAnswers: 22, totalQuestions: 28, accuracy: 78.6, currentrank: 3 },
+    { userId: '4', Username: 'Daisy', correctAnswers: 20, totalQuestions: 25, accuracy: 80, currentrank: 4 },
+    { userId: '5', Username: 'Eve', correctAnswers: 19, totalQuestions: 24, accuracy: 79.2, currentrank: 5 },
+    { userId: '6', Username: 'Frank', correctAnswers: 18, totalQuestions: 23, accuracy: 78.3, currentrank: 6 },
+    { userId: '7', Username: 'Grace', correctAnswers: 17, totalQuestions: 22, accuracy: 77.3, currentrank: 7 },
+    { userId: '8', Username: 'Heidi', correctAnswers: 16, totalQuestions: 21, accuracy: 76.2, currentrank: 8 },
+    { userId: '9', Username: 'Ivan', correctAnswers: 15, totalQuestions: 20, accuracy: 75, currentrank: 9 },
+    { userId: '10', Username: 'Judy', correctAnswers: 14, totalQuestions: 19, accuracy: 73.7, currentrank: 10 },
+  ]);
+
   const generateProblem = useCallback(() => {
     const minNumber = 1;
     let maxSum;
-
-    // Set maximum sum based on difficulty level
     if (difficulty === 1) {
-      // 3-4 years: answers within 10
       maxSum = 10;
     } else if (difficulty === 2) {
-      // 4-5 years: answers within 20
       maxSum = 20;
     } else {
-      // 5-6 years: answers within 100
       maxSum = 100;
     }
-
+    
+    let first, second;
     if (gameMode === "addition") {
-      // For addition, ensure sum doesn't exceed the target range
-      const first = getRandomNumber(minNumber, maxSum - 1);
+      first = getRandomNumber(minNumber, maxSum - 1);
       const maxSecond = maxSum - first;
-      const second = getRandomNumber(minNumber, maxSecond);
-
-      setFirstNumber(first);
-      setSecondNumber(second);
+      second = getRandomNumber(minNumber, maxSecond);
     } else {
-      // For subtraction, ensure result is within range
-      const first = getRandomNumber(minNumber, maxSum);
-      const second = getRandomNumber(minNumber, first);
-
-      setFirstNumber(first);
-      setSecondNumber(second);
+      first = getRandomNumber(minNumber, maxSum);
+      second = getRandomNumber(minNumber, first);
     }
-
-    setUserAnswer("");
+    
+    setFirstNumber(first);
+    setSecondNumber(second);
+    
+    // Generate ABCD options
+    const correct = calculateResult(first, second, gameMode);
+    const optionSet = new Set<number>([correct]);
+    
+    // Generate 3 wrong answers
+    while (optionSet.size < 4) {
+      let distractor = correct + getRandomNumber(-5, 5);
+      if (distractor !== correct && distractor >= 0) {
+        optionSet.add(distractor);
+      }
+    }
+    
+    // Convert to labeled options and shuffle
+    const optionArray = Array.from(optionSet);
+    const shuffledOptions = optionArray.sort(() => Math.random() - 0.5);
+    const labeledOptions = shuffledOptions.map((value, index) => ({
+      label: String.fromCharCode(65 + index), // A, B, C, D
+      value: value
+    }));
+    
+    setCorrectAnswer(correct);
+    setOptions(labeledOptions);
+    setHasTriedThisQuestion(false);
     setFeedback("");
   }, [difficulty, gameMode]);
 
@@ -120,6 +180,29 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
     };
   }, [isSessionStarted, isSessionComplete, sessionStartTime]);
 
+  // Update user stats
+  const updateUserStats = (isCorrect: boolean, isFirstTry: boolean) => {
+    setUserStats(prev => {
+      const newtotalQuestions = prev.totalQuestions + 1;
+      const newcorrectAnswers = isCorrect && isFirstTry ? prev.correctAnswers + 1 : prev.correctAnswers;
+      const newAccuracy = (newcorrectAnswers / newtotalQuestions) * 100;
+      
+      return {
+        ...prev,
+        correctAnswers: newcorrectAnswers,
+        totalQuestions: newtotalQuestions,
+        accuracy: Math.round(newAccuracy * 10) / 10
+      };
+    });
+  };
+
+  // Calculate current user currentrank
+  const getCurrentUserRank = () => {
+    const sortedUsers = [...allUsers, userStats].sort((a, b) => b.correctAnswers - a.correctAnswers);
+    const userIndex = sortedUsers.findIndex(user => user.userId === userId);
+    return userIndex + 1;
+  };
+
   // Format time as MM:SS
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -127,27 +210,23 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
     return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
-  const handleNumberClick = (num: string) => {
-    if (userAnswer.length < 2) {
-      setUserAnswer((prev) => prev + num);
-    }
-  };
 
-  const handleClear = () => {
-    setUserAnswer("");
-  };
+  const handleAnswerSelect = (selectedValue: number) => {
+    const isCorrect = selectedValue === correctAnswer;
+    const isFirstTry = !hasTriedThisQuestion;
+    
+    updateUserStats(isCorrect, isFirstTry);
+    
+    if (isCorrect) {
+      setFeedback("Correct! Great job!");
+      if (isFirstTry) {
+        setScore(prev => prev + 1);
+        setSessionScore(prev => prev + 1);
+      }
+      setConsecutiveCorrect(prev => prev + 1);
 
-  const checkAnswer = () => {
-    const correctAnswer = calculateResult(firstNumber, secondNumber, gameMode);
-    const userNum = parseInt(userAnswer || "0");
 
-    if (userNum === correctAnswer) {
-      setFeedback(t('correct'));
-      setScore((prev) => prev + 1);
-      setSessionScore((prev) => prev + 1);
-      setConsecutiveCorrect((prev) => prev + 1);
-
-      // Increase difficulty in adaptive mode after 5 consecutive correct answers
+      // Adaptive mode logic
       if (isAdaptiveMode && consecutiveCorrect === 4 && difficulty < 3) {
         setTimeout(() => {
           setDifficulty(difficulty + 1);
@@ -156,7 +235,7 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
         }, 1500);
       } else {
         setTimeout(() => {
-          setQuestionsAnswered((prev) => {
+          setQuestionsAnswered(prev => {
             const newCount = prev + 1;
             if (newCount >= questionsPerSession) {
               setIsSessionComplete(true);
@@ -168,7 +247,10 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
         }, 1500);
       }
     } else {
-      setFeedback(t('notCorrect'));
+
+      setFeedback("Not quite right. Try again!");
+      setHasTriedThisQuestion(true);
+
       setConsecutiveCorrect(0);
     }
   };
@@ -214,20 +296,22 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
         isSessionActive={isSessionStarted && !isSessionComplete}
         isAdaptiveMode={isAdaptiveMode}
         enableAdaptiveMode={enableAdaptiveMode}
+        userStats={userStats}
+        currentRank={getCurrentUserRank()}
+        isAdmin={isAdmin}
+        allUsers={allUsers}
       />
 
       {/* Main Content */}
-      <div
-        className={`flex-1 p-6 transition-all duration-300 ${
-          isMenuOpen ? "ml-64" : "ml-0"
-        }`}
-      >
+      <div className={`flex-1 p-6 transition-all duration-300 ${isMenuOpen ? "ml-64" : "ml-0"}`}>
         <div className="max-w-3xl mx-auto">
           {!isSessionStarted ? (
             <div className="bg-white p-8 rounded-lg shadow-md text-center">
+
               <h1 className="text-3xl font-bold text-purple-700 mb-6">
                 {t('title')}
               </h1>
+
               <div className="mb-8">
                 <h2 className="text-xl font-semibold mb-4">{t('sessionSettings')}</h2>
                 <div className="grid grid-cols-2 gap-4 text-left mb-6">
@@ -250,10 +334,12 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
                     </p>
                   </div>
                   <div>
+
                     <p className="text-gray-600">{t('questionsLabel')}</p>
                     <p className="font-semibold">
                       {questionsPerSession} {t('perSession')}
                     </p>
+
                   </div>
                   <div>
                     <p className="text-gray-600">{t('visualAidLabel')}</p>
@@ -270,13 +356,18 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
             </div>
           ) : isSessionComplete ? (
             <div className="bg-white p-6 rounded-lg shadow-md mb-6 text-center">
-              <h2 className="text-2xl font-bold mb-4">{t('sessionComplete')}</h2>
-              <p className="text-xl mb-2">
-                {t('yourScore')} {sessionScore}/{questionsPerSession}
-              </p>
-              <p className="text-lg mb-4">
-                {t('timeTaken')} {formatTime(sessionDuration)}
-              </p>
+
+              <h2 className="text-2xl font-bold mb-4">Session Complete!</h2>
+              <p className="text-xl mb-2">Your score: {sessionScore}/{questionsPerSession}</p>
+              <p className="text-lg mb-4">Time taken: {formatTime(sessionDuration)}</p>
+              <div className="mb-4 p-4 bg-blue-50 rounded-lg">
+                <p className="font-semibold">Your Statistics:</p>
+                <p>Total Correct: {userStats.correctAnswers}</p>
+                <p>Total Attempts: {userStats.totalQuestions}</p>
+                <p>Accuracy: {userStats.accuracy}%</p>
+                <p>Current currentrank: #{getCurrentUserRank()}</p>
+              </div>
+
               <button
                 onClick={() => {
                   setIsSessionStarted(false);
@@ -317,11 +408,13 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
                 </div>
               </div>
 
+
               <div className="text-center mb-8">
                 <Score
                   score={score}
                   showAnimation={feedback.includes("Correct")}
                 />
+
                 <div className="text-lg text-gray-600 mt-2">
                   {t('sessionProgress')} {questionsAnswered}/{questionsPerSession} {t('questions')}
                 </div>
@@ -341,47 +434,38 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
                 )}
               </div>
 
-              <div className="text-center">
-                <div className="text-9xl font-bold text-center mb-6 text-black">
+
+              <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+                <div className="text-6xl font-bold text-center mb-8 text-black">
+
                   {firstNumber}{" "}
                   <span className="text-black">
                     {gameMode === "addition" ? "+" : "-"}
                   </span>{" "}
-                  {secondNumber} = {userAnswer || "?"}
+                  {secondNumber} = ?
                 </div>
 
-                <div className="mt-2 text-center">
-                  <div className="text-2xl font-bold mb-4 text-black">
-                    {t('yourAnswer')} {userAnswer || "___"}
-                  </div>
-                </div>
 
-                <div className="mt-6 flex flex-col items-center">
-                  <NumberPad
-                    onNumberClick={handleNumberClick}
-                    onClear={handleClear}
-                    disabled={isSessionComplete}
+                <div className="mb-6">
+                  <AnswerOptions
+                    options={options}
+                    correctAnswer={correctAnswer}
+                    onAnswerSelect={handleAnswerSelect}
+                    hasTriedThisQuestion={hasTriedThisQuestion}
+                    disabled={!!feedback && feedback.includes("Correct")}
+
                   />
+                </div>
 
-                  <div className="mt-2 text-center">
-                    <button
-                      onClick={checkAnswer}
-                      disabled={!userAnswer || isSessionComplete}
-                      className={`px-6 py-3 rounded-lg font-bold text-lg ${
-                        !userAnswer || isSessionComplete
-                          ? "bg-gray-300 text-gray-500"
-                          : "bg-green-500 text-white hover:bg-green-600"
-                      }`}
-                    >
-                      {t('checkAnswer')}
-                    </button>
-                    <button
-                      onClick={() => setShowExplanation(!showExplanation)}
-                      className="block w-full mt-4 text-blue-500 underline"
-                    >
-                      {showExplanation ? t('hideHints') : t('showHints')}
-                    </button>
-                  </div>
+
+                <div className="text-center mb-4">
+                  <button
+                    onClick={() => setShowExplanation(!showExplanation)}
+                    className="text-blue-500 underline hover:text-blue-700"
+                  >
+                    {showExplanation ? "Hide" : "Show"} Hints
+                  </button>
+
                 </div>
 
                 <VisualAid
