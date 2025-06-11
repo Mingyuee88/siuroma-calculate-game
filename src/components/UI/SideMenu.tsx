@@ -3,6 +3,12 @@
 import { Menu, X, User, Trophy, Target, Percent, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useRef, useEffect, TouchEvent } from 'react';
 import { VisualAid } from './VisualAid';
+// 在顶部添加这些 import
+import { signOut } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
+
+// 同时导入 auth 对象
+import { auth } from '../../firebase';
 
 // User and Statistics interfaces
 interface UserStats {
@@ -13,6 +19,7 @@ interface UserStats {
   currentRank: number;
   accuracy: number; // percentage
 }
+
 
 
 interface SideMenuProps {
@@ -72,6 +79,23 @@ export function SideMenu({
   allUsers,
   setCurrentUser
 }: SideMenuProps) {
+
+  const router = useRouter();
+
+const handleLogout = async () => {
+  try {
+    await signOut(auth);
+    // 注销成功，跳转到登录页
+    router.push('/');
+  } catch (error) {
+    console.error('登出失败:', error);
+    alert('登出失败，请重试');
+  }
+};
+  return (
+    <>
+      {/* Menu Toggle Button */}
+
   // Swipe functionality states
   const [currentPanel, setCurrentPanel] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -319,6 +343,7 @@ export function SideMenu({
         </div>
       </div>
 
+
       <button
         onClick={onUserLogout}
         className="w-full bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors"
@@ -414,7 +439,10 @@ export function SideMenu({
 
       {/* Side Menu */}
       <div
+
+        className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-40 overflow-y-auto ${
         className={`fixed top-0 left-0 h-full w-80 bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-40 ${
+
           isMenuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -504,7 +532,27 @@ export function SideMenu({
               />
             ))}
           </div>
+
+
+          <VisualAid
+            visualStyle={visualStyle}
+            setVisualStyle={setVisualStyle}
+            firstNumber={0}
+            secondNumber={0}
+            gameMode="addition"
+            showExplanation={false}
+            showSelector={true}
+          />
+          <button
+  onClick={handleLogout}
+  className="w-full mt-6 px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+>
+  Logout
+</button>
+        </div>
+
         )}
+
       </div>
     </>
   );
