@@ -3,11 +3,8 @@
 import { Menu, X, User, Trophy, Target, Percent, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useRef, useEffect, TouchEvent } from 'react';
 import { VisualAid } from './VisualAid';
-// 在顶部添加这些 import
 import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
-
-// 同时导入 auth 对象
 import { auth } from '../../firebase';
 
 // User and Statistics interfaces
@@ -17,10 +14,8 @@ interface UserStats {
   totalQuestions: number;
   correctAnswers: number;
   currentRank: number;
-  accuracy: number; // percentage
+  accuracy: number;
 }
-
-
 
 interface SideMenuProps {
   userStats: UserStats;
@@ -37,7 +32,6 @@ interface SideMenuProps {
   isSessionActive: boolean;
   isAdaptiveMode: boolean;
   enableAdaptiveMode: () => void;
-  // New props for user system
   currentUser: UserStats | null;
   isAdmin: boolean;
   onUserLogin: (username: string) => void;
@@ -47,7 +41,6 @@ interface SideMenuProps {
   setCurrentUser: React.Dispatch<React.SetStateAction<UserStats | null>>;
 }
 
-// Mock data for demonstration - in real app, this would come from API
 const mockUserStats: UserStats = {
   userId: '1',
   username: 'Player1',
@@ -79,22 +72,7 @@ export function SideMenu({
   allUsers,
   setCurrentUser
 }: SideMenuProps) {
-
   const router = useRouter();
-
-const handleLogout = async () => {
-  try {
-    await signOut(auth);
-    // 注销成功，跳转到登录页
-    router.push('/');
-  } catch (error) {
-    console.error('登出失败:', error);
-    alert('登出失败，请重试');
-  }
-};
-  return (
-    <>
-      {/* Menu Toggle Button */}
 
   // Swipe functionality states
   const [currentPanel, setCurrentPanel] = useState(0);
@@ -148,6 +126,16 @@ const handleLogout = async () => {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      router.push('/');
+    } catch (error) {
+      console.error('登出失败:', error);
+      alert('登出失败，请重试');
+    }
+  };
+
   const renderLoginForm = () => (
     <div className="p-4 pt-16">
       <div className="mb-8 text-center">
@@ -181,11 +169,6 @@ const handleLogout = async () => {
 
   const renderSettingsPanel = () => (
     <div className="space-y-8">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold text-purple-700 mb-2">Math Explorer</h1>
-        <p className="text-sm text-gray-600">Math Game for Young Learners</p>
-      </div>
-
       <div>
         <h2 className="text-lg font-bold text-purple-700 mb-4">Difficulty Mode</h2>
         <div className="flex flex-col gap-2">
@@ -200,48 +183,30 @@ const handleLogout = async () => {
           >
             Adaptive Mode
           </button>
-          <div className="text-xs text-gray-500 px-2">
-            Automatically adjusts difficulty based on performance
-          </div>
         </div>
       </div>
 
       <div>
         <h2 className="text-lg font-bold text-purple-700 mb-4">Fixed Difficulty</h2>
         <div className="flex flex-col gap-2">
-          <button
-            onClick={() => setDifficulty(1)}
-            disabled={isSessionActive}
-            className={`px-3 py-2 rounded-lg text-sm font-medium ${
-              !isAdaptiveMode && difficulty === 1
-                ? 'bg-green-500 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            } ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            3-4 Years
-          </button>
-          <button
-            onClick={() => setDifficulty(2)}
-            disabled={isSessionActive}
-            className={`px-3 py-2 rounded-lg text-sm font-medium ${
-              !isAdaptiveMode && difficulty === 2
-                ? 'bg-yellow-500 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            } ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            4-5 Years
-          </button>
-          <button
-            onClick={() => setDifficulty(3)}
-            disabled={isSessionActive}
-            className={`px-3 py-2 rounded-lg text-sm font-medium ${
-              !isAdaptiveMode && difficulty === 3
-                ? 'bg-red-500 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            } ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            5-6 Years
-          </button>
+          {[
+            { level: 1, text: '3-4 Years', color: 'green' },
+            { level: 2, text: '4-5 Years', color: 'yellow' },
+            { level: 3, text: '5-6 Years', color: 'red' }
+          ].map(({ level, text, color }) => (
+            <button
+              key={level}
+              onClick={() => setDifficulty(level)}
+              disabled={isSessionActive}
+              className={`px-3 py-2 rounded-lg text-sm font-medium ${
+                !isAdaptiveMode && difficulty === level
+                  ? `bg-${color}-500 text-white`
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              } ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              {text}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -268,28 +233,23 @@ const handleLogout = async () => {
       <div>
         <h2 className="text-lg font-bold text-purple-700 mb-4">Game Mode</h2>
         <div className="flex flex-col gap-2">
-          <button
-            onClick={() => switchGameMode('addition')}
-            disabled={isSessionActive}
-            className={`px-3 py-2 rounded-lg text-sm font-medium ${
-              gameMode === 'addition'
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            } ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            Addition
-          </button>
-          <button
-            onClick={() => switchGameMode('subtraction')}
-            disabled={isSessionActive}
-            className={`px-3 py-2 rounded-lg text-sm font-medium ${
-              gameMode === 'subtraction'
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            } ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            Subtraction
-          </button>
+          {[
+            { mode: 'addition' as const, text: 'Addition' },
+            { mode: 'subtraction' as const, text: 'Subtraction' }
+          ].map(({ mode, text }) => (
+            <button
+              key={mode}
+              onClick={() => switchGameMode(mode)}
+              disabled={isSessionActive}
+              className={`px-3 py-2 rounded-lg text-sm font-medium ${
+                gameMode === mode
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              } ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              {text}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -342,14 +302,6 @@ const handleLogout = async () => {
           </div>
         </div>
       </div>
-
-
-      <button
-        onClick={onUserLogout}
-        className="w-full bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors"
-      >
-        Logout
-      </button>
     </div>
   );
 
@@ -377,34 +329,27 @@ const handleLogout = async () => {
       {isAdmin && (
         <div className="space-y-2">
           <h3 className="font-semibold text-purple-700 mb-3">Top Players</h3>
-          {/* Mock ranking data - replace with real data */}
-          {[
-            { rank: 1, username: 'SuperMath', score: 250 },
-            { rank: 2, username: 'NumberNinja', score: 230 },
-            { rank: 3, username: 'MathStar', score: 210 },
-            { rank: 4, username: 'CountKid', score: 185 },
-            { rank: 5, username: currentUser?.username || 'Player1', score: currentUser?.correctAnswers || 120 },
-          ].map((player) => (
+          {allUsers.slice(0, 5).map((player, index) => (
             <div 
-              key={player.rank}
+              key={player.userId}
               className={`flex items-center justify-between p-3 rounded-lg ${
-                player.username === currentUser?.username 
+                player.userId === currentUser?.userId 
                   ? 'bg-purple-100 border-2 border-purple-300' 
                   : 'bg-gray-50'
               }`}
             >
               <div className="flex items-center space-x-3">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                  player.rank === 1 ? 'bg-yellow-500 text-white' :
-                  player.rank === 2 ? 'bg-gray-400 text-white' :
-                  player.rank === 3 ? 'bg-orange-500 text-white' :
+                  index === 0 ? 'bg-yellow-500 text-white' :
+                  index === 1 ? 'bg-gray-400 text-white' :
+                  index === 2 ? 'bg-orange-500 text-white' :
                   'bg-blue-500 text-white'
                 }`}>
-                  {player.rank}
+                  {index + 1}
                 </div>
                 <span className="font-medium">{player.username}</span>
               </div>
-              <span className="text-sm font-semibold text-purple-600">{player.score}</span>
+              <span className="text-sm font-semibold text-purple-600">{player.correctAnswers}</span>
             </div>
           ))}
         </div>
@@ -413,8 +358,6 @@ const handleLogout = async () => {
   );
 
   const renderCurrentPanel = () => {
-    if (showLoginForm) return renderLoginForm();
-    
     switch (panels[currentPanel].id) {
       case 'settings':
         return renderSettingsPanel();
@@ -427,101 +370,50 @@ const handleLogout = async () => {
     }
   };
 
-  async function updateStatsAfterGame() {
-    // 这里用你自己的获取用户数据的逻辑
-    if (!currentUser) return;
-    const updatedStats = await getUpdatedUserStatsFromFirebase(currentUser.userId);
-    setCurrentUser(updatedStats);
-  }
-
   return (
-    <>
-
-      {/* Side Menu */}
-      <div
-
-        className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-40 overflow-y-auto ${
-        className={`fixed top-0 left-0 h-full w-80 bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-40 ${
-
-          isMenuOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
-      >
-        {!showLoginForm && (
-          <>
-            {/* Panel Navigation */}
-            <div className="flex border-b border-gray-200 bg-purple-50">
-              {panels.map((panel, index) => (
-                <button
-                  key={panel.id}
-                  onClick={() => setCurrentPanel(index)}
-                  className={`flex-1 py-3 px-2 text-xs font-medium transition-colors ${
-                    currentPanel === index
-                      ? 'text-purple-700 border-b-2 border-purple-700 bg-white'
-                      : 'text-gray-500 hover:text-purple-600'
-                  }`}
-                >
-                  <div className="flex flex-col items-center space-y-1">
-                    {panel.icon}
-                    <span>{panel.title}</span>
-                  </div>
-                </button>
-              ))}
-            </div>
-
-            {/* Swipe Navigation Arrows - 移动到顶部，不遮挡内容 */}
-            <div className="relative bg-gray-50 border-b border-gray-200">
-              <div className="flex justify-between items-center px-4 py-2">
-                <button
-                  onClick={() => setCurrentPanel(Math.max(0, currentPanel - 1))}
-                  disabled={currentPanel === 0}
-                  className={`p-2 rounded-full transition-colors ${
-                    currentPanel === 0 
-                      ? 'text-gray-300 cursor-not-allowed' 
-                      : 'text-purple-600 hover:bg-purple-100'
-                  }`}
-                >
-                  <ChevronLeft size={20} />
-                </button>
-                
-                <span className="text-sm font-medium text-gray-600">
-                  {panels[currentPanel].title}
-                </span>
-                
-                <button
-                  onClick={() => setCurrentPanel(Math.min(panels.length - 1, currentPanel + 1))}
-                  disabled={currentPanel === panels.length - 1}
-                  className={`p-2 rounded-full transition-colors ${
-                    currentPanel === panels.length - 1 
-                      ? 'text-gray-300 cursor-not-allowed' 
-                      : 'text-purple-600 hover:bg-purple-100'
-                  }`}
-                >
-                  <ChevronRight size={20} />
-                </button>
-              </div>
-            </div>
-          </>
-        )}
-
-        {/* Panel Content - 修复滚动问题 */}
-        <div 
-          ref={panelRef}
-          className="flex-1 overflow-y-auto"
-          style={{ 
-            height: showLoginForm ? '100vh' : 'calc(100vh - 120px)', // 为顶部导航和底部指示器留出空间
-            paddingBottom: '60px' // 额外的底部填充
-          }}
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
-        >
-          <div className="p-4 pt-4">
-            {renderCurrentPanel()}
+    <div 
+      className={`fixed top-0 left-0 h-full w-80 bg-white shadow-lg transform transition-transform duration-300 ${
+        isMenuOpen ? 'translate-x-0' : '-translate-x-full'
+      }`}
+      ref={panelRef}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+    >
+      {showLoginForm ? renderLoginForm() : (
+        <div className="h-full flex flex-col">
+          {/* Panel Navigation */}
+          <div className="flex border-b border-gray-200 bg-purple-50">
+            {panels.map((panel, index) => (
+              <button
+                key={panel.id}
+                onClick={() => setCurrentPanel(index)}
+                className={`flex-1 py-3 px-2 text-xs font-medium transition-colors ${
+                  currentPanel === index
+                    ? 'text-purple-700 border-b-2 border-purple-700 bg-white'
+                    : 'text-gray-500 hover:text-purple-600'
+                }`}
+              >
+                <div className="flex flex-col items-center space-y-1">
+                  {panel.icon}
+                  <span>{panel.title}</span>
+                </div>
+              </button>
+            ))}
           </div>
-        </div>
 
-        {/* Panel Indicators */}
-        {!showLoginForm && (
+          {/* Panel Content */}
+          <div className="flex-1 overflow-y-auto p-4">
+            {renderCurrentPanel()}
+            <button
+              onClick={handleLogout}
+              className="w-full mt-4 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors"
+            >
+              Logout
+            </button>
+          </div>
+
+          {/* Panel Indicators */}
           <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 bg-white/80 rounded-full px-3 py-2">
             {panels.map((_, index) => (
               <div
@@ -532,28 +424,8 @@ const handleLogout = async () => {
               />
             ))}
           </div>
-
-
-          <VisualAid
-            visualStyle={visualStyle}
-            setVisualStyle={setVisualStyle}
-            firstNumber={0}
-            secondNumber={0}
-            gameMode="addition"
-            showExplanation={false}
-            showSelector={true}
-          />
-          <button
-  onClick={handleLogout}
-  className="w-full mt-6 px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
->
-  Logout
-</button>
         </div>
-
-        )}
-
-      </div>
-    </>
+      )}
+    </div>
   );
 }
