@@ -3,6 +3,9 @@
 import { Menu, X, User, Trophy, Target, Percent, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useRef, useEffect, TouchEvent } from 'react';
 import { VisualAid } from './VisualAid';
+
+import { useLanguage } from '@/lib/i18n/LanguageContext';
+
 import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { auth } from '../../firebase';
@@ -16,6 +19,7 @@ interface UserStats {
   currentRank: number;
   accuracy: number;
 }
+
 
 interface SideMenuProps {
   userStats: UserStats;
@@ -72,6 +76,7 @@ export function SideMenu({
   allUsers,
   setCurrentUser
 }: SideMenuProps) {
+
   const router = useRouter();
 
   // Swipe functionality states
@@ -423,6 +428,7 @@ export function SideMenu({
                 }`}
               />
             ))}
+
           </div>
         </div>
       )}
