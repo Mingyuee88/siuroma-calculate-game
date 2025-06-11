@@ -6,12 +6,14 @@ import { Score } from "./UI/Score";
 import { SideMenu } from "./UI/SideMenu";
 import { VisualAid } from "./UI/VisualAid";
 import { getRandomNumber, calculateResult } from "@/lib/utils";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 interface MathGameProps {
   initialDifficulty?: number;
 }
 
 export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
+  const { t } = useLanguage();
   const [gameMode, setGameMode] = useState<"addition" | "subtraction">(
     "addition"
   );
@@ -140,7 +142,7 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
     const userNum = parseInt(userAnswer || "0");
 
     if (userNum === correctAnswer) {
-      setFeedback("Correct! Great job!");
+      setFeedback(t('correct'));
       setScore((prev) => prev + 1);
       setSessionScore((prev) => prev + 1);
       setConsecutiveCorrect((prev) => prev + 1);
@@ -150,7 +152,7 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
         setTimeout(() => {
           setDifficulty(difficulty + 1);
           setConsecutiveCorrect(0);
-          setFeedback(`You're doing great! Let's try some harder numbers!`);
+          setFeedback(t('harderNumbers'));
         }, 1500);
       } else {
         setTimeout(() => {
@@ -166,7 +168,7 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
         }, 1500);
       }
     } else {
-      setFeedback("Not quite right. Try again!");
+      setFeedback(t('notCorrect'));
       setConsecutiveCorrect(0);
     }
   };
@@ -224,38 +226,38 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
           {!isSessionStarted ? (
             <div className="bg-white p-8 rounded-lg shadow-md text-center">
               <h1 className="text-3xl font-bold text-purple-700 mb-6">
-                Math Explorer
+                {t('title')}
               </h1>
               <div className="mb-8">
-                <h2 className="text-xl font-semibold mb-4">Session Settings</h2>
+                <h2 className="text-xl font-semibold mb-4">{t('sessionSettings')}</h2>
                 <div className="grid grid-cols-2 gap-4 text-left mb-6">
                   <div>
-                    <p className="text-gray-600">Game Mode:</p>
+                    <p className="text-gray-600">{t('gameModeLabel')}</p>
                     <p className="font-semibold">
-                      {gameMode === "addition" ? "Addition" : "Subtraction"}
+                      {gameMode === "addition" ? t('addition') : t('subtraction')}
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-600">Age Level(Difficulty):</p>
+                    <p className="text-gray-600">{t('ageLevel')}</p>
                     <p className="font-semibold">
                       {isAdaptiveMode
-                        ? "Adaptive (Auto-adjusts)"
+                        ? t('adaptiveModeLabel')
                         : difficulty === 1
-                        ? "3-4 Years (1-10)"
+                        ? t('age3to4')
                         : difficulty === 2
-                        ? "4-5 Years (1-20)"
-                        : "5-6 Years (1-50)"}
+                        ? t('age4to5')
+                        : t('age5to6')}
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-600">Questions:</p>
+                    <p className="text-gray-600">{t('questionsLabel')}</p>
                     <p className="font-semibold">
-                      {questionsPerSession} per session
+                      {questionsPerSession} {t('perSession')}
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-600">Visual Aid:</p>
-                    <p className="font-semibold capitalize">{visualStyle}</p>
+                    <p className="text-gray-600">{t('visualAidLabel')}</p>
+                    <p className="font-semibold capitalize">{t(visualStyle)}</p>
                   </div>
                 </div>
               </div>
@@ -263,17 +265,17 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
                 onClick={startNewSession}
                 className="px-8 py-4 bg-purple-600 text-white rounded-lg font-bold text-lg hover:bg-purple-700 transition-colors"
               >
-                Start Session
+                {t('startSession')}
               </button>
             </div>
           ) : isSessionComplete ? (
             <div className="bg-white p-6 rounded-lg shadow-md mb-6 text-center">
-              <h2 className="text-2xl font-bold mb-4">Session Complete!</h2>
+              <h2 className="text-2xl font-bold mb-4">{t('sessionComplete')}</h2>
               <p className="text-xl mb-2">
-                Your score: {sessionScore}/{questionsPerSession}
+                {t('yourScore')} {sessionScore}/{questionsPerSession}
               </p>
               <p className="text-lg mb-4">
-                Time taken: {formatTime(sessionDuration)}
+                {t('timeTaken')} {formatTime(sessionDuration)}
               </p>
               <button
                 onClick={() => {
@@ -283,7 +285,7 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
                 }}
                 className="px-6 py-3 bg-purple-600 text-white rounded-lg font-bold hover:bg-purple-700"
               >
-                Start New Session
+                {t('startNewSession')}
               </button>
             </div>
           ) : (
@@ -297,7 +299,7 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
                     }}
                     className="px-4 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600"
                   >
-                    End Session
+                    {t('endSession')}
                   </button>
                   <button
                     onClick={() => {
@@ -310,18 +312,18 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
                     }}
                     className="px-4 py-2 bg-yellow-500 text-white rounded-lg font-medium hover:bg-yellow-600"
                   >
-                    Restart
+                    {t('restart')}
                   </button>
                 </div>
               </div>
 
-              <div className="text-center mb-6">
+              <div className="text-center mb-8">
                 <Score
                   score={score}
                   showAnimation={feedback.includes("Correct")}
                 />
                 <div className="text-lg text-gray-600 mt-2">
-                  Session Progress: {questionsAnswered}/{questionsPerSession} questions
+                  {t('sessionProgress')} {questionsAnswered}/{questionsPerSession} {t('questions')}
                 </div>
                 <div className="w-full max-w-md mx-auto mt-2 bg-gray-200 rounded-full h-2.5">
                   <div 
@@ -330,16 +332,16 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
                   />
                 </div>
                 <div className="text-lg text-gray-600 mt-1">
-                  Time: {formatTime(sessionDuration)}
+                  {t('time')} {formatTime(sessionDuration)}
                 </div>
                 {isAdaptiveMode && (
                   <div className="text-sm text-purple-600 mt-1">
-                    Current Level: {difficulty === 1 ? "Easy" : difficulty === 2 ? "Medium" : "Hard"}
+                    {t('currentLevel')} {difficulty === 1 ? t('easy') : difficulty === 2 ? t('medium') : t('hard')}
                   </div>
                 )}
               </div>
 
-              <div className="bg-white p-15 rounded-lg shadow-md mb-6">
+              <div className="text-center">
                 <div className="text-9xl font-bold text-center mb-6 text-black">
                   {firstNumber}{" "}
                   <span className="text-black">
@@ -350,7 +352,7 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
 
                 <div className="mt-2 text-center">
                   <div className="text-2xl font-bold mb-4 text-black">
-                    Your answer: {userAnswer || "___"}
+                    {t('yourAnswer')} {userAnswer || "___"}
                   </div>
                 </div>
 
@@ -371,13 +373,13 @@ export function MathGame({ initialDifficulty = 1 }: MathGameProps) {
                           : "bg-green-500 text-white hover:bg-green-600"
                       }`}
                     >
-                      Check Answer
+                      {t('checkAnswer')}
                     </button>
                     <button
                       onClick={() => setShowExplanation(!showExplanation)}
                       className="block w-full mt-4 text-blue-500 underline"
                     >
-                      {showExplanation ? "Hide" : "Show"} Hints
+                      {showExplanation ? t('hideHints') : t('showHints')}
                     </button>
                   </div>
                 </div>

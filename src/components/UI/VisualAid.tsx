@@ -4,6 +4,7 @@ import { Blocks } from '../VisualAid/Blocks';
 import { Animals } from '../VisualAid/Animals';
 import { Shapes } from '../VisualAid/Shapes';
 import { NumberLine } from '../VisualAid/NumberLine';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 // Types
 export type VisualStyle = 'blocks' | 'animals' | 'shapes' | 'numberLine';
@@ -30,12 +31,14 @@ export function VisualAid({
   showExplanation,
   showSelector = false,
 }: VisualAidProps) {
+  const { t } = useLanguage();
+
   return (
     <>
       {/* Selector */}
       {showSelector && (
         <div className="mb-8">
-          <h2 className="text-lg font-bold text-purple-700 mb-4">Visual Aid</h2>
+          <h2 className="text-lg font-bold text-purple-700 mb-4">{t('visualAid')}</h2>
           <div className="flex flex-col gap-2">
             <button
               onClick={() => setVisualStyle('blocks')}
@@ -45,7 +48,7 @@ export function VisualAid({
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              Blocks
+              {t('blocks')}
             </button>
             <button
               onClick={() => setVisualStyle('animals')}
@@ -55,7 +58,7 @@ export function VisualAid({
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              Animals
+              {t('animals')}
             </button>
             <button
               onClick={() => setVisualStyle('shapes')}
@@ -65,7 +68,7 @@ export function VisualAid({
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              Shapes
+              {t('shapes')}
             </button>
             <button
               onClick={() => setVisualStyle('numberLine')}
@@ -75,7 +78,7 @@ export function VisualAid({
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              Number Line
+              {t('numberLine')}
             </button>
           </div>
         </div>
