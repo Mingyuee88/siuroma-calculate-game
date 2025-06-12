@@ -136,5 +136,20 @@
       "resetFailed": "無法發送重設郵件，請檢查電子郵件是否正確或稍後再試"
     },
     "passwordResetSent": "重設密碼郵件已發送，請查收您的電子郵件。"
+  },
+  "phone": {
+    "title": "手機號碼登入",
+    "number": "手機號碼",
+    "numberPlaceholder": "請輸入手機號碼",
+    "numberRequired": "請輸入手機號碼",
+    "placeholder": "+852 1234 5678",
+    "sendCode": "發送驗證碼",
+    "sending": "發送中...",
+    "verificationCode": "驗證碼",
+    "codePlaceholder": "輸入收到的驗證碼",
+    "verify": "確認驗證碼",
+    "verifying": "驗證中...",
+    "sendCodeError": "發送驗證碼失敗，請重試",
+    "verifyCodeError": "驗證碼錯誤，請重新輸入"
   }
 } 

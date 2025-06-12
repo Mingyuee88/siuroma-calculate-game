@@ -1,15 +1,16 @@
 'use client';
 
 import { PhoneAuthProvider, signInWithCredential } from 'firebase/auth';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { useTranslation } from 'react-i18next';
+import { CountryCodeSelect } from '@/components/UI/CountryCodeSelect';
 
 declare global {
   interface Window {
-    recaptchaVerifier: RecaptchaVerifier;
+    recaptchaVerifier?: RecaptchaVerifier;
     grecaptcha?: any;
   }
 }
@@ -17,48 +18,91 @@ declare global {
 export default function PhoneLogin() {
   const { t } = useTranslation();
   const router = useRouter();
-  const [phoneNumber, setPhoneNumber] = useState('+852');
+  const [countryCode, setCountryCode] = useState('+86');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [verificationId, setVerificationId] = useState<string | null>(null);
+  const recaptchaVerifierRef = useRef<RecaptchaVerifier | null>(null);
+
+  // Clear error when switching between phone input and verification code screens
+  useEffect(() => {
+    setError('');
+  }, [verificationId]);
 
   // 初始化不可见 reCAPTCHA
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        auth,
-        'sign-in-button', // ← 绑定到这个按钮 ID
-        {
-          size: 'invisible',
-          callback: () => {
-            // reCAPTCHA 成功后自动触发登录流程
-            handleSendVerificationCode(); // 自动调用发送验证码函数
-          },
-        }
-      );
-    }
+    const initializeRecaptcha = () => {
+      if (!recaptchaVerifierRef.current) {
+        recaptchaVerifierRef.current = new RecaptchaVerifier(
+          auth,
+          'sign-in-button',
+          {
+            size: 'invisible',
+          }
+        );
+      }
+    };
 
+    // 组件挂载时初始化
+    initializeRecaptcha();
+
+    // 组件卸载时清理
     return () => {
-      if (window.recaptchaVerifier) {
-        window.recaptchaVerifier.clear(); // 清除旧实例
+      if (recaptchaVerifierRef.current) {
+        try {
+          recaptchaVerifierRef.current.clear();
+        } catch (error) {
+          console.error('Error clearing reCAPTCHA:', error);
+        }
+        recaptchaVerifierRef.current = null;
       }
     };
   }, []);
 
   const handleSendVerificationCode = async () => {
+    if (!phoneNumber.trim()) {
+      setError(t('phone.numberRequired'));
+      return;
+    }
+
     setLoading(true);
     setError('');
 
     try {
-      const appVerifier = window.recaptchaVerifier;
+      // 获取当前的 reCAPTCHA 实例
+      const appVerifier = recaptchaVerifierRef.current;
+      if (!appVerifier) {
+        throw new Error('reCAPTCHA not initialized');
+      }
 
-      const confirmation = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
-
+      const fullPhoneNumber = `${countryCode}${phoneNumber.replace(/^0+/, '')}`;
+      const confirmation = await signInWithPhoneNumber(auth, fullPhoneNumber, appVerifier);
       setVerificationId(confirmation.verificationId);
+      setError('');
     } catch (err: any) {
       console.error('发送验证码失败:', err);
       setError(t('phone.sendCodeError'));
+
+      // 如果发生错误，重新初始化 reCAPTCHA
+      if (recaptchaVerifierRef.current) {
+        try {
+          recaptchaVerifierRef.current.clear();
+        } catch (error) {
+          console.error('Error clearing reCAPTCHA:', error);
+        }
+        recaptchaVerifierRef.current = null;
+      }
+
+      // 创建新的 reCAPTCHA 实例
+      recaptchaVerifierRef.current = new RecaptchaVerifier(
+        auth,
+        'sign-in-button',
+        {
+          size: 'invisible',
+        }
+      );
     } finally {
       setLoading(false);
     }
@@ -68,14 +112,12 @@ export default function PhoneLogin() {
     if (!code || !verificationId) return;
   
     setLoading(true);
+    setError('');
+
     try {
-      // 用 verificationId 和 用户输入的 code 构造凭证
       const credential = PhoneAuthProvider.credential(verificationId, code);
-  
-      // 用凭证登录
       await signInWithCredential(auth, credential);
-  
-      router.push('/game'); // 登录成功跳转
+      router.push('/game');
     } catch (err) {
       setError(t('phone.verifyCodeError'));
     } finally {
@@ -95,21 +137,29 @@ export default function PhoneLogin() {
                 <label htmlFor="phone" className="block text-gray-700 mb-2">
                   {t('phone.number')}
                 </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-                  placeholder={t('phone.placeholder')}
-                  required
-                />
+                <div className="flex gap-2">
+                  <div className="w-32">
+                    <CountryCodeSelect
+                      selectedCode={countryCode}
+                      onSelect={setCountryCode}
+                    />
+                  </div>
+                  <input
+                    type="tel"
+                    id="phone"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, ''))}
+                    className="flex-1 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    placeholder={t('phone.numberPlaceholder')}
+                    required
+                  />
+                </div>
               </div>
 
               {error && <p className="text-red-500 text-sm">{error}</p>}
 
               <button
-                id="sign-in-button" // ← 必须和 RecaptchaVerifier 的容器一致
+                id="sign-in-button"
                 onClick={handleSendVerificationCode}
                 disabled={loading}
                 className={`w-full py-2 rounded transition-colors duration-200 ${
@@ -133,7 +183,7 @@ export default function PhoneLogin() {
                   type="text"
                   id="code"
                   value={code}
-                  onChange={(e) => setCode(e.target.value)}
+                  onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
                   className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                   placeholder={t('phone.codePlaceholder')}
                   required
@@ -157,7 +207,6 @@ export default function PhoneLogin() {
           </>
         )}
 
-        {/* 隐藏的 reCAPTCHA 容器 */}
         <div id="recaptcha-container" style={{ display: 'none' }}></div>
       </div>
     </main>
