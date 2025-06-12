@@ -173,6 +173,31 @@ export function SideMenu({
 
   const renderSettingsPanel = () => (
     <div className="space-y-8">
+
+
+      <div>
+        <h2 className="text-lg font-bold text-purple-700 mb-4">{t('gameSettings.gameSelection')}</h2>
+        <div className="flex flex-col gap-2">
+          {[
+            { mode: 'addition' as const, text: t('gameSettings.selection.MathGame') },
+            { mode: 'subtraction' as const, text: t('gameSettings.selection.EnglishGame') }
+          ].map(({ mode, text }) => (
+            <button
+              key={mode}
+              onClick={() => switchGameMode(mode)}
+              disabled={isSessionActive}
+              className={`px-3 py-2 rounded-lg text-sm font-medium ${
+                gameMode === mode
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              } ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              {text}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Language Selection */}
       <div>
         <h2 className="text-lg font-bold text-purple-700 mb-4">{t('language')}</h2>
@@ -196,6 +221,7 @@ export function SideMenu({
           ))}
         </div>
       </div>
+
 
       <div>
         <h2 className="text-lg font-bold text-purple-700 mb-4">{t('gameSettings.difficultyMode')}</h2>

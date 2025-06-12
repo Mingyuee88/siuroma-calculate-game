@@ -1,3 +1,5 @@
+import { MathGame } from "@/components/MathGame";
+
 export const translations = {
   en: {
     // Header & Navigation
@@ -10,8 +12,12 @@ export const translations = {
 
     // Game Settings
     gameSettings: {
+      gameSelection: "Game Selection",
       title: "Game Settings",
       difficultyMode: "Difficulty Mode",
+      gameType: "Game Type",
+      mathGame: "Math Game",
+      englishGame: "English Game",
       adaptiveMode: "Adaptive Mode",
       adaptiveModeDesc: "Automatically adjusts difficulty based on performance",
       fixedDifficulty: "Fixed Difficulty",
@@ -26,6 +32,13 @@ export const translations = {
         twenty: "20 Questions",
         thirty: "30 Questions"
       },
+
+      gameSelect: "Game Selection",
+      selection:{
+        MathGame: "Math Game",
+        EnglishGame: "English Game",
+      },
+
       gameMode: "Game Mode",
       operations: {
         addition: "Addition",
@@ -132,8 +145,12 @@ export const translations = {
 
     // Game Settings
     gameSettings: {
+      gameSelection: "遊戲選擇",
       title: "遊戲設定",
       difficultyMode: "難度模式",
+      gameType: "遊戲類型",
+      mathGame: "數學遊戲",
+      englishGame: "英文遊戲",
       adaptiveMode: "自適應模式",
       adaptiveModeDesc: "根據表現自動調整難度",
       fixedDifficulty: "固定難度",
@@ -148,6 +165,13 @@ export const translations = {
         twenty: "20個問題",
         thirty: "30個問題"
       },
+
+      gameSelect: "遊戲選擇",
+      selection:{
+        MathGame: "數學遊戲",
+        EnglishGame: "英語遊戲",
+      },
+
       gameMode: "遊戲模式",
       operations: {
         addition: "加法",
@@ -254,8 +278,12 @@ export const translations = {
 
     // Game Settings
     gameSettings: {
+      gameSelection: "游戏选择",
       title: "游戏设置",
       difficultyMode: "难度模式",
+      gameType: "游戏类型",
+      mathGame: "数学游戏",
+      englishGame: "英语游戏",
       adaptiveMode: "自适应模式",
       adaptiveModeDesc: "根据表现自动调整难度",
       fixedDifficulty: "固定难度",
@@ -270,6 +298,13 @@ export const translations = {
         twenty: "20个问题",
         thirty: "30个问题"
       },
+
+      gameSelect: "游戏选择",
+      selection:{
+        MathGame: "数学游戏",
+        EnglishGame: "数学游戏",
+      },
+
       gameMode: "游戏模式",
       operations: {
         addition: "加法",
