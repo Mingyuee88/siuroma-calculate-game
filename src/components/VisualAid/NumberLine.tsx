@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslation } from 'react-i18next';
+
 interface NumberLineProps {
   firstNumber: number;
   secondNumber: number;
@@ -8,6 +10,7 @@ interface NumberLineProps {
 }
 
 export function NumberLine({ firstNumber, secondNumber, gameMode, showExplanation = true }: NumberLineProps) {
+  const { t } = useTranslation();
   const result = gameMode === 'addition' ? firstNumber + secondNumber : firstNumber - secondNumber;
   const maxValue = Math.max(firstNumber + secondNumber, 20);
 
@@ -21,7 +24,7 @@ export function NumberLine({ firstNumber, secondNumber, gameMode, showExplanatio
         {Array.from({ length: maxValue + 1 }).map((_, i) => (
           <div key={`tick-${i}`} className="absolute" style={{ left: `${(i/maxValue) * 100}%` }}>
             <div className="h-3 w-1 bg-gray-800"></div>
-            <div className="text-xs text-center mt-1 text-black">{i}</div>
+            <div className="text-xs text-center mt-1 text-black font-gensen">{i}</div>
           </div>
         ))}
 
@@ -118,16 +121,16 @@ export function NumberLine({ firstNumber, secondNumber, gameMode, showExplanatio
       </div>
       
       {showExplanation && (
-        <div className="text-center text-gray-600 mb-4">
+        <div className="text-center text-gray-600 mb-4 font-gensen">
           {gameMode === 'addition' ? (
             <>
-              Start at 0, jump forward {firstNumber} spots, then jump forward {secondNumber} more spots.<br />
-              Where do you land? That&apos;s your answer!
+              {t('game.visualAid.numberLineAddition', { firstCount: firstNumber, secondCount: secondNumber })}<br />
+              {t('game.visualAid.whereDoYouLand')}
             </>
           ) : (
             <>
-              Start at {firstNumber}, jump backward {secondNumber} spots.<br />
-              Where do you land? That&apos;s your answer!
+              {t('game.visualAid.numberLineSubtraction', { firstCount: firstNumber, secondCount: secondNumber })}<br />
+              {t('game.visualAid.whereDoYouLand')}
             </>
           )}
         </div>

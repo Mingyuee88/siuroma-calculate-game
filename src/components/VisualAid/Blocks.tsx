@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslation } from 'react-i18next';
+
 interface BlocksProps {
   firstNumber: number;
   secondNumber: number;
@@ -8,6 +10,8 @@ interface BlocksProps {
 }
 
 export function Blocks({ firstNumber, secondNumber, gameMode, showExplanation = true }: BlocksProps) {
+  const { t } = useTranslation();
+
   if (gameMode === 'addition') {
     return (
       <div className="flex flex-col items-center">
@@ -21,7 +25,7 @@ export function Blocks({ firstNumber, secondNumber, gameMode, showExplanation = 
             </div>
           ))}
         </div>
-        <div className="text-2xl font-bold mb-2 text-black">+</div>
+        <div className="text-2xl font-bold mb-2 text-black">{t('game.symbols.plus')}</div>
         <div className="flex flex-wrap justify-center mb-4">
           {Array.from({ length: secondNumber }).map((_, i) => (
             <div
@@ -33,8 +37,8 @@ export function Blocks({ firstNumber, secondNumber, gameMode, showExplanation = 
           ))}
         </div>
         {showExplanation && (
-          <div className="text-center text-gray-600 mb-4">
-            Count all the blocks to find the total!
+          <div className="text-center text-gray-600 mb-4 font-gensen">
+            {t('game.visualAid.countBlocksTotal')}
           </div>
         )}
       </div>
@@ -59,9 +63,9 @@ export function Blocks({ firstNumber, secondNumber, gameMode, showExplanation = 
           })}
         </div>
         {showExplanation && (
-          <div className="text-center text-gray-600 mb-4">
-            Start with {firstNumber} blocks, take away {secondNumber} red blocks.<br />
-            Count the blue blocks that remain!
+          <div className="text-center text-gray-600 mb-4 font-gensen">
+            {t('game.visualAid.startWithBlocks', { count: firstNumber })} {t('game.visualAid.takeAwayRedBlocks', { count: secondNumber })}<br />
+            {t('game.visualAid.countBlueBlocksRemain')}
           </div>
         )}
       </div>

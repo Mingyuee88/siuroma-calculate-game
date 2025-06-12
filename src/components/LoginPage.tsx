@@ -105,7 +105,7 @@ export default function LoginPage() {
       <div className="absolute top-4 right-4" ref={langDropdownRef}>
         <button
           onClick={() => setIsLangOpen(!isLangOpen)}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white shadow-md hover:bg-gray-50 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white shadow-md hover:bg-gray-50 transition-colors font-gensen"
         >
           <Globe size={20} className="text-purple-600" />
           <span className="font-medium text-gray-700">
@@ -119,7 +119,7 @@ export default function LoginPage() {
               <button
                 key={lang.code}
                 onClick={() => handleLanguageChange(lang.code)}
-                className={`w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors ${
+                className={`w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors font-gensen ${
                   i18n.language === lang.code ? 'text-purple-600 font-medium' : 'text-gray-700'
                 }`}
               >
@@ -131,12 +131,12 @@ export default function LoginPage() {
       </div>
 
       <div className="bg-white p-8 rounded shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-4 text-center">{t('login.title')}</h2>
+        <h2 className="text-2xl font-bold mb-4 text-center tracking-wide font-gensen">{t('login.title')}</h2>
 
         {/* Email 登录表单 */}
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleLogin} className="space-y-4 font-gensen">
           <div>
-            <label htmlFor="username" className="block text-gray-700 mb-2">
+            <label htmlFor="username" className="block text-gray-700 mb-2 font-medium">
               {t('login.email')}
             </label>
             <input
@@ -160,7 +160,7 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-gray-700 mb-2">
+            <label htmlFor="password" className="block text-gray-700 mb-2 font-medium">
               {t('login.password')}
             </label>
             <input
@@ -178,7 +178,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-2 rounded transition-colors duration-200 ${
+            className={`w-full py-2 rounded transition-colors duration-200 font-medium ${
               loading
                 ? 'bg-blue-300 cursor-not-allowed'
                 : 'bg-blue-500 hover:bg-blue-600 text-white'
@@ -192,7 +192,7 @@ export default function LoginPage() {
         <div className="mt-6">
           <button
             onClick={() => router.push('/phonelogin')}
-            className="w-full flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded transition-colors duration-200"
+            className="w-full flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded transition-colors duration-200 font-medium font-gensen"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
@@ -205,7 +205,7 @@ export default function LoginPage() {
         <div className="mt-6">
           <button
             onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded transition-colors duration-200"
+            className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded transition-colors duration-200 font-medium font-gensen"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 48 48">
               <path fill="#EA4335" d="M24 9.5c3.04 0 5.66 1.13 7.53 3.05l5.66-5.66C33.22 3.44 28.00 1 24 1 14.67 1 6.63 6.82 2.81 15.38l6.61 5.13C12.27 13.34 17.77 9.5 24 9.5z"/>
@@ -219,11 +219,11 @@ export default function LoginPage() {
         </div>
 
         {/* 注册跳转按钮 */}
-        <div className="mt-4 text-center">
+        <div className="mt-4 text-center font-gensen">
           <p className="text-sm text-gray-600 mb-2">{t('login.noAccount')}</p>
           <button
             onClick={() => router.push('/register')}
-            className="text-blue-500 hover:underline text-sm"
+            className="text-blue-500 hover:underline text-sm font-medium"
           >
             {t('login.register')}
           </button>
