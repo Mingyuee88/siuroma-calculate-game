@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { NumberPad } from "./UI/NumberPad";
+//import { NumberPad } from "./UI/NumberPad";
 import { Score } from "./UI/Score";
 import { SideMenu } from "./UI/SideMenu";
 import { VisualAid } from "./UI/VisualAid";
@@ -16,11 +16,11 @@ interface MathGameProps {
 
 interface UserStats {
   userId: string;
-  Username: string;
+  username: string;
   correctAnswers: number;
   totalQuestions: number;
   accuracy: number;
-  currentrank: number;
+  currentRank: number;
 }
 
 
@@ -35,7 +35,7 @@ export function MathGame({
   const [difficulty, setDifficulty] = useState(initialDifficulty);
   const [firstNumber, setFirstNumber] = useState(0);
   const [secondNumber, setSecondNumber] = useState(0);
-  const [userAnswer, setUserAnswer] = useState<string>("");
+  // const [userAnswer, setUserAnswer] = useState<string>("");
   const [feedback, setFeedback] = useState("");
   const [score, setScore] = useState(0);
   const [consecutiveCorrect, setConsecutiveCorrect] = useState(0);
@@ -62,25 +62,25 @@ export function MathGame({
   // User statistics
   const [userStats, setUserStats] = useState<UserStats>({
     userId: userId,
-    Username: 'Current User',
+    username: 'Current User',
     correctAnswers: 0,
     totalQuestions: 0,
     accuracy: 0,
-    currentrank: 0
+    currentRank: 0
   });
 
   // Mock leaderboard data - in real app, this would come from a database
   const [allUsers] = useState<UserStats[]>([
-    { userId: '1', Username: 'Alice', correctAnswers: 28, totalQuestions: 35, accuracy: 80, currentrank: 1 },
-    { userId: '2', Username: 'Bob', correctAnswers: 25, totalQuestions: 30, accuracy: 83.3, currentrank: 2 },
-    { userId: '3', Username: 'Charlie', correctAnswers: 22, totalQuestions: 28, accuracy: 78.6, currentrank: 3 },
-    { userId: '4', Username: 'Daisy', correctAnswers: 20, totalQuestions: 25, accuracy: 80, currentrank: 4 },
-    { userId: '5', Username: 'Eve', correctAnswers: 19, totalQuestions: 24, accuracy: 79.2, currentrank: 5 },
-    { userId: '6', Username: 'Frank', correctAnswers: 18, totalQuestions: 23, accuracy: 78.3, currentrank: 6 },
-    { userId: '7', Username: 'Grace', correctAnswers: 17, totalQuestions: 22, accuracy: 77.3, currentrank: 7 },
-    { userId: '8', Username: 'Heidi', correctAnswers: 16, totalQuestions: 21, accuracy: 76.2, currentrank: 8 },
-    { userId: '9', Username: 'Ivan', correctAnswers: 15, totalQuestions: 20, accuracy: 75, currentrank: 9 },
-    { userId: '10', Username: 'Judy', correctAnswers: 14, totalQuestions: 19, accuracy: 73.7, currentrank: 10 },
+    { userId: '1', username: 'Alice', correctAnswers: 28, totalQuestions: 35, accuracy: 80, currentRank: 1 },
+    { userId: '2', username: 'Bob', correctAnswers: 25, totalQuestions: 30, accuracy: 83.3, currentRank: 2 },
+    { userId: '3', username: 'Charlie', correctAnswers: 22, totalQuestions: 28, accuracy: 78.6, currentRank: 3 },
+    { userId: '4', username: 'Daisy', correctAnswers: 20, totalQuestions: 25, accuracy: 80, currentRank: 4 },
+    { userId: '5', username: 'Eve', correctAnswers: 19, totalQuestions: 24, accuracy: 79.2, currentRank: 5 },
+    { userId: '6', username: 'Frank', correctAnswers: 18, totalQuestions: 23, accuracy: 78.3, currentRank: 6 },
+    { userId: '7', username: 'Grace', correctAnswers: 17, totalQuestions: 22, accuracy: 77.3, currentRank: 7 },
+    { userId: '8', username: 'Heidi', correctAnswers: 16, totalQuestions: 21, accuracy: 76.2, currentRank: 8 },
+    { userId: '9', username: 'Ivan', correctAnswers: 15, totalQuestions: 20, accuracy: 75, currentRank: 9 },
+    { userId: '10', username: 'Judy', correctAnswers: 14, totalQuestions: 19, accuracy: 73.7, currentRank: 10 },
   ]);
 
   const generateProblem = useCallback(() => {
@@ -137,7 +137,7 @@ export function MathGame({
     setQuestionsAnswered(0);
     setSessionScore(0);
     setIsSessionComplete(false);
-    setUserAnswer("");
+    // setUserAnswer("");
     setFeedback("");
     setConsecutiveCorrect(0);
     setIsSessionStarted(true);
@@ -291,6 +291,10 @@ export function MathGame({
         currentRank={getCurrentUserRank()}
         isAdmin={isAdmin}
         allUsers={allUsers}
+        currentUser={userStats}
+        onUserLogin={() => {}}
+        onUserLogout={() => {}}
+        setCurrentUser={() => {}}
       />
 
       {/* Main Content */}
@@ -377,7 +381,7 @@ export function MathGame({
                     onClick={() => {
                       setQuestionsAnswered(0);
                       setSessionScore(0);
-                      setUserAnswer("");
+                      // setUserAnswer("");
                       setFeedback("");
                       setConsecutiveCorrect(0);
                       generateProblem();
