@@ -46,6 +46,7 @@ export function MathGame({
   const [isAdaptiveMode, setIsAdaptiveMode] = useState(false);
 
   // Session related state
+  const [questionKey, setQuestionKey] = useState(0);
   const [questionsPerSession, setQuestionsPerSession] = useState(10);
   const [questionsAnswered, setQuestionsAnswered] = useState(0);
   const [isSessionComplete, setIsSessionComplete] = useState(false);
@@ -235,6 +236,7 @@ export function MathGame({
             } else {
               generateProblem();
             }
+            setQuestionKey(prev => prev + 1);
             return newCount;
           });
         }, 1500);
@@ -351,7 +353,7 @@ export function MathGame({
                 <p>Total Correct: {userStats.correctAnswers}</p>
                 <p>Total Attempts: {userStats.totalQuestions}</p>
                 <p>Accuracy: {userStats.accuracy}%</p>
-                <p>Current currentrank: #{getCurrentUserRank()}</p>
+                <p>Current Rank: #{getCurrentUserRank()}</p>
               </div>
               <button
                 onClick={() => {
@@ -425,6 +427,7 @@ export function MathGame({
 
                 <div className="mb-6">
                   <AnswerOptions
+                    key={questionKey}
                     options={options}
                     correctAnswer={correctAnswer}
                     onAnswerSelect={handleAnswerSelect}
