@@ -1,100 +1,6 @@
 @import "tailwindcss";
 
 /* Fredoka Font for English text */
-@font-face {
-  font-family: 'Fredoka';
-  src: url('/fonts/Fredoka/Fredoka-VariableFont_wdth,wght.ttf') format('truetype-variations');
-  font-weight: 100 900;
-  font-style: normal;
-}
-
-/* GenSenRounded Font for Chinese text */
-@font-face {
-  font-family: 'GenSenRounded';
-  src: url('/fonts/GenSenRounded/GenSenRounded2TC-EL.otf') format('opentype');
-  font-weight: 200;
-}
-@font-face {
-  font-family: 'GenSenRounded';
-  src: url('/fonts/GenSenRounded/GenSenRounded2TC-L.otf') format('opentype');
-  font-weight: 300;
-}
-@font-face {
-  font-family: 'GenSenRounded';
-  src: url('/fonts/GenSenRounded/GenSenRounded2TC-R.otf') format('opentype');
-  font-weight: normal;
-}
-@font-face {
-  font-family: 'GenSenRounded';
-  src: url('/fonts/GenSenRounded/GenSenRounded2TC-M.otf') format('opentype');
-  font-weight: 500;
-}
-@font-face {
-  font-family: 'GenSenRounded';
-  src: url('/fonts/GenSenRounded/GenSenRounded2TC-B.otf') format('opentype');
-  font-weight: bold;
-}
-@font-face {
-  font-family: 'GenSenRounded';
-  src: url('/fonts/GenSenRounded/GenSenRounded2TC-H.otf') format('opentype');
-  font-weight: 800;
-}
-
-/* Poppins Font for numbers */
-@font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/poppins/Poppins-Thin.ttf') format('truetype');
-  font-weight: 100;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/poppins/Poppins-ExtraLight.ttf') format('truetype');
-  font-weight: 200;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/poppins/Poppins-Light.ttf') format('truetype');
-  font-weight: 300;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/poppins/Poppins-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/poppins/Poppins-Medium.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/poppins/Poppins-SemiBold.ttf') format('truetype');
-  font-weight: 600;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/poppins/Poppins-Bold.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/poppins/Poppins-ExtraBold.ttf') format('truetype');
-  font-weight: 800;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/poppins/Poppins-Black.ttf') format('truetype');
-  font-weight: 900;
-  font-style: normal;
-}
 
 :root {
   --background: #ffffff;
@@ -111,10 +17,17 @@
   }
 }
 
+/* Default font (English) */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-english), sans-serif;
+}
+
+/* Chinese fonts for zh and zh-TW */
+html[lang="zh"] body,
+html[lang="zh-TW"] body {
+  font-family: var(--font-chinese), sans-serif;
 }
 
 /* 移动端侧边栏和汉堡菜单优化 */

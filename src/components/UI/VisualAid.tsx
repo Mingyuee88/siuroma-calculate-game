@@ -35,11 +35,11 @@ export function VisualAid({
       {/* Selector */}
       {showSelector && (
         <div className="mb-8">
-          <h2 className="text-lg font-bold text-purple-700 mb-4">Visual Aid</h2>
+          <h2 className="text-lg font-bold text-purple-700 mb-4 font-gensen">Visual Aid</h2>
           <div className="flex flex-col gap-2">
             <button
               onClick={() => setVisualStyle('blocks')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium ${
+              className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${
                 visualStyle === 'blocks'
                   ? 'bg-purple-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -49,7 +49,7 @@ export function VisualAid({
             </button>
             <button
               onClick={() => setVisualStyle('animals')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium ${
+              className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${
                 visualStyle === 'animals'
                   ? 'bg-purple-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -59,7 +59,7 @@ export function VisualAid({
             </button>
             <button
               onClick={() => setVisualStyle('shapes')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium ${
+              className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${
                 visualStyle === 'shapes'
                   ? 'bg-purple-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -69,7 +69,7 @@ export function VisualAid({
             </button>
             <button
               onClick={() => setVisualStyle('numberLine')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium ${
+              className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${
                 visualStyle === 'numberLine'
                   ? 'bg-purple-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'

@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslation } from 'react-i18next';
+
 interface ShapesProps {
   firstNumber: number;
   secondNumber: number;
@@ -19,6 +21,7 @@ const shapes = [
 ];
 
 export function Shapes({ firstNumber, secondNumber, gameMode, showExplanation = true }: ShapesProps) {
+  const { t } = useTranslation();
   const result = gameMode === 'addition' ? firstNumber + secondNumber : firstNumber - secondNumber;
 
   if (gameMode === 'addition') {
@@ -34,7 +37,7 @@ export function Shapes({ firstNumber, secondNumber, gameMode, showExplanation = 
             </div>
           ))}
         </div>
-        <div className="text-2xl font-bold mb-2 text-black">+</div>
+        <div className="text-2xl font-bold mb-2 text-black">{t('game.symbols.plus')}</div>
         <div className="flex flex-wrap justify-center mb-4">
           {Array.from({ length: secondNumber }).map((_, i) => (
             <div
@@ -46,9 +49,14 @@ export function Shapes({ firstNumber, secondNumber, gameMode, showExplanation = 
           ))}
         </div>
         {showExplanation && (
-          <div className="text-center text-gray-600 mb-4">
-            Count all the shapes to find the total!<br />
-            {firstNumber} {firstNumber === 1 ? 'circle' : 'circles'} + {secondNumber} {secondNumber === 1 ? 'square' : 'squares'} = ?
+          <div className="text-center text-gray-600 mb-4 font-gensen">
+            {t('game.visualAid.countShapesTotal')}<br />
+            {t('game.visualAid.circlesAndSquares', {
+              firstCount: firstNumber,
+              firstShape: t(`game.visualAid.${firstNumber === 1 ? 'circle' : 'circles'}`),
+              secondCount: secondNumber,
+              secondShape: t(`game.visualAid.${secondNumber === 1 ? 'square' : 'squares'}`)
+            })}
           </div>
         )}
       </div>
@@ -66,7 +74,7 @@ export function Shapes({ firstNumber, secondNumber, gameMode, showExplanation = 
             </div>
           ))}
         </div>
-        <div className="text-2xl font-bold mb-2">−</div>
+        <div className="text-2xl font-bold mb-2">{t('game.symbols.minus')}</div>
         <div className="flex flex-wrap justify-center mb-4">
           {Array.from({ length: secondNumber }).map((_, i) => (
             <div
@@ -90,10 +98,16 @@ export function Shapes({ firstNumber, secondNumber, gameMode, showExplanation = 
           ))}
         </div>
         {showExplanation && (
-          <div className="text-center text-gray-600 mb-4">
-            Start with {firstNumber} {firstNumber === 1 ? 'circle' : 'circles'}.<br />
-            Take away {secondNumber} {secondNumber === 1 ? 'circle' : 'circles'}.<br />
-            How many circles are left?
+          <div className="text-center text-gray-600 mb-4 font-gensen">
+            {t('game.visualAid.startWithCircles', {
+              count: firstNumber,
+              shape: t(`game.visualAid.${firstNumber === 1 ? 'circle' : 'circles'}`)
+            })}<br />
+            {t('game.visualAid.takeAwayCircles', {
+              count: secondNumber,
+              shape: t(`game.visualAid.${secondNumber === 1 ? 'circle' : 'circles'}`)
+            })}<br />
+            {t('game.visualAid.howManyCirclesLeft')}
           </div>
         )}
       </div>

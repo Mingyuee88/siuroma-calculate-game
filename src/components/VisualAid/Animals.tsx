@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslation } from 'react-i18next';
+
 interface AnimalsProps {
   firstNumber: number;
   secondNumber: number;
@@ -10,6 +12,8 @@ interface AnimalsProps {
 const animals = ['🐶', '🐱', '🐰', '🐻', '🐼', '🦊', '🐨', '🐯'];
 
 export function Animals({ firstNumber, secondNumber, gameMode, showExplanation = true }: AnimalsProps) {
+  const { t } = useTranslation();
+
   if (gameMode === 'addition') {
     return (
       <div className="flex flex-col items-center">
@@ -23,7 +27,7 @@ export function Animals({ firstNumber, secondNumber, gameMode, showExplanation =
             </div>
           ))}
         </div>
-        <div className="text-2xl font-bold mb-2 text-black">+</div>
+        <div className="text-2xl font-bold mb-2 text-black">{t('game.symbols.plus')}</div>
         <div className="flex flex-wrap justify-center mb-4">
           {Array.from({ length: secondNumber }).map((_, i) => (
             <div
@@ -35,8 +39,8 @@ export function Animals({ firstNumber, secondNumber, gameMode, showExplanation =
           ))}
         </div>
         {showExplanation && (
-          <div className="text-center text-gray-600 mb-4">
-            Count all the animals to find the total!
+          <div className="text-center text-gray-600 mb-4 font-gensen">
+            {t('game.visualAid.countAnimalsTotal')}
           </div>
         )}
       </div>
@@ -61,9 +65,9 @@ export function Animals({ firstNumber, secondNumber, gameMode, showExplanation =
           })}
         </div>
         {showExplanation && (
-          <div className="text-center text-gray-600 mb-4">
-            {firstNumber} animals were playing. {secondNumber} animals went home.<br />
-            How many animals are still playing?
+          <div className="text-center text-gray-600 mb-4 font-gensen">
+            {t('game.visualAid.animalsPlaying', { count: firstNumber })} {t('game.visualAid.animalsWentHome', { count: secondNumber })}<br />
+            {t('game.visualAid.howManyAnimalsLeft')}
           </div>
         )}
       </div>

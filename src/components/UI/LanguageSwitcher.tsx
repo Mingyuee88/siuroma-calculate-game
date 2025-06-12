@@ -40,7 +40,7 @@ export function LanguageSwitcher() {
         className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white shadow-md hover:bg-gray-50 transition-colors"
       >
         <Globe size={20} className="text-purple-600" />
-        <span className="font-medium text-gray-700">
+        <span className="font-medium text-gray-700 font-gensen">
           {languages.find(lang => lang.code === i18n.language)?.name || 'English'}
         </span>
       </button>
@@ -51,7 +51,7 @@ export function LanguageSwitcher() {
             <button
               key={lang.code}
               onClick={() => handleLanguageChange(lang.code)}
-              className={`w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors ${
+              className={`w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors font-gensen ${
                 i18n.language === lang.code ? 'text-purple-600 font-medium' : 'text-gray-700'
               }`}
             >
