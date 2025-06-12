@@ -1,0 +1,121 @@
+{
+  "title": "数学探险家",
+  "description": "计算你的游戏垂直统计数据",
+  "language": "语言",
+  "calculate": "计算",
+  "reset": "重置",
+  "result": "结果",
+  "input": {
+    "placeholder": "输入你的数据",
+    "submit": "提交"
+  },
+  "menu": {
+    "language": "切换语言",
+    "settings": "游戏设置",
+    "stats": "我的统计",
+    "ranking": "我的排名",
+    "adminRanking": "所有排名"
+  },
+  "game": {
+    "settings": {
+      "difficulty": "难度等级",
+      "gameMode": "游戏模式",
+      "addition": "加法",
+      "subtraction": "减法",
+      "visualStyle": "视觉样式",
+      "blocks": "方块",
+      "animals": "动物",
+      "shapes": "形状",
+      "numberLine": "数轴",
+      "questionsPerSession": "每轮题目数",
+      "adaptiveMode": "自适应模式"
+    },
+    "welcome": {
+      "title": "数学探险家",
+      "description": "欢迎来到数学探险家！准备开始一场精彩的数学冒险吧。",
+      "startButton": "开始游戏",
+      "gameMode": "游戏模式",
+      "ageLevel": "年龄等级（难度）",
+      "adaptiveMode": "自适应（自动调整）",
+      "level1": "3-4岁 (1-10)",
+      "level2": "4-5岁 (1-20)",
+      "level3": "5-6岁 (1-50)",
+      "questions": "题目数量",
+      "perSession": "每轮",
+      "visualAid": "视觉辅助"
+    },
+    "feedback": {
+      "correct": "答对了！太棒了！",
+      "incorrect": "不太对哦，再试试看！",
+      "levelUp": "你做得太好了！让我们试试更难的题目吧！"
+    },
+    "question": {
+      "title": "第 {{current}} 题，共 {{total}} 题",
+      "add": "{{first}} + {{second}} 等于多少？",
+      "subtract": "{{first}} - {{second}} 等于多少？"
+    },
+    "complete": {
+      "title": "本轮完成！",
+      "score": "你的得分：{{score}}/{{total}}",
+      "time": "用时：{{time}}",
+      "accuracy": "准确率：{{accuracy}}%",
+      "statistics": "你的统计",
+      "totalCorrect": "总答对题数",
+      "totalAttempts": "总尝试题数",
+      "currentRank": "当前排名",
+      "playAgain": "再玩一次",
+      "endSession": "结束本轮",
+      "restart": "重新开始"
+    },
+    "stats": {
+      "performance": "我的表现",
+      "correctAnswers": "答对题数",
+      "totalQuestions": "总题目数",
+      "accuracy": "准确率"
+    },
+    "ranking": {
+      "topPlayers": "最佳玩家"
+    },
+    "progress": "本轮进度",
+    "questions": "题",
+    "time": "时间",
+    "currentLevel": "当前等级",
+    "level1": "简单",
+    "level2": "中等",
+    "level3": "困难",
+    "showHint": "显示提示",
+    "hideHint": "隐藏提示"
+  },
+  "login": {
+    "title": "请登录以继续",
+    "email": "邮箱",
+    "password": "密码",
+    "emailLogin": "邮箱登录",
+    "phoneLogin": "手机号登录",
+    "googleLogin": "使用 Google 登录",
+    "forgotPassword": "忘记密码？",
+    "noAccount": "还没有账号？",
+    "register": "立即注册",
+    "loading": "登录中...",
+    "error": {
+      "invalidCredentials": "用户名或密码错误",
+      "general": "登录失败，请稍后再试。",
+      "emailRequired": "请输入邮箱以接收重置密码邮件",
+      "resetFailed": "无法发送重置邮件，请检查邮箱是否正确或稍后再试"
+    },
+    "passwordResetSent": "重置密码邮件已发送，请查收您的邮箱。"
+  },
+  "phone": {
+    "title": "手机号登录",
+    "number": "手机号",
+    "placeholder": "+852 1234 5678",
+    "sendCode": "发送验证码",
+    "sending": "发送中...",
+    "verificationCode": "验证码",
+    "codePlaceholder": "输入收到的验证码",
+    "verify": "确认验证码",
+    "verifying": "验证中...",
+    "sendCodeError": "发送验证码失败，请重试",
+    "verifyCodeError": "验证码错误，请重新输入"
+  }
+} 

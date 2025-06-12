@@ -1,16 +1,46 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { FormEvent } from 'react';
 import { auth, signInWithEmailAndPassword, signInWithGoogle, sendPasswordResetEmail } from '../firebase';
 import { GoogleAuthProvider } from 'firebase/auth';
+import { useTranslation } from 'react-i18next';
+import { Globe } from 'lucide-react';
 
 export default function LoginPage() {
+  const { t, i18n } = useTranslation();
   const router = useRouter();
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  const emailInputRef = useRef<HTMLInputElement>(null); // 用于忘记密码功能
+  const [isLangOpen, setIsLangOpen] = useState(false);
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const langDropdownRef = useRef<HTMLDivElement>(null);
+
+  const languages = [
+    { code: 'en', name: 'English' },
+    { code: 'zh', name: '简体中文' },
+    { code: 'zh-TW', name: '繁體中文' }
+  ];
+
+  // 点击外部关闭语言下拉菜单
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (langDropdownRef.current && !langDropdownRef.current.contains(event.target as Node)) {
+        setIsLangOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleLanguageChange = (langCode: string) => {
+    i18n.changeLanguage(langCode);
+    setIsLangOpen(false);
+  };
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -31,9 +61,9 @@ export default function LoginPage() {
     } catch (err: any) {
       console.error('登录失败:', err);
       if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
-        setError('用户名或密码错误');
+        setError(t('login.error.invalidCredentials'));
       } else {
-        setError('登录失败，请稍后再试。');
+        setError(t('login.error.general'));
       }
     } finally {
       setLoading(false);
@@ -48,7 +78,7 @@ export default function LoginPage() {
       router.push('/game');
     } catch (err: any) {
       console.error('Google 登录失败:', err);
-      setError('使用 Google 登录失败，请重试。');
+      setError(t('login.error.general'));
     }
   };
 
@@ -56,61 +86,89 @@ export default function LoginPage() {
     const email = emailInputRef.current?.value.trim();
 
     if (!email) {
-      setError('请输入邮箱以接收重置密码邮件');
+      setError(t('login.error.emailRequired'));
       return;
     }
 
     try {
       await sendPasswordResetEmail(auth, email);
-      alert('重置密码邮件已发送，请查收您的邮箱。');
+      alert(t('login.passwordResetSent'));
     } catch (err: any) {
       console.error('发送重置邮件失败:', err);
-      setError('无法发送重置邮件，请检查邮箱是否正确或稍后再试');
+      setError(t('login.error.resetFailed'));
     }
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-blue-100 to-blue-200 flex items-center justify-center">
+    <main className="min-h-screen bg-gradient-to-b from-blue-100 to-blue-200 flex items-center justify-center relative">
+      {/* 语言切换器 */}
+      <div className="absolute top-4 right-4" ref={langDropdownRef}>
+        <button
+          onClick={() => setIsLangOpen(!isLangOpen)}
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white shadow-md hover:bg-gray-50 transition-colors"
+        >
+          <Globe size={20} className="text-purple-600" />
+          <span className="font-medium text-gray-700">
+            {languages.find(lang => lang.code === i18n.language)?.name || 'English'}
+          </span>
+        </button>
+
+        {isLangOpen && (
+          <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-1 z-50">
+            {languages.map(lang => (
+              <button
+                key={lang.code}
+                onClick={() => handleLanguageChange(lang.code)}
+                className={`w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors ${
+                  i18n.language === lang.code ? 'text-purple-600 font-medium' : 'text-gray-700'
+                }`}
+              >
+                {lang.name}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
       <div className="bg-white p-8 rounded shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-4 text-center">登录</h2>
+        <h2 className="text-2xl font-bold mb-4 text-center">{t('login.title')}</h2>
 
         {/* Email 登录表单 */}
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label htmlFor="username" className="block text-gray-700 mb-2">
-              邮箱
+              {t('login.email')}
             </label>
             <input
               type="email"
               id="username"
               name="username"
-              ref={emailInputRef} // 绑定到 ref
+              ref={emailInputRef}
               className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-              placeholder="输入邮箱"
+              placeholder={t('login.email')}
               required
             />
-            {/* 忘记密码按钮 */}
             <div className="mt-1 text-right">
               <button
                 type="button"
                 onClick={handleForgotPassword}
                 className="text-sm text-blue-500 hover:underline focus:outline-none"
               >
-                忘记密码？
+                {t('login.forgotPassword')}
               </button>
             </div>
           </div>
 
           <div>
             <label htmlFor="password" className="block text-gray-700 mb-2">
-              密码
+              {t('login.password')}
             </label>
             <input
               type="password"
               id="password"
               name="password"
               className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-              placeholder="输入密码"
+              placeholder={t('login.password')}
               required
             />
           </div>
@@ -126,9 +184,10 @@ export default function LoginPage() {
                 : 'bg-blue-500 hover:bg-blue-600 text-white'
             }`}
           >
-            {loading ? '登录中...' : '邮箱登录'}
+            {loading ? t('login.loading') : t('login.emailLogin')}
           </button>
         </form>
+
         {/* 手机号登录按钮 */}
         <div className="mt-6">
           <button
@@ -138,9 +197,10 @@ export default function LoginPage() {
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
             </svg>
-            使用手机号登录
+            {t('login.phoneLogin')}
           </button>
         </div>
+
         {/* Google 登录按钮 */}
         <div className="mt-6">
           <button
@@ -154,18 +214,18 @@ export default function LoginPage() {
               <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.58-4.18-13.46-9.69l-7.75 6.43C6.63 41.18 14.67 47 24 48z"/>
               <path fill="none" d="M1 1h46v46H1z"/>
             </svg>
-            使用 Google 登录
+            {t('login.googleLogin')}
           </button>
         </div>
 
         {/* 注册跳转按钮 */}
         <div className="mt-4 text-center">
-          <p className="text-sm text-gray-600 mb-2">还没有账号？</p>
+          <p className="text-sm text-gray-600 mb-2">{t('login.noAccount')}</p>
           <button
             onClick={() => router.push('/register')}
             className="text-blue-500 hover:underline text-sm"
           >
-            立即注册
+            {t('login.register')}
           </button>
         </div>
       </div>
