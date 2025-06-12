@@ -314,14 +314,13 @@ export function MathGame({
         isSessionActive={isSessionStarted && !isSessionComplete}
         isAdaptiveMode={isAdaptiveMode}
         enableAdaptiveMode={enableAdaptiveMode}
-        userStats={userStats}
+        currentUser={userStats}
         currentRank={getCurrentUserRank()}
         isAdmin={isAdmin}
         allUsers={allUsers}
-        currentUser={userStats}
         onUserLogin={() => {}}
         onUserLogout={() => {}}
-        setCurrentUser={() => {}}
+        setCurrentUser={setUserStats}
       />
 
       {/* 汉堡菜单按钮 - 始终显示在移动端 */}
@@ -378,7 +377,7 @@ export function MathGame({
                   <div>
                     <p className="text-gray-600">{t("game.welcome.gameMode")}:</p>
                     <p className="font-semibold">
-                      {gameMode === "addition" ? "Addition" : "Subtraction"}
+                      {t(`game.settings.${gameMode}`)}
                     </p>
                   </div>
                   <div>
@@ -399,7 +398,9 @@ export function MathGame({
                   </div>
                   <div>
                     <p className="text-gray-600">{t("game.welcome.visualAid")}:</p>
-                    <p className="font-semibold capitalize">{visualStyle}</p>
+                    <p className="font-semibold capitalize">
+                      {t(`game.settings.${visualStyle}`)}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -467,117 +468,4 @@ export function MathGame({
       </div>
     </div>
   );
-
-              </div>
-            </div>
-
-            <div className="text-center mb-6">
-              <Score
-                score={score} // 使用你的动画逻辑
-                total={questionsAnswered}
-                time={formatTime(sessionDuration)}
-                showAnimation={feedback.includes("Correct")}
-              />
-              <div className="text-lg text-gray-600 mt-2">
-                {t("game.progress")}: {questionsAnswered}/{questionsPerSession} {t("game.questions")}
-              </div>
-              <div className="w-full max-w-md mx-auto mt-2 bg-gray-200 rounded-full h-2.5">
-                <div 
-                  className="bg-purple-600 h-2.5 rounded-full transition-all duration-300"
-                  style={{ width: `${(questionsAnswered / questionsPerSession) * 100}%` }}
-                />
-              </div>
-              <div className="text-lg text-gray-600 mt-1">
-                {t("game.time")}: {formatTime(sessionDuration)}
-              </div>
-              {isAdaptiveMode && (
-                <div className="text-sm text-purple-600 mt-1">
-                  {t("game.currentLevel")}: {difficulty === 1 ? t("game.level1") : difficulty === 2 ? t("game.level2") : t("game.level3")}
-                </div>
-              )}
-            </div>
-
-              </div>
-              <div className="w-full max-w-md mx-auto mt-2 bg-gray-200 rounded-full h-2.5">
-                <div 
-                  className="bg-purple-600 h-2.5 rounded-full transition-all duration-300"
-                  style={{ width: `${(questionsAnswered / questionsPerSession) * 100}%` }}
-                />
-              </div>
-              <div className="text-lg text-gray-600 mt-1">
-                Time: {formatTime(sessionDuration)}
-              </div>
-              {isAdaptiveMode && (
-                <div className="text-sm text-purple-600 mt-1">
-                  Current Level: {difficulty === 1 ? "Easy" : difficulty === 2 ? "Medium" : "Hard"}
-                </div>
-              )}
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-              <div className="text-6xl font-bold text-center mb-8 text-black">
-                {firstNumber}{" "}
-                <span className="text-black">
-                  {gameMode === "addition" ? "+" : "-"}
-                </span>{" "}
-                {secondNumber} = ?
-              </div>
-                
-                <div className="text-center mb-4">
-                  <button
-                    onClick={() => setShowExplanation(!showExplanation)}
-                    className="text-blue-500 underline hover:text-blue-700"
-                  >
-                    {showExplanation ? t("game.hideHint") : t("game.showHint")}
-                  </button>
-                </div>
-
-              <div className="mb-6">
-                <AnswerOptions
-                  key={questionKey}
-                  options={options}
-                  correctAnswer={correctAnswer}
-                  onAnswerSelect={handleAnswerSelect}
-                  hasTriedThisQuestion={hasTriedThisQuestion}
-                  disabled={!!feedback && feedback.includes("Correct")}
-                />
-              </div>
-
-              <div className="text-center mb-4">
-                <button
-                  onClick={() => setShowExplanation(!showExplanation)}
-                  className="text-blue-500 underline hover:text-blue-700"
-                >
-                  {showExplanation ? "Hide" : "Show"} Hints
-                </button>
-              </div>
-                
-              <VisualAid
-                visualStyle={visualStyle}
-                setVisualStyle={setVisualStyle}
-                firstNumber={firstNumber}
-                secondNumber={secondNumber}
-                gameMode={gameMode}
-                showExplanation={showExplanation}
-                showSelector={false}
-              />
-
-              {feedback && (
-                <div
-                  className={`mt-4 p-3 rounded-lg text-center font-bold ${
-                    feedback.includes("Correct")
-                      ? "bg-green-100 text-green-700"
-                      : "bg-yellow-100 text-yellow-700"
-                  }`}
-                >
-                  {feedback}
-                </div>
-              )}
-            </div>
-          </>
-        )}
-      </div>
-    </div>
-  </div>
-);
 }
