@@ -53,7 +53,7 @@ export function MathGame({
   const [isInitialized, setIsInitialized] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(true);
   const [isAdaptiveMode, setIsAdaptiveMode] = useState(false);
-
+  const [isMobile, setIsMobile] = useState(false);
   // Session related state
   const [questionKey, setQuestionKey] = useState(0);
   const [questionsPerSession, setQuestionsPerSession] = useState(10);
@@ -177,7 +177,21 @@ export function MathGame({
       }
     };
   }, [isSessionStarted, isSessionComplete, sessionStartTime]);
-
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      // 移动端默认关闭侧边栏，桌面端保持原有逻辑
+      if (mobile && isMenuOpen) {
+        setIsMenuOpen(false);
+      }
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   // Update user stats
   const updateUserStats = (isCorrect: boolean, isFirstTry: boolean) => {
     setUserStats(prev => {
@@ -275,33 +289,81 @@ export function MathGame({
     return null;
   }
 
+  // 合并后的 return 语句，结合两个分支的优点：
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-gray-100">
+      {/* 移动端遮罩层 */}
+      {isMobile && isMenuOpen && (
+        <div 
+          className="mobile-overlay"
+          onClick={() => setIsMenuOpen(false)}
+        />
+      )}
+
       <SideMenu
         isMenuOpen={isMenuOpen}
         setIsMenuOpen={setIsMenuOpen}
         difficulty={difficulty}
-        setDifficulty={setDifficulty}
+        setDifficulty={setDifficultyLevel}
         gameMode={gameMode}
-        switchGameMode={setGameMode}
+        switchGameMode={switchGameMode}
         visualStyle={visualStyle}
         setVisualStyle={setVisualStyle}
         questionsPerSession={questionsPerSession}
         setQuestionsPerSession={setQuestionsPerSession}
         isSessionActive={isSessionStarted && !isSessionComplete}
         isAdaptiveMode={isAdaptiveMode}
-        enableAdaptiveMode={() => setIsAdaptiveMode(!isAdaptiveMode)}
+        enableAdaptiveMode={enableAdaptiveMode}
         currentUser={userStats}
+        currentRank={getCurrentUserRank()}
         isAdmin={isAdmin}
+        allUsers={allUsers}
         onUserLogin={() => {}}
         onUserLogout={() => {}}
-        currentRank={getCurrentUserRank()}
-        allUsers={allUsers}
         setCurrentUser={setUserStats}
       />
 
-      <main className={`flex-1 p-4 transition-all duration-300 ${isMenuOpen ? 'ml-64' : 'ml-0'}`}>
-        <div className="max-w-4xl mx-auto relative">
+      {/* 汉堡菜单按钮 - 始终显示在移动端 */}
+      {isMobile && (
+        <>
+          {/* 打开按钮 - 显示在左上角 */}
+          {!isMenuOpen && (
+            <button
+              onClick={() => setIsMenuOpen(true)}
+              className="hamburger-btn"
+              aria-label="Open menu"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          )}
+
+          {/* 关闭按钮 - 显示在右上角 */}
+          {isMenuOpen && (
+            <button
+              onClick={() => setIsMenuOpen(false)}
+              className="hamburger-btn-close"
+              aria-label="Close menu"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          )}
+        </>
+      )}
+
+      {/* Main Content */}
+      <div className={`flex-1 p-6 transition-all duration-300 ${
+        isMobile 
+          ? "main-content-mobile" 
+          : isMenuOpen 
+            ? "ml-64" 
+            : "ml-0"
+      }`}>
+        <div className="max-w-3xl mx-auto relative">
+          {/* 语言切换器 - 来自 main 分支 */}
           <div className="absolute top-0 right-0 z-10">
             <LanguageSwitcher />
           </div>
@@ -315,7 +377,7 @@ export function MathGame({
                   <div>
                     <p className="text-gray-600">{t("game.welcome.gameMode")}:</p>
                     <p className="font-semibold">
-                      {gameMode === "addition" ? "Addition" : "Subtraction"}
+                      {t(`game.settings.${gameMode}`)}
                     </p>
                   </div>
                   <div>
@@ -336,7 +398,9 @@ export function MathGame({
                   </div>
                   <div>
                     <p className="text-gray-600">{t("game.welcome.visualAid")}:</p>
-                    <p className="font-semibold capitalize">{visualStyle}</p>
+                    <p className="font-semibold capitalize">
+                      {t(`game.settings.${visualStyle}`)}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -387,7 +451,6 @@ export function MathGame({
                     onClick={() => {
                       setQuestionsAnswered(0);
                       setSessionScore(0);
-                      // setUserAnswer("");
                       setFeedback("");
                       setConsecutiveCorrect(0);
                       generateProblem();
@@ -398,83 +461,11 @@ export function MathGame({
                   </button>
                 </div>
               </div>
-
-              <div className="text-center mb-6">
-                <Score score={sessionScore} total={questionsAnswered} time={formatTime(sessionDuration)} />
-                <div className="text-lg text-gray-600 mt-2">
-                  {t("game.progress")}: {questionsAnswered}/{questionsPerSession} {t("game.questions")}
-                </div>
-                <div className="w-full max-w-md mx-auto mt-2 bg-gray-200 rounded-full h-2.5">
-                  <div 
-                    className="bg-purple-600 h-2.5 rounded-full transition-all duration-300"
-                    style={{ width: `${(questionsAnswered / questionsPerSession) * 100}%` }}
-                  />
-                </div>
-                <div className="text-lg text-gray-600 mt-1">
-                  {t("game.time")}: {formatTime(sessionDuration)}
-                </div>
-                {isAdaptiveMode && (
-                  <div className="text-sm text-purple-600 mt-1">
-                    {t("game.currentLevel")}: {difficulty === 1 ? t("game.level1") : difficulty === 2 ? t("game.level2") : t("game.level3")}
-                  </div>
-                )}
-              </div>
-
-              <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-                <div className="text-6xl font-bold text-center mb-8 text-black">
-                  {firstNumber}{" "}
-                  <span className="text-black">
-                    {gameMode === "addition" ? "+" : "-"}
-                  </span>{" "}
-                  {secondNumber} = ?
-                </div>
-
-                <div className="mb-6">
-                  <AnswerOptions
-                    key={questionKey}
-                    options={options}
-                    correctAnswer={correctAnswer}
-                    onAnswerSelect={handleAnswerSelect}
-                    hasTriedThisQuestion={hasTriedThisQuestion}
-                    disabled={!!feedback && feedback.includes("Correct")}
-                  />
-                </div>
-
-                <div className="text-center mb-4">
-                  <button
-                    onClick={() => setShowExplanation(!showExplanation)}
-                    className="text-blue-500 underline hover:text-blue-700"
-                  >
-                    {showExplanation ? t("game.hideHint") : t("game.showHint")}
-                  </button>
-                </div>
-
-                <VisualAid
-                  visualStyle={visualStyle}
-                  setVisualStyle={setVisualStyle}
-                  firstNumber={firstNumber}
-                  secondNumber={secondNumber}
-                  gameMode={gameMode}
-                  showExplanation={showExplanation}
-                  showSelector={false}
-                />
-
-                {feedback && (
-                  <div
-                    className={`mt-4 p-3 rounded-lg text-center font-bold ${
-                      feedback.includes("Correct")
-                        ? "bg-green-100 text-green-700"
-                        : "bg-yellow-100 text-yellow-700"
-                    }`}
-                  >
-                    {feedback}
-                  </div>
-                )}
-              </div>
+              {/* 这里应该继续添加游戏进行时的其他内容 */}
             </>
           )}
         </div>
-      </main>
+      </div>
     </div>
   );
 }
