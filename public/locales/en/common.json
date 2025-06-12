@@ -14,7 +14,9 @@
     "settings": "Game Settings",
     "stats": "My Stats",
     "ranking": "My Ranking",
-    "adminRanking": "All Rankings"
+    "adminRanking": "All Rankings",
+    "logout": "Logout",
+    "currentUser": "Current User"
   },
   "game": {
     "settings": {
@@ -74,7 +76,11 @@
       "accuracy": "Accuracy"
     },
     "ranking": {
-      "topPlayers": "Top Players"
+      "topPlayers": "Top Players",
+      "allRankings": "All Rankings",
+      "myRanking": "My Ranking",
+      "yourCurrentRank": "Your Current Rank",
+      "basedOnCorrectAnswers": "Based on correct answers"
     },
     "progress": "Session Progress",
     "questions": "questions",
@@ -84,7 +90,33 @@
     "level2": "Medium",
     "level3": "Hard",
     "showHint": "Show Hints",
-    "hideHint": "Hide Hints"
+    "hideHint": "Hide Hints",
+    "symbols": {
+      "plus": "+",
+      "minus": "-"
+    },
+    "visualAid": {
+      "countAnimalsTotal": "Count all the animals to find the total!",
+      "animalsPlaying": "{{count}} animals were playing",
+      "animalsWentHome": "{{count}} animals went home",
+      "howManyAnimalsLeft": "How many animals are still playing?",
+      "countBlocksTotal": "Count all the blocks to find the total!",
+      "startWithBlocks": "Start with {{count}} blocks",
+      "takeAwayRedBlocks": "take away {{count}} red blocks",
+      "countBlueBlocksRemain": "Count the blue blocks that remain!",
+      "countShapesTotal": "Count all the shapes to find the total!",
+      "circlesAndSquares": "{{firstCount}} {{firstShape}} + {{secondCount}} {{secondShape}} = ?",
+      "circle": "circle",
+      "circles": "circles",
+      "square": "square",
+      "squares": "squares",
+      "startWithCircles": "Start with {{count}} {{shape}}",
+      "takeAwayCircles": "Take away {{count}} {{shape}}",
+      "howManyCirclesLeft": "How many circles are left?",
+      "numberLineAddition": "Start at 0, jump forward {{firstCount}} spots, then jump forward {{secondCount}} more spots",
+      "numberLineSubtraction": "Start at {{firstCount}}, jump backward {{secondCount}} spots",
+      "whereDoYouLand": "Where do you land? That's your answer!"
+    }
   },
   "login": {
     "title": "Please login to continue",

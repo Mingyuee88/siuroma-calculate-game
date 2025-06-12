@@ -140,27 +140,27 @@ export function SideMenu({
   const renderLoginForm = () => (
     <div className="p-4 pt-16">
       <div className="mb-8 text-center">
-        <h1 className="text-2xl font-bold text-purple-700 mb-2">{t('title')}</h1>
-        <p className="text-sm text-gray-600">{t('login.title')}</p>
+        <h1 className="text-2xl font-bold text-purple-700 mb-2 font-gensen">{t('title')}</h1>
+        <p className="text-sm text-gray-600 font-gensen">{t('login.title')}</p>
       </div>
       
       <form onSubmit={handleLogin} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 mb-2 font-gensen">
             {t('login.email')}
           </label>
           <input
             type="text"
             value={loginUsername}
             onChange={(e) => setLoginUsername(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 font-gensen"
             placeholder={t('login.email')}
             required
           />
         </div>
         <button
           type="submit"
-          className="w-full bg-purple-500 text-white py-2 px-4 rounded-lg hover:bg-purple-600 transition-colors"
+          className="w-full bg-purple-500 text-white py-2 px-4 rounded-lg hover:bg-purple-600 transition-colors font-gensen"
         >
           {t('login.emailLogin')}
         </button>
@@ -171,12 +171,12 @@ export function SideMenu({
   const renderSettingsPanel = () => (
     <div className="space-y-8">
       <div>
-        <h2 className="text-lg font-bold text-purple-700 mb-4">{t('game.settings.difficulty')}</h2>
+        <h2 className="text-lg font-bold text-purple-700 mb-4 font-gensen">{t('game.settings.difficulty')}</h2>
         <div className="flex flex-col gap-2">
           <button
             onClick={enableAdaptiveMode}
             disabled={isSessionActive}
-            className={`px-3 py-2 rounded-lg text-sm font-medium ${
+            className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${
               isAdaptiveMode
                 ? 'bg-purple-500 text-white'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -188,7 +188,7 @@ export function SideMenu({
       </div>
 
       <div>
-        <h2 className="text-lg font-bold text-purple-700 mb-4">{t('game.settings.difficulty')}</h2>
+        <h2 className="text-lg font-bold text-purple-700 mb-4 font-gensen">{t('game.settings.difficulty')}</h2>
         <div className="flex flex-col gap-2">
           {[
             { level: 1, text: t('game.welcome.level1'), color: 'green' },
@@ -199,7 +199,7 @@ export function SideMenu({
               key={level}
               onClick={() => setDifficulty(level)}
               disabled={isSessionActive}
-              className={`px-3 py-2 rounded-lg text-sm font-medium ${
+              className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${
                 !isAdaptiveMode && difficulty === level
                   ? `bg-${color}-500 text-white`
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -212,14 +212,14 @@ export function SideMenu({
       </div>
 
       <div>
-        <h2 className="text-lg font-bold text-purple-700 mb-4">{t('game.settings.questionsPerSession')}</h2>
+        <h2 className="text-lg font-bold text-purple-700 mb-4 font-gensen">{t('game.settings.questionsPerSession')}</h2>
         <div className="flex flex-col gap-2">
           {[10, 20, 30].map(count => (
             <button
               key={count}
               onClick={() => setQuestionsPerSession(count)}
               disabled={isSessionActive}
-              className={`px-3 py-2 rounded-lg text-sm font-medium ${
+              className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${
                 questionsPerSession === count
                   ? 'bg-purple-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -232,7 +232,7 @@ export function SideMenu({
       </div>
 
       <div>
-        <h2 className="text-lg font-bold text-purple-700 mb-4">{t('game.settings.gameMode')}</h2>
+        <h2 className="text-lg font-bold text-purple-700 mb-4 font-gensen">{t('game.settings.gameMode')}</h2>
         <div className="flex flex-col gap-2">
           {[
             { mode: 'addition' as const, text: t('game.settings.addition') },
@@ -242,7 +242,7 @@ export function SideMenu({
               key={mode}
               onClick={() => switchGameMode(mode)}
               disabled={isSessionActive}
-              className={`px-3 py-2 rounded-lg text-sm font-medium ${
+              className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${
                 gameMode === mode
                   ? 'bg-blue-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -255,7 +255,7 @@ export function SideMenu({
       </div>
 
       <div>
-        <h2 className="text-lg font-bold text-purple-700 mb-4">{t('game.settings.visualStyle')}</h2>
+        <h2 className="text-lg font-bold text-purple-700 mb-4 font-gensen">{t('game.settings.visualStyle')}</h2>
         <div className="grid grid-cols-2 gap-2">
           {[
             { style: 'blocks' as const, text: t('game.settings.blocks') },
@@ -266,7 +266,7 @@ export function SideMenu({
             <button
               key={style}
               onClick={() => setVisualStyle(style)}
-              className={`px-3 py-2 rounded-lg text-sm font-medium ${
+              className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${
                 visualStyle === style
                   ? 'bg-purple-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -284,28 +284,28 @@ export function SideMenu({
     <div className="space-y-6 pb-16">
       <div className="text-center">
         <User size={48} className="mx-auto mb-2 text-purple-700" />
-        <h2 className="text-xl font-bold text-purple-700">{currentUser?.username}</h2>
+        <h2 className="text-xl font-bold text-purple-700 font-gensen">{currentUser?.username}</h2>
       </div>
 
       <div className="bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg p-4">
-        <h3 className="text-lg font-semibold text-purple-700 mb-4">{t('game.stats.performance')}</h3>
+        <h3 className="text-lg font-semibold text-purple-700 mb-4 font-gensen">{t('game.stats.performance')}</h3>
         
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-white rounded-lg p-3 text-center">
-            <div className="text-2xl font-bold text-green-600">{currentUser?.correctAnswers}</div>
-            <div className="text-sm text-gray-600">{t('game.stats.correctAnswers')}</div>
+            <div className="text-2xl font-bold text-green-600 font-gensen">{currentUser?.correctAnswers}</div>
+            <div className="text-sm text-gray-600 font-gensen">{t('game.stats.correctAnswers')}</div>
           </div>
           
           <div className="bg-white rounded-lg p-3 text-center">
-            <div className="text-2xl font-bold text-blue-600">{currentUser?.totalQuestions}</div>
-            <div className="text-sm text-gray-600">{t('game.stats.totalQuestions')}</div>
+            <div className="text-2xl font-bold text-blue-600 font-gensen">{currentUser?.totalQuestions}</div>
+            <div className="text-sm text-gray-600 font-gensen">{t('game.stats.totalQuestions')}</div>
           </div>
         </div>
 
         <div className="mt-4 bg-white rounded-lg p-3">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-700">{t('game.stats.accuracy')}</span>
-            <span className="text-sm font-bold text-purple-600">{currentUser?.accuracy}%</span>
+            <span className="text-sm font-medium text-gray-700 font-gensen">{t('game.stats.accuracy')}</span>
+            <span className="text-sm font-bold text-purple-600 font-gensen">{currentUser?.accuracy}%</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div 
@@ -322,18 +322,18 @@ export function SideMenu({
     <div className="space-y-6 pb-16">
       <div className="text-center">
         <Trophy size={48} className="mx-auto mb-2 text-yellow-500" />
-        <h2 className="text-xl font-bold text-purple-700">
-          {isAdmin ? 'All Rankings' : 'My Ranking'}
+        <h2 className="text-xl font-bold text-purple-700 font-gensen">
+          {isAdmin ? t('game.ranking.allRankings') : t('game.ranking.myRanking')}
         </h2>
       </div>
 
       {!isAdmin && (
         <div className="bg-gradient-to-r from-yellow-100 to-orange-100 rounded-lg p-4">
           <div className="text-center">
-            <div className="text-3xl font-bold text-orange-600 mb-2">#{currentUser?.currentRank}</div>
-            <div className="text-sm text-gray-600">Your Current Rank</div>
-            <div className="mt-2 text-xs text-gray-500">
-              Based on correct answers: {currentUser?.correctAnswers}
+            <div className="text-3xl font-bold text-orange-600 mb-2 font-gensen">#{currentUser?.currentRank}</div>
+            <div className="text-sm text-gray-600 font-gensen">{t('game.ranking.yourCurrentRank')}</div>
+            <div className="mt-2 text-xs text-gray-500 font-gensen">
+              {t('game.ranking.basedOnCorrectAnswers')}: {currentUser?.correctAnswers}
             </div>
           </div>
         </div>
@@ -341,7 +341,7 @@ export function SideMenu({
 
       {isAdmin && (
         <div className="space-y-2">
-          <h3 className="font-semibold text-purple-700 mb-3">{t('game.ranking.topPlayers')}</h3>
+          <h3 className="font-semibold text-purple-700 mb-3 font-gensen">{t('game.ranking.topPlayers')}</h3>
           {allUsers.slice(0, 5).map((player, index) => (
             <div 
               key={player.userId}
@@ -352,7 +352,7 @@ export function SideMenu({
               }`}
             >
               <div className="flex items-center space-x-3">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold font-gensen ${
                   index === 0 ? 'bg-yellow-500 text-white' :
                   index === 1 ? 'bg-gray-400 text-white' :
                   index === 2 ? 'bg-orange-500 text-white' :
@@ -360,9 +360,9 @@ export function SideMenu({
                 }`}>
                   {index + 1}
                 </div>
-                <span className="font-medium">{player.username}</span>
+                <span className="font-medium font-gensen">{player.username}</span>
               </div>
-              <span className="text-sm font-semibold text-purple-600">{player.correctAnswers}</span>
+              <span className="text-sm font-semibold text-purple-600 font-gensen">{player.correctAnswers}</span>
             </div>
           ))}
         </div>
@@ -423,9 +423,9 @@ export function SideMenu({
             {renderCurrentPanel()}
             <button
               onClick={handleLogout}
-              className="w-full mt-4 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors"
+              className="w-full mt-4 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors font-gensen"
             >
-              Logout
+              {t("menu.logout")}
             </button>
           </div>
 

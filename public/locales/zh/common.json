@@ -14,7 +14,9 @@
     "settings": "游戏设置",
     "stats": "我的统计",
     "ranking": "我的排名",
-    "adminRanking": "所有排名"
+    "adminRanking": "所有排名",
+    "logout": "退出登录",
+    "currentUser": "当前用户"
   },
   "game": {
     "settings": {
@@ -74,7 +76,11 @@
       "accuracy": "准确率"
     },
     "ranking": {
-      "topPlayers": "最佳玩家"
+      "topPlayers": "最佳玩家",
+      "allRankings": "所有排名",
+      "myRanking": "我的排名",
+      "yourCurrentRank": "你的当前排名",
+      "basedOnCorrectAnswers": "基于答对题数"
     },
     "progress": "本轮进度",
     "questions": "题",
@@ -84,7 +90,33 @@
     "level2": "中等",
     "level3": "困难",
     "showHint": "显示提示",
-    "hideHint": "隐藏提示"
+    "hideHint": "隐藏提示",
+    "symbols": {
+      "plus": "+",
+      "minus": "-"
+    },
+    "visualAid": {
+      "countAnimalsTotal": "数一数总共有多少只动物！",
+      "animalsPlaying": "{{count}}只动物在玩耍",
+      "animalsWentHome": "{{count}}只动物回家了",
+      "howManyAnimalsLeft": "还剩下多少只动物在玩耍？",
+      "countBlocksTotal": "数一数总共有多少个方块！",
+      "startWithBlocks": "从{{count}}个方块开始",
+      "takeAwayRedBlocks": "拿走{{count}}个红色方块",
+      "countBlueBlocksRemain": "数一数还剩下多少个蓝色方块！",
+      "countShapesTotal": "数一数总共有多少个图形！",
+      "circlesAndSquares": "{{firstCount}}个{{firstShape}} + {{secondCount}}个{{secondShape}} = ?",
+      "circle": "圆形",
+      "circles": "圆形",
+      "square": "方形",
+      "squares": "方形",
+      "startWithCircles": "从{{count}}个{{shape}}开始",
+      "takeAwayCircles": "拿走{{count}}个{{shape}}",
+      "howManyCirclesLeft": "还剩下多少个圆形？",
+      "numberLineAddition": "从0开始，向前跳{{firstCount}}格，再向前跳{{secondCount}}格",
+      "numberLineSubtraction": "从{{firstCount}}开始，向后跳{{secondCount}}格",
+      "whereDoYouLand": "你会落在哪里？那就是答案！"
+    }
   },
   "login": {
     "title": "请登录以继续",

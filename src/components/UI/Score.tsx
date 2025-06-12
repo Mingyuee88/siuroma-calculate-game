@@ -17,13 +17,13 @@ export function Score({ score, total, time, showAnimation = false }: ScoreProps)
     <div className="flex items-center justify-center space-x-8">
       <div className="flex items-center text-yellow-500">
         <Star fill="currentColor" size={24} />
-        <span className="mx-2 font-bold">{t('game.complete.score', { score, total })}</span>
+        <span className="mx-2 font-bold font-gensen">{t('game.complete.score', { score, total })}</span>
         <Star fill="currentColor" size={24} />
       </div>
       
       <div className="flex items-center text-blue-500">
         <Clock size={24} />
-        <span className="mx-2 font-bold">{t('game.complete.time', { time })}</span>
+        <span className="mx-2 font-bold font-gensen">{t('game.complete.time', { time })}</span>
       </div>
 
       {showAnimation && (

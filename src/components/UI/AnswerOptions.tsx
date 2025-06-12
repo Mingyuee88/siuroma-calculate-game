@@ -81,10 +81,10 @@ export function AnswerOptions({
           className={getOptionStyle(option)}
         >
           <div className="flex items-center justify-between">
-            <span className="text-2xl font-bold text-purple-600">
+            <span className="text-2xl font-bold text-purple-600 font-gensen">
               {option.label}
             </span>
-            <span className="text-2xl">
+            <span className="text-2xl font-gensen">
               {option.value}
             </span>
           </div>
