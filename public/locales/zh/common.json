@@ -138,18 +138,41 @@
     "passwordResetSent": "重置密码邮件已发送，请查收您的邮箱。"
   },
   "phone": {
-    "title": "手机号登录",
-    "number": "手机号",
-    "numberPlaceholder": "请输入手机号",
-    "numberRequired": "请输入手机号",
-    "placeholder": "+852 1234 5678",
+    "title": "手机号码登录",
+    "number": "手机号码",
+    "numberPlaceholder": "请输入手机号码",
+    "numberRequired": "请输入手机号码",
+    "placeholder": "+86 1234 5678",
     "sendCode": "发送验证码",
     "sending": "发送中...",
     "verificationCode": "验证码",
-    "codePlaceholder": "输入收到的验证码",
-    "verify": "确认验证码",
+    "codePlaceholder": "请输入验证码",
+    "verify": "验证",
     "verifying": "验证中...",
     "sendCodeError": "发送验证码失败，请重试",
-    "verifyCodeError": "验证码错误，请重新输入"
+    "verifyCodeError": "验证码错误，请重新输入",
+    "backToLogin": "返回登录",
+    "otherLoginMethods": "其他登录方式"
+  },
+  "register": {
+    "title": "创建账号",
+    "subtitle": "立即加入我们！请填写以下信息",
+    "email": "电子邮箱",
+    "emailPlaceholder": "请输入邮箱",
+    "password": "密码",
+    "passwordPlaceholder": "请创建密码",
+    "confirmPassword": "确认密码",
+    "confirmPasswordPlaceholder": "请再次输入密码",
+    "createAccount": "创建账号",
+    "creating": "正在创建账号...",
+    "backToLogin": "返回登录",
+    "alreadyHaveAccount": "已有账号？",
+    "passwordStrength": "密码强度",
+    "errors": {
+      "passwordMismatch": "两次输入的密码不一致",
+      "emailInUse": "该邮箱已被注册",
+      "weakPassword": "密码强度太弱，请至少使用6个字符",
+      "general": "注册失败，请重试"
+    }
   }
 } 
