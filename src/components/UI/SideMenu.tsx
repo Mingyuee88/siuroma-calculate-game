@@ -385,9 +385,12 @@ export function SideMenu({
 
   return (
     <div 
-      className={`fixed top-0 left-0 h-full w-80 bg-white shadow-lg transform transition-transform duration-300 ${
-        isMenuOpen ? 'translate-x-0' : '-translate-x-full'
-      }`}
+      className={`
+        ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} 
+        transition-transform duration-300 ease-in-out
+        fixed left-0 top-0 h-full w-80 bg-white shadow-lg z-50
+        md:relative md:translate-x-0 md:shadow-none md:w-64
+      `}
       ref={panelRef}
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
