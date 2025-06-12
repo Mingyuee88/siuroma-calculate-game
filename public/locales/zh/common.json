@@ -14,7 +14,9 @@
     "settings": "游戏设置",
     "stats": "我的统计",
     "ranking": "我的排名",
-    "adminRanking": "所有排名"
+    "adminRanking": "所有排名",
+    "logout": "退出登录",
+    "currentUser": "当前用户"
   },
   "game": {
     "settings": {

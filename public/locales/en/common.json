@@ -14,7 +14,9 @@
     "settings": "Game Settings",
     "stats": "My Stats",
     "ranking": "My Ranking",
-    "adminRanking": "All Rankings"
+    "adminRanking": "All Rankings",
+    "logout": "Logout",
+    "currentUser": "Current User"
   },
   "game": {
     "settings": {

@@ -25,21 +25,31 @@ interface UserStats {
   currentRank: number;
 }
 
-const defaultUserStats: UserStats = {
-  userId: 'user123',
-  username: 'Current User',
-  correctAnswers: 0,
-  totalQuestions: 0,
-  accuracy: 0,
-  currentRank: 0
-};
-
 export function MathGame({ 
   initialDifficulty = 1, 
   userId = 'user123',
   isAdmin = false 
 }: MathGameProps) {
   const { t } = useTranslation();
+  
+  // User statistics
+  const [userStats, setUserStats] = useState<UserStats>({
+    userId: 'user123',
+    username: '',  // Will be set in useEffect
+    correctAnswers: 0,
+    totalQuestions: 0,
+    accuracy: 0,
+    currentRank: 0
+  });
+
+  // Initialize user stats with translation
+  useEffect(() => {
+    setUserStats(prev => ({
+      ...prev,
+      username: t('menu.currentUser')
+    }));
+  }, [t]);
+
   const [gameMode, setGameMode] = useState<"addition" | "subtraction">("addition");
   const [difficulty, setDifficulty] = useState(initialDifficulty);
   const [firstNumber, setFirstNumber] = useState(0);
@@ -68,9 +78,6 @@ export function MathGame({
   const [options, setOptions] = useState<{ label: string; value: number }[]>([]);
   const [correctAnswer, setCorrectAnswer] = useState(0);
   const [hasTriedThisQuestion, setHasTriedThisQuestion] = useState(false);
-
-  // User statistics
-  const [userStats, setUserStats] = useState<UserStats>(defaultUserStats);
 
   // Mock leaderboard data - in real app, this would come from a database
   const [allUsers] = useState<UserStats[]>([

@@ -425,7 +425,7 @@ export function SideMenu({
               onClick={handleLogout}
               className="w-full mt-4 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors font-gensen"
             >
-              Logout
+              {t("menu.logout")}
             </button>
           </div>
 
