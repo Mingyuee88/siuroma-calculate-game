@@ -3,7 +3,6 @@
 import { Menu, X, User, Trophy, Target, Percent, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useRef, useEffect, TouchEvent } from 'react';
 import { VisualAid } from './VisualAid';
-
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 import { signOut } from 'firebase/auth';
@@ -76,7 +75,7 @@ export function SideMenu({
   allUsers,
   setCurrentUser
 }: SideMenuProps) {
-
+  const { t, language, setLanguage } = useLanguage();
   const router = useRouter();
 
   // Swipe functionality states
@@ -174,8 +173,32 @@ export function SideMenu({
 
   const renderSettingsPanel = () => (
     <div className="space-y-8">
+      {/* Language Selection */}
       <div>
-        <h2 className="text-lg font-bold text-purple-700 mb-4">Difficulty Mode</h2>
+        <h2 className="text-lg font-bold text-purple-700 mb-4">{t('language')}</h2>
+        <div className="flex flex-col gap-2">
+          {[
+            { code: 'en', label: t('english') },
+            { code: 'zh-TW', label: t('traditionalChinese') },
+            { code: 'zh-CN', label: t('simplifiedChinese') }
+          ].map(({ code, label }) => (
+            <button
+              key={code}
+              onClick={() => setLanguage(code as 'en' | 'zh-TW' | 'zh-CN')}
+              className={`px-3 py-2 rounded-lg text-sm font-medium ${
+                language === code
+                  ? 'bg-purple-500 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h2 className="text-lg font-bold text-purple-700 mb-4">{t('gameSettings.difficultyMode')}</h2>
         <div className="flex flex-col gap-2">
           <button
             onClick={enableAdaptiveMode}
@@ -186,18 +209,18 @@ export function SideMenu({
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             } ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
-            Adaptive Mode
+            {t('gameSettings.adaptiveMode')}
           </button>
         </div>
       </div>
 
       <div>
-        <h2 className="text-lg font-bold text-purple-700 mb-4">Fixed Difficulty</h2>
+        <h2 className="text-lg font-bold text-purple-700 mb-4">{t('gameSettings.fixedDifficulty')}</h2>
         <div className="flex flex-col gap-2">
           {[
-            { level: 1, text: '3-4 Years', color: 'green' },
-            { level: 2, text: '4-5 Years', color: 'yellow' },
-            { level: 3, text: '5-6 Years', color: 'red' }
+            { level: 1, text: t('gameSettings.ageLevels.easy'), color: 'green' },
+            { level: 2, text: t('gameSettings.ageLevels.medium'), color: 'yellow' },
+            { level: 3, text: t('gameSettings.ageLevels.hard'), color: 'red' }
           ].map(({ level, text, color }) => (
             <button
               key={level}
@@ -216,9 +239,13 @@ export function SideMenu({
       </div>
 
       <div>
-        <h2 className="text-lg font-bold text-purple-700 mb-4">Questions per Session</h2>
+        <h2 className="text-lg font-bold text-purple-700 mb-4">{t('gameSettings.questionsPerSession')}</h2>
         <div className="flex flex-col gap-2">
-          {[10, 20, 30].map(count => (
+          {[
+            { count: 10, text: t('gameSettings.questionCounts.ten') },
+            { count: 20, text: t('gameSettings.questionCounts.twenty') },
+            { count: 30, text: t('gameSettings.questionCounts.thirty') }
+          ].map(({ count, text }) => (
             <button
               key={count}
               onClick={() => setQuestionsPerSession(count)}
@@ -229,18 +256,18 @@ export function SideMenu({
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               } ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-              {count} Questions
+              {text}
             </button>
           ))}
         </div>
       </div>
 
       <div>
-        <h2 className="text-lg font-bold text-purple-700 mb-4">Game Mode</h2>
+        <h2 className="text-lg font-bold text-purple-700 mb-4">{t('gameSettings.gameMode')}</h2>
         <div className="flex flex-col gap-2">
           {[
-            { mode: 'addition' as const, text: 'Addition' },
-            { mode: 'subtraction' as const, text: 'Subtraction' }
+            { mode: 'addition' as const, text: t('gameSettings.operations.addition') },
+            { mode: 'subtraction' as const, text: t('gameSettings.operations.subtraction') }
           ].map(({ mode, text }) => (
             <button
               key={mode}

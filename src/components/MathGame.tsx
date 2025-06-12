@@ -36,6 +36,7 @@ export function MathGame({
   userId = 'user123',
   isAdmin = false 
 }: MathGameProps) {
+  const { t } = useLanguage();
   const [gameMode, setGameMode] = useState<"addition" | "subtraction">("addition");
   const [difficulty, setDifficulty] = useState(initialDifficulty);
   const [firstNumber, setFirstNumber] = useState(0);
@@ -313,37 +314,35 @@ export function MathGame({
               </h1>
 
               <div className="mb-8">
-                <h2 className="text-xl font-semibold mb-4">{t('sessionSettings')}</h2>
+                <h2 className="text-xl font-semibold mb-4">{t('session.settings')}</h2>
                 <div className="grid grid-cols-2 gap-4 text-left mb-6">
                   <div>
-                    <p className="text-gray-600">{t('gameModeLabel')}</p>
+                    <p className="text-gray-600">{t('session.gameModeLabel')}</p>
                     <p className="font-semibold">
-                      {gameMode === "addition" ? t('addition') : t('subtraction')}
+                      {gameMode === "addition" ? t('gameSettings.operations.addition') : t('gameSettings.operations.subtraction')}
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-600">{t('ageLevel')}</p>
+                    <p className="text-gray-600">{t('session.ageLevel')}</p>
                     <p className="font-semibold">
                       {isAdaptiveMode
-                        ? t('adaptiveModeLabel')
+                        ? t('session.adaptiveModeLabel')
                         : difficulty === 1
-                        ? t('age3to4')
+                        ? t('gameSettings.ageLevels.easy')
                         : difficulty === 2
-                        ? t('age4to5')
-                        : t('age5to6')}
+                        ? t('gameSettings.ageLevels.medium')
+                        : t('gameSettings.ageLevels.hard')}
                     </p>
                   </div>
                   <div>
-
-                    <p className="text-gray-600">{t('questionsLabel')}</p>
+                    <p className="text-gray-600">{t('session.questionsLabel')}</p>
                     <p className="font-semibold">
-                      {questionsPerSession} {t('perSession')}
+                      {questionsPerSession} {t('session.perSession')}
                     </p>
-
                   </div>
                   <div>
-                    <p className="text-gray-600">{t('visualAidLabel')}</p>
-                    <p className="font-semibold capitalize">{t(visualStyle)}</p>
+                    <p className="text-gray-600">{t('session.visualAidLabel')}</p>
+                    <p className="font-semibold capitalize">{t(`gameSettings.visualTypes.${visualStyle}`)}</p>
                   </div>
                 </div>
               </div>
@@ -351,21 +350,19 @@ export function MathGame({
                 onClick={startNewSession}
                 className="px-8 py-4 bg-purple-600 text-white rounded-lg font-bold text-lg hover:bg-purple-700 transition-colors"
               >
-                {t('startSession')}
+                {t('session.start')}
               </button>
             </div>
           ) : isSessionComplete ? (
             <div className="bg-white p-6 rounded-lg shadow-md mb-6 text-center">
-
-              <h2 className="text-2xl font-bold mb-4">Session Complete!</h2>
-              <p className="text-xl mb-2">Your score: {sessionScore}/{questionsPerSession}</p>
-              <p className="text-lg mb-4">Time taken: {formatTime(sessionDuration)}</p>
+              <h2 className="text-2xl font-bold mb-4">{t('session.complete')}</h2>
+              <p className="text-xl mb-2">{t('session.score')} {sessionScore}/{questionsPerSession}</p>
+              <p className="text-lg mb-4">{t('session.timeTaken')} {formatTime(sessionDuration)}</p>
               <div className="mb-4 p-4 bg-blue-50 rounded-lg">
-                <p className="font-semibold">Your Statistics:</p>
-                <p>Total Correct: {userStats.correctAnswers}</p>
-                <p>Total Attempts: {userStats.totalQuestions}</p>
-                <p>Accuracy: {userStats.accuracy}%</p>
-                <p>Current currentrank: #{getCurrentUserRank()}</p>
+                <p className="font-semibold">{t('stats.totalCorrect')} {userStats.correctAnswers}</p>
+                <p>{t('stats.totalAttempts')} {userStats.totalQuestions}</p>
+                <p>{t('stats.accuracy')} {userStats.accuracy}%</p>
+                <p>{t('stats.currentRank')} #{getCurrentUserRank()}</p>
               </div>
 
               <button
@@ -376,7 +373,7 @@ export function MathGame({
                 }}
                 className="px-6 py-3 bg-purple-600 text-white rounded-lg font-bold hover:bg-purple-700"
               >
-                {t('startNewSession')}
+                {t('session.startNew')}
               </button>
             </div>
           ) : (
@@ -390,7 +387,7 @@ export function MathGame({
                     }}
                     className="px-4 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600"
                   >
-                    {t('endSession')}
+                    {t('session.end')}
                   </button>
                   <button
                     onClick={() => {
@@ -403,11 +400,10 @@ export function MathGame({
                     }}
                     className="px-4 py-2 bg-yellow-500 text-white rounded-lg font-medium hover:bg-yellow-600"
                   >
-                    {t('restart')}
+                    {t('session.restart')}
                   </button>
                 </div>
               </div>
-
 
               <div className="text-center mb-8">
                 <Score
@@ -416,7 +412,7 @@ export function MathGame({
                 />
 
                 <div className="text-lg text-gray-600 mt-2">
-                  {t('sessionProgress')} {questionsAnswered}/{questionsPerSession} {t('questions')}
+                  {t('session.progress')} {questionsAnswered}/{questionsPerSession} {t('session.questions')}
                 </div>
                 <div className="w-full max-w-md mx-auto mt-2 bg-gray-200 rounded-full h-2.5">
                   <div 
@@ -425,71 +421,63 @@ export function MathGame({
                   />
                 </div>
                 <div className="text-lg text-gray-600 mt-1">
-                  {t('time')} {formatTime(sessionDuration)}
+                  {t('session.time')} {formatTime(sessionDuration)}
                 </div>
                 {isAdaptiveMode && (
                   <div className="text-sm text-purple-600 mt-1">
-                    {t('currentLevel')} {difficulty === 1 ? t('easy') : difficulty === 2 ? t('medium') : t('hard')}
+                    {t('session.currentLevel')} {difficulty === 1 ? t('session.levels.easy') : difficulty === 2 ? t('session.levels.medium') : t('session.levels.hard')}
                   </div>
                 )}
               </div>
 
+              <div className="text-6xl font-bold text-center mb-8 text-black">
+                {firstNumber}{" "}
+                <span className="text-black">
+                  {gameMode === "addition" ? "+" : "-"}
+                </span>{" "}
+                {secondNumber} = ?
+              </div>
 
-              <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-                <div className="text-6xl font-bold text-center mb-8 text-black">
-
-                  {firstNumber}{" "}
-                  <span className="text-black">
-                    {gameMode === "addition" ? "+" : "-"}
-                  </span>{" "}
-                  {secondNumber} = ?
-                </div>
-
-
-                <div className="mb-6">
-                  <AnswerOptions
-                    options={options}
-                    correctAnswer={correctAnswer}
-                    onAnswerSelect={handleAnswerSelect}
-                    hasTriedThisQuestion={hasTriedThisQuestion}
-                    disabled={!!feedback && feedback.includes("Correct")}
-
-                  />
-                </div>
-
-
-                <div className="text-center mb-4">
-                  <button
-                    onClick={() => setShowExplanation(!showExplanation)}
-                    className="text-blue-500 underline hover:text-blue-700"
-                  >
-                    {showExplanation ? "Hide" : "Show"} Hints
-                  </button>
-
-                </div>
-
-                <VisualAid
-                  visualStyle={visualStyle}
-                  setVisualStyle={setVisualStyle}
-                  firstNumber={firstNumber}
-                  secondNumber={secondNumber}
-                  gameMode={gameMode}
-                  showExplanation={showExplanation}
-                  showSelector={false}
+              <div className="mb-6">
+                <AnswerOptions
+                  options={options}
+                  correctAnswer={correctAnswer}
+                  onAnswerSelect={handleAnswerSelect}
+                  hasTriedThisQuestion={hasTriedThisQuestion}
+                  disabled={!!feedback && feedback.includes("Correct")}
                 />
-
-                {feedback && (
-                  <div
-                    className={`mt-4 p-3 rounded-lg text-center font-bold ${
-                      feedback.includes("Correct")
-                        ? "bg-green-100 text-green-700"
-                        : "bg-yellow-100 text-yellow-700"
-                    }`}
-                  >
-                    {feedback}
-                  </div>
-                )}
               </div>
+
+              <div className="text-center mb-4">
+                <button
+                  onClick={() => setShowExplanation(!showExplanation)}
+                  className="text-blue-500 underline hover:text-blue-700"
+                >
+                  {showExplanation ? t('game.hideHints') : t('game.showHints')}
+                </button>
+              </div>
+
+              <VisualAid
+                visualStyle={visualStyle}
+                setVisualStyle={setVisualStyle}
+                firstNumber={firstNumber}
+                secondNumber={secondNumber}
+                gameMode={gameMode}
+                showExplanation={showExplanation}
+                showSelector={false}
+              />
+
+              {feedback && (
+                <div
+                  className={`mt-4 p-3 rounded-lg text-center font-bold ${
+                    feedback.includes("Correct")
+                      ? "bg-green-100 text-green-700"
+                      : "bg-yellow-100 text-yellow-700"
+                  }`}
+                >
+                  {feedback}
+                </div>
+              )}
             </>
           )}
         </div>

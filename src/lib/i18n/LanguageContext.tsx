@@ -5,10 +5,15 @@ import { translations } from './translations';
 
 type Language = 'en' | 'zh-TW' | 'zh-CN';
 
+type TranslationKey = keyof typeof translations.en;
+type NestedKey = {
+  [K in TranslationKey]: typeof translations.en[K] extends string ? K : never
+}[TranslationKey];
+
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: keyof typeof translations.en) => string;
+  t: (key: string) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -28,8 +33,28 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('language', lang);
   };
 
-  const t = (key: keyof typeof translations.en): string => {
-    return translations[language][key] || translations.en[key];
+  const t = (key: string): string => {
+    const keys = key.split('.');
+    let value: any = translations[language];
+    
+    for (const k of keys) {
+      if (value && typeof value === 'object' && k in value) {
+        value = value[k];
+      } else {
+        // Fallback to English if translation is missing
+        value = translations.en;
+        for (const fallbackKey of keys) {
+          if (value && typeof value === 'object' && fallbackKey in value) {
+            value = value[fallbackKey];
+          } else {
+            return key; // Return the key if translation is not found
+          }
+        }
+        break;
+      }
+    }
+    
+    return typeof value === 'string' ? value : key;
   };
 
   return (
