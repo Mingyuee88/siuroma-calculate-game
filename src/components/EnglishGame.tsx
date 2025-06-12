@@ -33,7 +33,7 @@ interface UserStats {
 
 
 
-export function MathGame({ 
+export function EnglishGame({ 
   initialDifficulty = 1, 
   userId = 'user123',
   isAdmin = false,
