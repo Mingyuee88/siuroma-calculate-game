@@ -1,5 +1,6 @@
 'use client';
 
+import { PhoneAuthProvider, signInWithCredential } from 'firebase/auth';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
@@ -63,11 +64,15 @@ export default function PhoneLogin() {
 
   const verifyCode = async () => {
     if (!code || !verificationId) return;
-
+  
     setLoading(true);
     try {
-      const confirmation = await auth.signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier);
-      await confirmation.confirm(code);
+      // 用 verificationId 和 用户输入的 code 构造凭证
+      const credential = PhoneAuthProvider.credential(verificationId, code);
+  
+      // 用凭证登录
+      await signInWithCredential(auth, credential);
+  
       router.push('/game'); // 登录成功跳转
     } catch (err) {
       setError('验证码错误，请重新输入');
@@ -75,7 +80,7 @@ export default function PhoneLogin() {
       setLoading(false);
     }
   };
-
+  
   return (
     <main className="min-h-screen bg-gradient-to-b from-blue-100 to-blue-200 flex items-center justify-center">
       <div className="bg-white p-8 rounded shadow-md w-96">
