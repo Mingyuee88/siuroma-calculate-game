@@ -285,6 +285,7 @@ export function SideMenu({
         </div>
       </div>
 
+      {/* Visual Aid section */}
       <div className="mb-16">
         <VisualAid
           visualStyle={visualStyle}
@@ -307,23 +308,23 @@ export function SideMenu({
       </div>
 
       <div className="bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg p-4">
-        <h3 className="text-lg font-semibold text-purple-700 mb-4">My Performance</h3>
+        <h3 className="text-lg font-semibold text-purple-700 mb-4">{t('stats.title')}</h3>
         
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-white rounded-lg p-3 text-center">
             <div className="text-2xl font-bold text-green-600">{currentUser?.correctAnswers}</div>
-            <div className="text-sm text-gray-600">Correct Answers</div>
+            <div className="text-sm text-gray-600">{t('stats.totalCorrect')}</div>
           </div>
           
           <div className="bg-white rounded-lg p-3 text-center">
             <div className="text-2xl font-bold text-blue-600">{currentUser?.totalQuestions}</div>
-            <div className="text-sm text-gray-600">Total Questions</div>
+            <div className="text-sm text-gray-600">{t('stats.totalAttempts')}</div>
           </div>
         </div>
 
         <div className="mt-4 bg-white rounded-lg p-3">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-700">Accuracy</span>
+            <span className="text-sm font-medium text-gray-700">{t('stats.accuracy')}</span>
             <span className="text-sm font-bold text-purple-600">{currentUser?.accuracy}%</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
@@ -342,7 +343,7 @@ export function SideMenu({
       <div className="text-center">
         <Trophy size={48} className="mx-auto mb-2 text-yellow-500" />
         <h2 className="text-xl font-bold text-purple-700">
-          {isAdmin ? 'All Rankings' : 'My Ranking'}
+          {isAdmin ? t('stats.allRankings') : t('stats.myRanking')}
         </h2>
       </div>
 
@@ -350,42 +351,40 @@ export function SideMenu({
         <div className="bg-gradient-to-r from-yellow-100 to-orange-100 rounded-lg p-4">
           <div className="text-center">
             <div className="text-3xl font-bold text-orange-600 mb-2">#{currentUser?.currentRank}</div>
-            <div className="text-sm text-gray-600">Your Current Rank</div>
+            <div className="text-sm text-gray-600">{t('stats.currentRank')}</div>
             <div className="mt-2 text-xs text-gray-500">
-              Based on correct answers: {currentUser?.correctAnswers}
+              {t('stats.basedOnCorrectAnswers')}: {currentUser?.correctAnswers}
             </div>
           </div>
         </div>
       )}
 
-      {isAdmin && (
-        <div className="space-y-2">
-          <h3 className="font-semibold text-purple-700 mb-3">Top Players</h3>
-          {allUsers.slice(0, 5).map((player, index) => (
-            <div 
-              key={player.userId}
-              className={`flex items-center justify-between p-3 rounded-lg ${
-                player.userId === currentUser?.userId 
-                  ? 'bg-purple-100 border-2 border-purple-300' 
-                  : 'bg-gray-50'
-              }`}
-            >
-              <div className="flex items-center space-x-3">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                  index === 0 ? 'bg-yellow-500 text-white' :
-                  index === 1 ? 'bg-gray-400 text-white' :
-                  index === 2 ? 'bg-orange-500 text-white' :
-                  'bg-blue-500 text-white'
-                }`}>
-                  {index + 1}
-                </div>
-                <span className="font-medium">{player.username}</span>
+      <div className="space-y-2">
+        <h3 className="font-semibold text-purple-700 mb-3">{t('stats.topPlayers')}</h3>
+        {allUsers.slice(0, 5).map((player, index) => (
+          <div 
+            key={player.userId}
+            className={`flex items-center justify-between p-3 rounded-lg ${
+              player.userId === currentUser?.userId 
+                ? 'bg-purple-100 border-2 border-purple-300' 
+                : 'bg-gray-50'
+            }`}
+          >
+            <div className="flex items-center space-x-3">
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                index === 0 ? 'bg-yellow-500 text-white' :
+                index === 1 ? 'bg-gray-400 text-white' :
+                index === 2 ? 'bg-orange-500 text-white' :
+                'bg-blue-500 text-white'
+              }`}>
+                {index + 1}
               </div>
-              <span className="text-sm font-semibold text-purple-600">{player.correctAnswers}</span>
+              <span className="font-medium">{player.username}</span>
             </div>
-          ))}
-        </div>
-      )}
+            <span className="text-sm font-semibold text-purple-600">{player.correctAnswers}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 
@@ -428,7 +427,7 @@ export function SideMenu({
               >
                 <div className="flex flex-col items-center space-y-1">
                   {panel.icon}
-                  <span>{panel.title}</span>
+                  <span>{t(`panels.${panel.id}`)}</span>
                 </div>
               </button>
             ))}
@@ -441,7 +440,7 @@ export function SideMenu({
               onClick={handleLogout}
               className="w-full mt-4 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors"
             >
-              Logout
+              {t('auth.logout')}
             </button>
           </div>
 

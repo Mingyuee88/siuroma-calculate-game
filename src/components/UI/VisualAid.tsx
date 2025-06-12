@@ -38,7 +38,7 @@ export function VisualAid({
       {/* Selector */}
       {showSelector && (
         <div className="mb-8">
-          <h2 className="text-lg font-bold text-purple-700 mb-4">{t('visualAid')}</h2>
+          <h2 className="text-lg font-bold text-purple-700 mb-4">{t('gameSettings.visualAid')}</h2>
           <div className="flex flex-col gap-2">
             <button
               onClick={() => setVisualStyle('blocks')}
@@ -48,7 +48,7 @@ export function VisualAid({
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              {t('blocks')}
+              {t('gameSettings.visualAidOptions.blocks')}
             </button>
             <button
               onClick={() => setVisualStyle('animals')}
@@ -58,7 +58,7 @@ export function VisualAid({
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              {t('animals')}
+              {t('gameSettings.visualAidOptions.animals')}
             </button>
             <button
               onClick={() => setVisualStyle('shapes')}
@@ -68,7 +68,7 @@ export function VisualAid({
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              {t('shapes')}
+              {t('gameSettings.visualAidOptions.shapes')}
             </button>
             <button
               onClick={() => setVisualStyle('numberLine')}
@@ -78,7 +78,7 @@ export function VisualAid({
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              {t('numberLine')}
+              {t('gameSettings.visualAidOptions.numberLine')}
             </button>
           </div>
         </div>

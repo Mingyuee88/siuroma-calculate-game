@@ -29,10 +29,17 @@ export const translations = {
       gameMode: "Game Mode",
       operations: {
         addition: "Addition",
-        subtraction: "Subtraction"
+        subtraction: "Subtraction",
+        division: "Division"
       },
       visualAid: "Visual Aid",
       visualTypes: {
+        blocks: "Blocks",
+        animals: "Animals",
+        shapes: "Shapes",
+        numberLine: "Number Line"
+      },
+      visualAidOptions: {
         blocks: "Blocks",
         animals: "Animals",
         shapes: "Shapes",
@@ -64,6 +71,13 @@ export const translations = {
         easy: "Easy",
         medium: "Medium",
         hard: "Hard"
+      },
+      division: "Division",
+      visualAidOptions: {
+        blocks: "Blocks",
+        animals: "Animals",
+        shapes: "Shapes",
+        numberLine: "Number Line"
       }
     },
 
@@ -87,6 +101,24 @@ export const translations = {
       accuracy: "Accuracy:",
       currentRank: "Current Rank:",
       timeSpent: "Time Spent:"
+    },
+
+    panels: {
+      settings: 'Settings',
+      stats: 'Stats',
+      ranking: 'Ranking'
+    },
+
+    auth: {
+      login: 'Login',
+      register: 'Register',
+      username: 'Username',
+      password: 'Password',
+      confirmPassword: 'Confirm Password',
+      loginSuccess: 'Login successful!',
+      registerSuccess: 'Registration successful!',
+      logout: 'Logout',
+      logoutSuccess: 'Logged out successfully!'
     }
   },
   'zh-TW': {
@@ -119,11 +151,18 @@ export const translations = {
       gameMode: "遊戲模式",
       operations: {
         addition: "加法",
-        subtraction: "減法"
+        subtraction: "減法",
+        division: "除法"
       },
       visualAid: "視覺輔助",
       visualTypes: {
         blocks: "方塊",
+        animals: "動物",
+        shapes: "形狀",
+        numberLine: "數線"
+      },
+      visualAidOptions: {
+        blocks: "積木",
         animals: "動物",
         shapes: "形狀",
         numberLine: "數線"
@@ -154,6 +193,13 @@ export const translations = {
         easy: "簡單",
         medium: "中等",
         hard: "困難"
+      },
+      division: "除法",
+      visualAidOptions: {
+        blocks: "積木",
+        animals: "動物",
+        shapes: "形狀",
+        numberLine: "數線"
       }
     },
 
@@ -177,6 +223,24 @@ export const translations = {
       accuracy: "準確率：",
       currentRank: "當前排名：",
       timeSpent: "用時："
+    },
+
+    panels: {
+      settings: '設定',
+      stats: '統計',
+      ranking: '排名'
+    },
+
+    auth: {
+      login: '登入',
+      register: '註冊',
+      username: '使用者名稱',
+      password: '密碼',
+      confirmPassword: '確認密碼',
+      loginSuccess: '登入成功！',
+      registerSuccess: '註冊成功！',
+      logout: '登出',
+      logoutSuccess: '登出成功！'
     }
   },
   'zh-CN': {
@@ -209,11 +273,18 @@ export const translations = {
       gameMode: "游戏模式",
       operations: {
         addition: "加法",
-        subtraction: "减法"
+        subtraction: "减法",
+        division: "除法"
       },
       visualAid: "视觉辅助",
       visualTypes: {
         blocks: "方块",
+        animals: "动物",
+        shapes: "形状",
+        numberLine: "数线"
+      },
+      visualAidOptions: {
+        blocks: "积木",
         animals: "动物",
         shapes: "形状",
         numberLine: "数线"
@@ -244,6 +315,13 @@ export const translations = {
         easy: "简单",
         medium: "中等",
         hard: "困难"
+      },
+      division: "除法",
+      visualAidOptions: {
+        blocks: "积木",
+        animals: "动物",
+        shapes: "形状",
+        numberLine: "数线"
       }
     },
 
@@ -267,6 +345,24 @@ export const translations = {
       accuracy: "准确率：",
       currentRank: "当前排名：",
       timeSpent: "用时："
+    },
+
+    panels: {
+      settings: '设置',
+      stats: '统计',
+      ranking: '排名'
+    },
+
+    auth: {
+      login: '登录',
+      register: '注册',
+      username: '用户名',
+      password: '密码',
+      confirmPassword: '确认密码',
+      loginSuccess: '登录成功！',
+      registerSuccess: '注册成功！',
+      logout: '退出',
+      logoutSuccess: '退出成功！'
     }
   }
 }; 
