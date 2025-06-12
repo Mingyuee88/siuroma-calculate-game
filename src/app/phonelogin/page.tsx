@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import { auth } from '../../firebase';
+import { useTranslation } from 'react-i18next';
 
 declare global {
   interface Window {
@@ -14,6 +15,7 @@ declare global {
 }
 
 export default function PhoneLogin() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [phoneNumber, setPhoneNumber] = useState('+852');
   const [code, setCode] = useState('');
@@ -56,7 +58,7 @@ export default function PhoneLogin() {
       setVerificationId(confirmation.verificationId);
     } catch (err: any) {
       console.error('发送验证码失败:', err);
-      setError('发送验证码失败，请重试');
+      setError(t('phone.sendCodeError'));
     } finally {
       setLoading(false);
     }
@@ -75,7 +77,7 @@ export default function PhoneLogin() {
   
       router.push('/game'); // 登录成功跳转
     } catch (err) {
-      setError('验证码错误，请重新输入');
+      setError(t('phone.verifyCodeError'));
     } finally {
       setLoading(false);
     }
@@ -84,14 +86,14 @@ export default function PhoneLogin() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-blue-100 to-blue-200 flex items-center justify-center">
       <div className="bg-white p-8 rounded shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-4 text-center">手机号登录</h2>
+        <h2 className="text-2xl font-bold mb-4 text-center">{t('phone.title')}</h2>
 
         {!verificationId ? (
           <>
             <div className="space-y-4">
               <div>
                 <label htmlFor="phone" className="block text-gray-700 mb-2">
-                  手机号
+                  {t('phone.number')}
                 </label>
                 <input
                   type="tel"
@@ -99,7 +101,7 @@ export default function PhoneLogin() {
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-                  placeholder="+852 1234 5678"
+                  placeholder={t('phone.placeholder')}
                   required
                 />
               </div>
@@ -116,7 +118,7 @@ export default function PhoneLogin() {
                     : 'bg-blue-500 hover:bg-blue-600 text-white'
                 }`}
               >
-                {loading ? '发送中...' : '发送验证码'}
+                {loading ? t('phone.sending') : t('phone.sendCode')}
               </button>
             </div>
           </>
@@ -125,7 +127,7 @@ export default function PhoneLogin() {
             <div className="space-y-4">
               <div>
                 <label htmlFor="code" className="block text-gray-700 mb-2">
-                  验证码
+                  {t('phone.verificationCode')}
                 </label>
                 <input
                   type="text"
@@ -133,7 +135,7 @@ export default function PhoneLogin() {
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
                   className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-                  placeholder="输入收到的验证码"
+                  placeholder={t('phone.codePlaceholder')}
                   required
                 />
               </div>
@@ -149,7 +151,7 @@ export default function PhoneLogin() {
                     : 'bg-green-500 hover:bg-green-600 text-white'
                 }`}
               >
-                {loading ? '验证中...' : '确认验证码'}
+                {loading ? t('phone.verifying') : t('phone.verify')}
               </button>
             </div>
           </>

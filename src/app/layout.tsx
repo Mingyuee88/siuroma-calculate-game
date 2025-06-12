@@ -1,15 +1,10 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
 import "./globals.css";
-
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-});
+import { I18nProvider } from "@/components/I18nProvider";
 
 export const metadata: Metadata = {
-  title: "Math Explorer - Fun Math Learning for Kids",
-  description: "An interactive math learning game for children aged 3-6, featuring visual representations of addition and subtraction.",
+  title: "Game Vertical Calculator",
+  description: "Calculate your game vertical statistics",
 };
 
 export default function RootLayout({
@@ -18,9 +13,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={poppins.className} suppressHydrationWarning>
-        {children}
+    <html suppressHydrationWarning>
+      <head />
+      <body>
+        <I18nProvider>
+          {children}
+        </I18nProvider>
       </body>
     </html>
   );

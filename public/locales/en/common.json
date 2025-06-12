@@ -1,0 +1,121 @@
+{
+  "title": "Math Explorer",
+  "description": "Calculate your game vertical statistics",
+  "language": "Language",
+  "calculate": "Calculate",
+  "reset": "Reset",
+  "result": "Result",
+  "input": {
+    "placeholder": "Enter your data",
+    "submit": "Submit"
+  },
+  "menu": {
+    "language": "Switch Language",
+    "settings": "Game Settings",
+    "stats": "My Stats",
+    "ranking": "My Ranking",
+    "adminRanking": "All Rankings"
+  },
+  "game": {
+    "settings": {
+      "difficulty": "Difficulty Level",
+      "gameMode": "Game Mode",
+      "addition": "Addition",
+      "subtraction": "Subtraction",
+      "visualStyle": "Visual Style",
+      "blocks": "Blocks",
+      "animals": "Animals",
+      "shapes": "Shapes",
+      "numberLine": "Number Line",
+      "questionsPerSession": "Questions Per Session",
+      "adaptiveMode": "Adaptive Mode"
+    },
+    "welcome": {
+      "title": "Math Explorer",
+      "description": "Welcome to Math Explorer! Get ready for an exciting math adventure.",
+      "startButton": "Start Session",
+      "gameMode": "Game Mode",
+      "ageLevel": "Age Level (Difficulty)",
+      "adaptiveMode": "Adaptive (Auto-adjusts)",
+      "level1": "3-4 Years (1-10)",
+      "level2": "4-5 Years (1-20)",
+      "level3": "5-6 Years (1-50)",
+      "questions": "Questions",
+      "perSession": "per session",
+      "visualAid": "Visual Aid"
+    },
+    "feedback": {
+      "correct": "Correct! Great job!",
+      "incorrect": "Not quite right. Try again!",
+      "levelUp": "You're doing great! Let's try some harder numbers!"
+    },
+    "question": {
+      "title": "Question {{current}} of {{total}}",
+      "add": "What is {{first}} + {{second}}?",
+      "subtract": "What is {{first}} - {{second}}?"
+    },
+    "complete": {
+      "title": "Session Complete!",
+      "score": "Your score: {{score}}/{{total}}",
+      "time": "Time taken: {{time}}",
+      "accuracy": "Accuracy: {{accuracy}}%",
+      "statistics": "Your Statistics",
+      "totalCorrect": "Total Correct",
+      "totalAttempts": "Total Attempts",
+      "currentRank": "Current Rank",
+      "playAgain": "Play Again",
+      "endSession": "End Session",
+      "restart": "Restart"
+    },
+    "stats": {
+      "performance": "My Performance",
+      "correctAnswers": "Correct Answers",
+      "totalQuestions": "Total Questions",
+      "accuracy": "Accuracy"
+    },
+    "ranking": {
+      "topPlayers": "Top Players"
+    },
+    "progress": "Session Progress",
+    "questions": "questions",
+    "time": "Time",
+    "currentLevel": "Current Level",
+    "level1": "Easy",
+    "level2": "Medium",
+    "level3": "Hard",
+    "showHint": "Show Hints",
+    "hideHint": "Hide Hints"
+  },
+  "login": {
+    "title": "Please login to continue",
+    "email": "Email",
+    "password": "Password",
+    "emailLogin": "Login with Email",
+    "phoneLogin": "Login with Phone",
+    "googleLogin": "Login with Google",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "register": "Register Now",
+    "loading": "Logging in...",
+    "error": {
+      "invalidCredentials": "Invalid email or password",
+      "general": "Login failed, please try again later.",
+      "emailRequired": "Please enter your email to receive the reset password email",
+      "resetFailed": "Failed to send reset email, please check your email or try again later"
+    },
+    "passwordResetSent": "Password reset email has been sent, please check your inbox."
+  },
+  "phone": {
+    "title": "Phone Login",
+    "number": "Phone Number",
+    "placeholder": "+852 1234 5678",
+    "sendCode": "Send Code",
+    "sending": "Sending...",
+    "verificationCode": "Verification Code",
+    "codePlaceholder": "Enter the code you received",
+    "verify": "Verify Code",
+    "verifying": "Verifying...",
+    "sendCodeError": "Failed to send verification code, please try again",
+    "verifyCodeError": "Invalid verification code, please try again"
+  }
+} 

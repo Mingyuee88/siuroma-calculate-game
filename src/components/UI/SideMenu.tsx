@@ -6,6 +6,7 @@ import { VisualAid } from './VisualAid';
 import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { auth } from '../../firebase';
+import { useTranslation } from 'react-i18next';
 
 // User and Statistics interfaces
 interface UserStats {
@@ -18,7 +19,6 @@ interface UserStats {
 }
 
 interface SideMenuProps {
-  userStats: UserStats;
   isMenuOpen: boolean;
   setIsMenuOpen: (isOpen: boolean) => void;
   difficulty: number;
@@ -32,13 +32,13 @@ interface SideMenuProps {
   isSessionActive: boolean;
   isAdaptiveMode: boolean;
   enableAdaptiveMode: () => void;
-  currentUser: UserStats | null;
+  currentUser: UserStats;
   isAdmin: boolean;
   onUserLogin: (username: string) => void;
   onUserLogout: () => void;
   currentRank: number;
   allUsers: UserStats[];
-  setCurrentUser: React.Dispatch<React.SetStateAction<UserStats | null>>;
+  setCurrentUser: React.Dispatch<React.SetStateAction<UserStats>>;
 }
 
 const mockUserStats: UserStats = {
@@ -73,6 +73,7 @@ export function SideMenu({
   setCurrentUser
 }: SideMenuProps) {
   const router = useRouter();
+  const { t } = useTranslation();
 
   // Swipe functionality states
   const [currentPanel, setCurrentPanel] = useState(0);
@@ -86,9 +87,9 @@ export function SideMenu({
 
   // Panel definitions
   const panels = [
-    { id: 'settings', title: 'Game Settings', icon: <Menu size={20} /> },
-    { id: 'stats', title: 'My Stats', icon: <Target size={20} /> },
-    { id: 'ranking', title: isAdmin ? 'All Rankings' : 'My Ranking', icon: <Trophy size={20} /> }
+    { id: 'settings', title: t('menu.settings'), icon: <Menu size={20} /> },
+    { id: 'stats', title: t('menu.stats'), icon: <Target size={20} /> },
+    { id: 'ranking', title: isAdmin ? t('menu.adminRanking') : t('menu.ranking'), icon: <Trophy size={20} /> }
   ];
 
   // Swipe detection
@@ -139,21 +140,21 @@ export function SideMenu({
   const renderLoginForm = () => (
     <div className="p-4 pt-16">
       <div className="mb-8 text-center">
-        <h1 className="text-2xl font-bold text-purple-700 mb-2">Math Explorer</h1>
-        <p className="text-sm text-gray-600">Please login to continue</p>
+        <h1 className="text-2xl font-bold text-purple-700 mb-2">{t('title')}</h1>
+        <p className="text-sm text-gray-600">{t('login.title')}</p>
       </div>
       
       <form onSubmit={handleLogin} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Username
+            {t('login.email')}
           </label>
           <input
             type="text"
             value={loginUsername}
             onChange={(e) => setLoginUsername(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-            placeholder="Enter your username"
+            placeholder={t('login.email')}
             required
           />
         </div>
@@ -161,7 +162,7 @@ export function SideMenu({
           type="submit"
           className="w-full bg-purple-500 text-white py-2 px-4 rounded-lg hover:bg-purple-600 transition-colors"
         >
-          Login
+          {t('login.emailLogin')}
         </button>
       </form>
     </div>
@@ -170,7 +171,7 @@ export function SideMenu({
   const renderSettingsPanel = () => (
     <div className="space-y-8">
       <div>
-        <h2 className="text-lg font-bold text-purple-700 mb-4">Difficulty Mode</h2>
+        <h2 className="text-lg font-bold text-purple-700 mb-4">{t('game.settings.difficulty')}</h2>
         <div className="flex flex-col gap-2">
           <button
             onClick={enableAdaptiveMode}
@@ -181,18 +182,18 @@ export function SideMenu({
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             } ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
-            Adaptive Mode
+            {t('game.settings.adaptiveMode')}
           </button>
         </div>
       </div>
 
       <div>
-        <h2 className="text-lg font-bold text-purple-700 mb-4">Fixed Difficulty</h2>
+        <h2 className="text-lg font-bold text-purple-700 mb-4">{t('game.settings.difficulty')}</h2>
         <div className="flex flex-col gap-2">
           {[
-            { level: 1, text: '3-4 Years', color: 'green' },
-            { level: 2, text: '4-5 Years', color: 'yellow' },
-            { level: 3, text: '5-6 Years', color: 'red' }
+            { level: 1, text: t('game.welcome.level1'), color: 'green' },
+            { level: 2, text: t('game.welcome.level2'), color: 'yellow' },
+            { level: 3, text: t('game.welcome.level3'), color: 'red' }
           ].map(({ level, text, color }) => (
             <button
               key={level}
@@ -211,7 +212,7 @@ export function SideMenu({
       </div>
 
       <div>
-        <h2 className="text-lg font-bold text-purple-700 mb-4">Questions per Session</h2>
+        <h2 className="text-lg font-bold text-purple-700 mb-4">{t('game.settings.questionsPerSession')}</h2>
         <div className="flex flex-col gap-2">
           {[10, 20, 30].map(count => (
             <button
@@ -224,18 +225,18 @@ export function SideMenu({
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               } ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-              {count} Questions
+              {count} {t('game.questions')}
             </button>
           ))}
         </div>
       </div>
 
       <div>
-        <h2 className="text-lg font-bold text-purple-700 mb-4">Game Mode</h2>
+        <h2 className="text-lg font-bold text-purple-700 mb-4">{t('game.settings.gameMode')}</h2>
         <div className="flex flex-col gap-2">
           {[
-            { mode: 'addition' as const, text: 'Addition' },
-            { mode: 'subtraction' as const, text: 'Subtraction' }
+            { mode: 'addition' as const, text: t('game.settings.addition') },
+            { mode: 'subtraction' as const, text: t('game.settings.subtraction') }
           ].map(({ mode, text }) => (
             <button
               key={mode}
@@ -253,16 +254,28 @@ export function SideMenu({
         </div>
       </div>
 
-      <div className="mb-16">
-        <VisualAid
-          visualStyle={visualStyle}
-          setVisualStyle={setVisualStyle}
-          firstNumber={0}
-          secondNumber={0}
-          gameMode="addition"
-          showExplanation={false}
-          showSelector={true}
-        />
+      <div>
+        <h2 className="text-lg font-bold text-purple-700 mb-4">{t('game.settings.visualStyle')}</h2>
+        <div className="grid grid-cols-2 gap-2">
+          {[
+            { style: 'blocks' as const, text: t('game.settings.blocks') },
+            { style: 'animals' as const, text: t('game.settings.animals') },
+            { style: 'shapes' as const, text: t('game.settings.shapes') },
+            { style: 'numberLine' as const, text: t('game.settings.numberLine') }
+          ].map(({ style, text }) => (
+            <button
+              key={style}
+              onClick={() => setVisualStyle(style)}
+              className={`px-3 py-2 rounded-lg text-sm font-medium ${
+                visualStyle === style
+                  ? 'bg-purple-500 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              {text}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -275,23 +288,23 @@ export function SideMenu({
       </div>
 
       <div className="bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg p-4">
-        <h3 className="text-lg font-semibold text-purple-700 mb-4">My Performance</h3>
+        <h3 className="text-lg font-semibold text-purple-700 mb-4">{t('game.stats.performance')}</h3>
         
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-white rounded-lg p-3 text-center">
             <div className="text-2xl font-bold text-green-600">{currentUser?.correctAnswers}</div>
-            <div className="text-sm text-gray-600">Correct Answers</div>
+            <div className="text-sm text-gray-600">{t('game.stats.correctAnswers')}</div>
           </div>
           
           <div className="bg-white rounded-lg p-3 text-center">
             <div className="text-2xl font-bold text-blue-600">{currentUser?.totalQuestions}</div>
-            <div className="text-sm text-gray-600">Total Questions</div>
+            <div className="text-sm text-gray-600">{t('game.stats.totalQuestions')}</div>
           </div>
         </div>
 
         <div className="mt-4 bg-white rounded-lg p-3">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-700">Accuracy</span>
+            <span className="text-sm font-medium text-gray-700">{t('game.stats.accuracy')}</span>
             <span className="text-sm font-bold text-purple-600">{currentUser?.accuracy}%</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
@@ -328,7 +341,7 @@ export function SideMenu({
 
       {isAdmin && (
         <div className="space-y-2">
-          <h3 className="font-semibold text-purple-700 mb-3">Top Players</h3>
+          <h3 className="font-semibold text-purple-700 mb-3">{t('game.ranking.topPlayers')}</h3>
           {allUsers.slice(0, 5).map((player, index) => (
             <div 
               key={player.userId}
