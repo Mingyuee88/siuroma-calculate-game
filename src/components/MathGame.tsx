@@ -44,7 +44,7 @@ export function MathGame({
   const [isInitialized, setIsInitialized] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(true);
   const [isAdaptiveMode, setIsAdaptiveMode] = useState(false);
-
+  const [isMobile, setIsMobile] = useState(false);
   // Session related state
   const [questionKey, setQuestionKey] = useState(0);
   const [questionsPerSession, setQuestionsPerSession] = useState(10);
@@ -175,7 +175,21 @@ export function MathGame({
       }
     };
   }, [isSessionStarted, isSessionComplete, sessionStartTime]);
-
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      // 移动端默认关闭侧边栏，桌面端保持原有逻辑
+      if (mobile && isMenuOpen) {
+        setIsMenuOpen(false);
+      }
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   // Update user stats
   const updateUserStats = (isCorrect: boolean, isFirstTry: boolean) => {
     setUserStats(prev => {
@@ -273,204 +287,250 @@ export function MathGame({
     return null;
   }
 
-  return (
-    <div className="flex min-h-screen bg-gray-100">
-      <SideMenu
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-        difficulty={difficulty}
-        setDifficulty={setDifficultyLevel}
-        gameMode={gameMode}
-        switchGameMode={switchGameMode}
-        visualStyle={visualStyle}
-        setVisualStyle={setVisualStyle}
-        questionsPerSession={questionsPerSession}
-        setQuestionsPerSession={setQuestionsPerSession}
-        isSessionActive={isSessionStarted && !isSessionComplete}
-        isAdaptiveMode={isAdaptiveMode}
-        enableAdaptiveMode={enableAdaptiveMode}
-        userStats={userStats}
-        currentRank={getCurrentUserRank()}
-        isAdmin={isAdmin}
-        allUsers={allUsers}
-        currentUser={userStats}
-        onUserLogin={() => {}}
-        onUserLogout={() => {}}
-        setCurrentUser={() => {}}
+  // 修改 return 语句中的主要布局部分：
+return (
+  <div className="flex min-h-screen bg-gray-100">
+    {/* 移动端遮罩层 */}
+    {isMobile && isMenuOpen && (
+      <div 
+        className="mobile-overlay"
+        onClick={() => setIsMenuOpen(false)}
       />
+    )}
+    
+    <SideMenu
+      isMenuOpen={isMenuOpen}
+      setIsMenuOpen={setIsMenuOpen}
+      difficulty={difficulty}
+      setDifficulty={setDifficultyLevel}
+      gameMode={gameMode}
+      switchGameMode={switchGameMode}
+      visualStyle={visualStyle}
+      setVisualStyle={setVisualStyle}
+      questionsPerSession={questionsPerSession}
+      setQuestionsPerSession={setQuestionsPerSession}
+      isSessionActive={isSessionStarted && !isSessionComplete}
+      isAdaptiveMode={isAdaptiveMode}
+      enableAdaptiveMode={enableAdaptiveMode}
+      userStats={userStats}
+      currentRank={getCurrentUserRank()}
+      isAdmin={isAdmin}
+      allUsers={allUsers}
+      currentUser={userStats}
+      onUserLogin={() => {}}
+      onUserLogout={() => {}}
+      setCurrentUser={() => {}}
+    />
 
-      {/* Main Content */}
-      <div className={`flex-1 p-6 transition-all duration-300 ${isMenuOpen ? "ml-64" : "ml-0"}`}>
-        <div className="max-w-3xl mx-auto">
-          {!isSessionStarted ? (
-            <div className="bg-white p-8 rounded-lg shadow-md text-center">
-              <h1 className="text-3xl font-bold text-purple-700 mb-6">Math Explorer</h1>
-              <div className="mb-8">
-                <h2 className="text-xl font-semibold mb-4">Session Settings</h2>
-                <div className="grid grid-cols-2 gap-4 text-left mb-6">
-                  <div>
-                    <p className="text-gray-600">Game Mode:</p>
-                    <p className="font-semibold">
-                      {gameMode === "addition" ? "Addition" : "Subtraction"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600">Age Level(Difficulty):</p>
-                    <p className="font-semibold">
-                      {isAdaptiveMode
-                        ? "Adaptive (Auto-adjusts)"
-                        : difficulty === 1
-                        ? "3-4 Years (1-10)"
-                        : difficulty === 2
-                        ? "4-5 Years (1-20)"
-                        : "5-6 Years (1-50)"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600">Questions:</p>
-                    <p className="font-semibold">{questionsPerSession} per session</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600">Visual Aid:</p>
-                    <p className="font-semibold capitalize">{visualStyle}</p>
-                  </div>
+    {/* 汉堡菜单按钮 - 始终显示在移动端 */}
+    {isMobile && (
+      <>
+        {/* 打开按钮 - 显示在左上角 */}
+        {!isMenuOpen && (
+          <button
+            onClick={() => setIsMenuOpen(true)}
+            className="hamburger-btn"
+            aria-label="Open menu"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        )}
+
+        {/* 关闭按钮 - 显示在右上角 */}
+        {isMenuOpen && (
+          <button
+            onClick={() => setIsMenuOpen(false)}
+            className="hamburger-btn-close"
+            aria-label="Close menu"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        )}
+      </>
+    )}
+
+    {/* Main Content */}
+    <div className={`flex-1 p-6 transition-all duration-300 ${
+      isMobile 
+        ? "main-content-mobile" 
+        : isMenuOpen 
+          ? "ml-64" 
+          : "ml-0"
+    }`}>
+      <div className="max-w-3xl mx-auto">
+        {/* 现有的所有内容保持不变 */}
+        {!isSessionStarted ? (
+          <div className="bg-white p-8 rounded-lg shadow-md text-center">
+            <h1 className="text-3xl font-bold text-purple-700 mb-6">Math Explorer</h1>
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold mb-4">Session Settings</h2>
+              <div className="grid grid-cols-2 gap-4 text-left mb-6">
+                <div>
+                  <p className="text-gray-600">Game Mode:</p>
+                  <p className="font-semibold">
+                    {gameMode === "addition" ? "Addition" : "Subtraction"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-gray-600">Age Level(Difficulty):</p>
+                  <p className="font-semibold">
+                    {isAdaptiveMode
+                      ? "Adaptive (Auto-adjusts)"
+                      : difficulty === 1
+                      ? "3-4 Years (1-10)"
+                      : difficulty === 2
+                      ? "4-5 Years (1-20)"
+                      : "5-6 Years (1-50)"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-gray-600">Questions:</p>
+                  <p className="font-semibold">{questionsPerSession} per session</p>
+                </div>
+                <div>
+                  <p className="text-gray-600">Visual Aid:</p>
+                  <p className="font-semibold capitalize">{visualStyle}</p>
                 </div>
               </div>
-              <button
-                onClick={startNewSession}
-                className="px-8 py-4 bg-purple-600 text-white rounded-lg font-bold text-lg hover:bg-purple-700 transition-colors"
-              >
-                Start Session
-              </button>
             </div>
-          ) : isSessionComplete ? (
-            <div className="bg-white p-6 rounded-lg shadow-md mb-6 text-center">
-              <h2 className="text-2xl font-bold mb-4">Session Complete!</h2>
-              <p className="text-xl mb-2">Your score: {sessionScore}/{questionsPerSession}</p>
-              <p className="text-lg mb-4">Time taken: {formatTime(sessionDuration)}</p>
-              <div className="mb-4 p-4 bg-blue-50 rounded-lg">
-                <p className="font-semibold">Your Statistics:</p>
-                <p>Total Correct: {userStats.correctAnswers}</p>
-                <p>Total Attempts: {userStats.totalQuestions}</p>
-                <p>Accuracy: {userStats.accuracy}%</p>
-                <p>Current Rank: #{getCurrentUserRank()}</p>
-              </div>
-              <button
-                onClick={() => {
-                  setIsSessionStarted(false);
-                  setSessionDuration(0);
-                  startNewSession();
-                }}
-                className="px-6 py-3 bg-purple-600 text-white rounded-lg font-bold hover:bg-purple-700"
-              >
-                Start New Session
-              </button>
+            <button
+              onClick={startNewSession}
+              className="px-8 py-4 bg-purple-600 text-white rounded-lg font-bold text-lg hover:bg-purple-700 transition-colors"
+            >
+              Start Session
+            </button>
+          </div>
+        ) : isSessionComplete ? (
+          <div className="bg-white p-6 rounded-lg shadow-md mb-6 text-center">
+            <h2 className="text-2xl font-bold mb-4">Session Complete!</h2>
+            <p className="text-xl mb-2">Your score: {sessionScore}/{questionsPerSession}</p>
+            <p className="text-lg mb-4">Time taken: {formatTime(sessionDuration)}</p>
+            <div className="mb-4 p-4 bg-blue-50 rounded-lg">
+              <p className="font-semibold">Your Statistics:</p>
+              <p>Total Correct: {userStats.correctAnswers}</p>
+              <p>Total Attempts: {userStats.totalQuestions}</p>
+              <p>Accuracy: {userStats.accuracy}%</p>
+              <p>Current Rank: #{getCurrentUserRank()}</p>
             </div>
-          ) : (
-            <>
-              <div className="w-full flex justify-end mb-4">
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => {
-                      setIsSessionComplete(true);
-                      setIsSessionStarted(false);
-                    }}
-                    className="px-4 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600"
-                  >
-                    End Session
-                  </button>
-                  <button
-                    onClick={() => {
-                      setQuestionsAnswered(0);
-                      setSessionScore(0);
-                      // setUserAnswer("");
-                      setFeedback("");
-                      setConsecutiveCorrect(0);
-                      generateProblem();
-                    }}
-                    className="px-4 py-2 bg-yellow-500 text-white rounded-lg font-medium hover:bg-yellow-600"
-                  >
-                    Restart
-                  </button>
-                </div>
+            <button
+              onClick={() => {
+                setIsSessionStarted(false);
+                setSessionDuration(0);
+                startNewSession();
+              }}
+              className="px-6 py-3 bg-purple-600 text-white rounded-lg font-bold hover:bg-purple-700"
+            >
+              Start New Session
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="w-full flex justify-end mb-4">
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    setIsSessionComplete(true);
+                    setIsSessionStarted(false);
+                  }}
+                  className="px-4 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600"
+                >
+                  End Session
+                </button>
+                <button
+                  onClick={() => {
+                    setQuestionsAnswered(0);
+                    setSessionScore(0);
+                    setFeedback("");
+                    setConsecutiveCorrect(0);
+                    generateProblem();
+                  }}
+                  className="px-4 py-2 bg-yellow-500 text-white rounded-lg font-medium hover:bg-yellow-600"
+                >
+                  Restart
+                </button>
               </div>
+            </div>
 
-              <div className="text-center mb-6">
-                <Score score={score} showAnimation={feedback.includes("Correct")} />
-                <div className="text-lg text-gray-600 mt-2">
-                  Session Progress: {questionsAnswered}/{questionsPerSession} questions
-                </div>
-                <div className="w-full max-w-md mx-auto mt-2 bg-gray-200 rounded-full h-2.5">
-                  <div 
-                    className="bg-purple-600 h-2.5 rounded-full transition-all duration-300"
-                    style={{ width: `${(questionsAnswered / questionsPerSession) * 100}%` }}
-                  />
-                </div>
-                <div className="text-lg text-gray-600 mt-1">
-                  Time: {formatTime(sessionDuration)}
-                </div>
-                {isAdaptiveMode && (
-                  <div className="text-sm text-purple-600 mt-1">
-                    Current Level: {difficulty === 1 ? "Easy" : difficulty === 2 ? "Medium" : "Hard"}
-                  </div>
-                )}
+            <div className="text-center mb-6">
+              <Score score={score} showAnimation={feedback.includes("Correct")} />
+              <div className="text-lg text-gray-600 mt-2">
+                Session Progress: {questionsAnswered}/{questionsPerSession} questions
               </div>
-
-              <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-                <div className="text-6xl font-bold text-center mb-8 text-black">
-                  {firstNumber}{" "}
-                  <span className="text-black">
-                    {gameMode === "addition" ? "+" : "-"}
-                  </span>{" "}
-                  {secondNumber} = ?
-                </div>
-
-                <div className="mb-6">
-                  <AnswerOptions
-                    key={questionKey}
-                    options={options}
-                    correctAnswer={correctAnswer}
-                    onAnswerSelect={handleAnswerSelect}
-                    hasTriedThisQuestion={hasTriedThisQuestion}
-                    disabled={!!feedback && feedback.includes("Correct")}
-                  />
-                </div>
-
-                <div className="text-center mb-4">
-                  <button
-                    onClick={() => setShowExplanation(!showExplanation)}
-                    className="text-blue-500 underline hover:text-blue-700"
-                  >
-                    {showExplanation ? "Hide" : "Show"} Hints
-                  </button>
-                </div>
-
-                <VisualAid
-                  visualStyle={visualStyle}
-                  setVisualStyle={setVisualStyle}
-                  firstNumber={firstNumber}
-                  secondNumber={secondNumber}
-                  gameMode={gameMode}
-                  showExplanation={showExplanation}
-                  showSelector={false}
+              <div className="w-full max-w-md mx-auto mt-2 bg-gray-200 rounded-full h-2.5">
+                <div 
+                  className="bg-purple-600 h-2.5 rounded-full transition-all duration-300"
+                  style={{ width: `${(questionsAnswered / questionsPerSession) * 100}%` }}
                 />
-
-                {feedback && (
-                  <div
-                    className={`mt-4 p-3 rounded-lg text-center font-bold ${
-                      feedback.includes("Correct")
-                        ? "bg-green-100 text-green-700"
-                        : "bg-yellow-100 text-yellow-700"
-                    }`}
-                  >
-                    {feedback}
-                  </div>
-                )}
               </div>
-            </>
-          )}
-        </div>
+              <div className="text-lg text-gray-600 mt-1">
+                Time: {formatTime(sessionDuration)}
+              </div>
+              {isAdaptiveMode && (
+                <div className="text-sm text-purple-600 mt-1">
+                  Current Level: {difficulty === 1 ? "Easy" : difficulty === 2 ? "Medium" : "Hard"}
+                </div>
+              )}
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+              <div className="text-6xl font-bold text-center mb-8 text-black">
+                {firstNumber}{" "}
+                <span className="text-black">
+                  {gameMode === "addition" ? "+" : "-"}
+                </span>{" "}
+                {secondNumber} = ?
+              </div>
+
+              <div className="mb-6">
+                <AnswerOptions
+                  key={questionKey}
+                  options={options}
+                  correctAnswer={correctAnswer}
+                  onAnswerSelect={handleAnswerSelect}
+                  hasTriedThisQuestion={hasTriedThisQuestion}
+                  disabled={!!feedback && feedback.includes("Correct")}
+                />
+              </div>
+
+              <div className="text-center mb-4">
+                <button
+                  onClick={() => setShowExplanation(!showExplanation)}
+                  className="text-blue-500 underline hover:text-blue-700"
+                >
+                  {showExplanation ? "Hide" : "Show"} Hints
+                </button>
+              </div>
+
+              <VisualAid
+                visualStyle={visualStyle}
+                setVisualStyle={setVisualStyle}
+                firstNumber={firstNumber}
+                secondNumber={secondNumber}
+                gameMode={gameMode}
+                showExplanation={showExplanation}
+                showSelector={false}
+              />
+
+              {feedback && (
+                <div
+                  className={`mt-4 p-3 rounded-lg text-center font-bold ${
+                    feedback.includes("Correct")
+                      ? "bg-green-100 text-green-700"
+                      : "bg-yellow-100 text-yellow-700"
+                  }`}
+                >
+                  {feedback}
+                </div>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </div>
-  );
+  </div>
+);
 }
