@@ -142,14 +142,37 @@
     "number": "手機號碼",
     "numberPlaceholder": "請輸入手機號碼",
     "numberRequired": "請輸入手機號碼",
-    "placeholder": "+852 1234 5678",
+    "placeholder": "+886 1234 5678",
     "sendCode": "發送驗證碼",
     "sending": "發送中...",
     "verificationCode": "驗證碼",
-    "codePlaceholder": "輸入收到的驗證碼",
-    "verify": "確認驗證碼",
+    "codePlaceholder": "請輸入驗證碼",
+    "verify": "驗證",
     "verifying": "驗證中...",
     "sendCodeError": "發送驗證碼失敗，請重試",
-    "verifyCodeError": "驗證碼錯誤，請重新輸入"
+    "verifyCodeError": "驗證碼錯誤，請重新輸入",
+    "backToLogin": "返回登入",
+    "otherLoginMethods": "其他登入方式"
+  },
+  "register": {
+    "title": "創建帳號",
+    "subtitle": "立即加入我們！請填寫以下資訊",
+    "email": "電子郵箱",
+    "emailPlaceholder": "請輸入郵箱",
+    "password": "密碼",
+    "passwordPlaceholder": "請創建密碼",
+    "confirmPassword": "確認密碼",
+    "confirmPasswordPlaceholder": "請再次輸入密碼",
+    "createAccount": "創建帳號",
+    "creating": "正在創建帳號...",
+    "backToLogin": "返回登入",
+    "alreadyHaveAccount": "已有帳號？",
+    "passwordStrength": "密碼強度",
+    "errors": {
+      "passwordMismatch": "兩次輸入的密碼不一致",
+      "emailInUse": "該郵箱已被註冊",
+      "weakPassword": "密碼強度太弱，請至少使用6個字符",
+      "general": "註冊失敗，請重試"
+    }
   }
 } 
