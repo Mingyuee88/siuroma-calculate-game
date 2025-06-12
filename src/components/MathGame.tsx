@@ -7,6 +7,8 @@ import { SideMenu } from "./UI/SideMenu";
 import { VisualAid } from "./UI/VisualAid";
 import { getRandomNumber, calculateResult } from "@/lib/utils";
 import { AnswerOptions } from "./UI/AnswerOptions";
+import { useTranslation } from "react-i18next";
+import { LanguageSwitcher } from './UI/LanguageSwitcher';
 
 interface MathGameProps {
   initialDifficulty?: number;
@@ -23,14 +25,21 @@ interface UserStats {
   currentRank: number;
 }
 
-
-
+const defaultUserStats: UserStats = {
+  userId: 'user123',
+  username: 'Current User',
+  correctAnswers: 0,
+  totalQuestions: 0,
+  accuracy: 0,
+  currentRank: 0
+};
 
 export function MathGame({ 
   initialDifficulty = 1, 
   userId = 'user123',
   isAdmin = false 
 }: MathGameProps) {
+  const { t } = useTranslation();
   const [gameMode, setGameMode] = useState<"addition" | "subtraction">("addition");
   const [difficulty, setDifficulty] = useState(initialDifficulty);
   const [firstNumber, setFirstNumber] = useState(0);
@@ -61,14 +70,7 @@ export function MathGame({
   const [hasTriedThisQuestion, setHasTriedThisQuestion] = useState(false);
 
   // User statistics
-  const [userStats, setUserStats] = useState<UserStats>({
-    userId: userId,
-    username: 'Current User',
-    correctAnswers: 0,
-    totalQuestions: 0,
-    accuracy: 0,
-    currentRank: 0
-  });
+  const [userStats, setUserStats] = useState<UserStats>(defaultUserStats);
 
   // Mock leaderboard data - in real app, this would come from a database
   const [allUsers] = useState<UserStats[]>([
@@ -192,7 +194,7 @@ export function MathGame({
     });
   };
 
-  // Calculate current user currentrank
+  // Calculate current user rank
   const getCurrentUserRank = () => {
     const sortedUsers = [...allUsers, userStats].sort((a, b) => b.correctAnswers - a.correctAnswers);
     const userIndex = sortedUsers.findIndex(user => user.userId === userId);
@@ -213,7 +215,7 @@ export function MathGame({
     updateUserStats(isCorrect, isFirstTry);
     
     if (isCorrect) {
-      setFeedback("Correct! Great job!");
+      setFeedback(t("game.feedback.correct"));
       if (isFirstTry) {
         setScore(prev => prev + 1);
         setSessionScore(prev => prev + 1);
@@ -225,7 +227,7 @@ export function MathGame({
         setTimeout(() => {
           setDifficulty(difficulty + 1);
           setConsecutiveCorrect(0);
-          setFeedback(`You're doing great! Let's try some harder numbers!`);
+          setFeedback(t("game.feedback.levelUp"));
         }, 1500);
       } else {
         setTimeout(() => {
@@ -242,7 +244,7 @@ export function MathGame({
         }, 1500);
       }
     } else {
-      setFeedback("Not quite right. Try again!");
+      setFeedback(t("game.feedback.incorrect"));
       setHasTriedThisQuestion(true);
       setConsecutiveCorrect(0);
     }
@@ -274,64 +276,66 @@ export function MathGame({
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen">
       <SideMenu
         isMenuOpen={isMenuOpen}
         setIsMenuOpen={setIsMenuOpen}
         difficulty={difficulty}
-        setDifficulty={setDifficultyLevel}
+        setDifficulty={setDifficulty}
         gameMode={gameMode}
-        switchGameMode={switchGameMode}
+        switchGameMode={setGameMode}
         visualStyle={visualStyle}
         setVisualStyle={setVisualStyle}
         questionsPerSession={questionsPerSession}
         setQuestionsPerSession={setQuestionsPerSession}
         isSessionActive={isSessionStarted && !isSessionComplete}
         isAdaptiveMode={isAdaptiveMode}
-        enableAdaptiveMode={enableAdaptiveMode}
-        userStats={userStats}
-        currentRank={getCurrentUserRank()}
-        isAdmin={isAdmin}
-        allUsers={allUsers}
+        enableAdaptiveMode={() => setIsAdaptiveMode(!isAdaptiveMode)}
         currentUser={userStats}
+        isAdmin={isAdmin}
         onUserLogin={() => {}}
         onUserLogout={() => {}}
-        setCurrentUser={() => {}}
+        currentRank={getCurrentUserRank()}
+        allUsers={allUsers}
+        setCurrentUser={setUserStats}
       />
 
-      {/* Main Content */}
-      <div className={`flex-1 p-6 transition-all duration-300 ${isMenuOpen ? "ml-64" : "ml-0"}`}>
-        <div className="max-w-3xl mx-auto">
+      <main className={`flex-1 p-4 transition-all duration-300 ${isMenuOpen ? 'ml-64' : 'ml-0'}`}>
+        <div className="max-w-4xl mx-auto relative">
+          <div className="absolute top-0 right-0 z-10">
+            <LanguageSwitcher />
+          </div>
+
           {!isSessionStarted ? (
             <div className="bg-white p-8 rounded-lg shadow-md text-center">
-              <h1 className="text-3xl font-bold text-purple-700 mb-6">Math Explorer</h1>
+              <h1 className="text-3xl font-bold text-purple-700 mb-6">{t("game.welcome.title")}</h1>
               <div className="mb-8">
-                <h2 className="text-xl font-semibold mb-4">Session Settings</h2>
+                <h2 className="text-xl font-semibold mb-4">{t("game.welcome.description")}</h2>
                 <div className="grid grid-cols-2 gap-4 text-left mb-6">
                   <div>
-                    <p className="text-gray-600">Game Mode:</p>
+                    <p className="text-gray-600">{t("game.welcome.gameMode")}:</p>
                     <p className="font-semibold">
                       {gameMode === "addition" ? "Addition" : "Subtraction"}
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-600">Age Level(Difficulty):</p>
+                    <p className="text-gray-600">{t("game.welcome.ageLevel")}:</p>
                     <p className="font-semibold">
                       {isAdaptiveMode
-                        ? "Adaptive (Auto-adjusts)"
+                        ? t("game.welcome.adaptiveMode")
                         : difficulty === 1
-                        ? "3-4 Years (1-10)"
+                        ? t("game.welcome.level1")
                         : difficulty === 2
-                        ? "4-5 Years (1-20)"
-                        : "5-6 Years (1-50)"}
+                        ? t("game.welcome.level2")
+                        : t("game.welcome.level3")}
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-600">Questions:</p>
-                    <p className="font-semibold">{questionsPerSession} per session</p>
+                    <p className="text-gray-600">{t("game.welcome.questions")}:</p>
+                    <p className="font-semibold">{questionsPerSession} {t("game.welcome.perSession")}</p>
                   </div>
                   <div>
-                    <p className="text-gray-600">Visual Aid:</p>
+                    <p className="text-gray-600">{t("game.welcome.visualAid")}:</p>
                     <p className="font-semibold capitalize">{visualStyle}</p>
                   </div>
                 </div>
@@ -340,20 +344,20 @@ export function MathGame({
                 onClick={startNewSession}
                 className="px-8 py-4 bg-purple-600 text-white rounded-lg font-bold text-lg hover:bg-purple-700 transition-colors"
               >
-                Start Session
+                {t("game.welcome.startButton")}
               </button>
             </div>
           ) : isSessionComplete ? (
             <div className="bg-white p-6 rounded-lg shadow-md mb-6 text-center">
-              <h2 className="text-2xl font-bold mb-4">Session Complete!</h2>
-              <p className="text-xl mb-2">Your score: {sessionScore}/{questionsPerSession}</p>
-              <p className="text-lg mb-4">Time taken: {formatTime(sessionDuration)}</p>
+              <h2 className="text-2xl font-bold mb-4">{t("game.complete.title")}</h2>
+              <p className="text-xl mb-2">{t("game.complete.score", { score: sessionScore, total: questionsPerSession })}</p>
+              <p className="text-lg mb-4">{t("game.complete.time", { time: formatTime(sessionDuration) })}</p>
               <div className="mb-4 p-4 bg-blue-50 rounded-lg">
-                <p className="font-semibold">Your Statistics:</p>
-                <p>Total Correct: {userStats.correctAnswers}</p>
-                <p>Total Attempts: {userStats.totalQuestions}</p>
-                <p>Accuracy: {userStats.accuracy}%</p>
-                <p>Current Rank: #{getCurrentUserRank()}</p>
+                <p className="font-semibold">{t("game.complete.statistics")}:</p>
+                <p>{t("game.complete.totalCorrect")}: {userStats.correctAnswers}</p>
+                <p>{t("game.complete.totalAttempts")}: {userStats.totalQuestions}</p>
+                <p>{t("game.complete.accuracy")}: {Math.round(userStats.accuracy)}%</p>
+                <p>{t("game.complete.currentRank")}: #{getCurrentUserRank()}</p>
               </div>
               <button
                 onClick={() => {
@@ -363,7 +367,7 @@ export function MathGame({
                 }}
                 className="px-6 py-3 bg-purple-600 text-white rounded-lg font-bold hover:bg-purple-700"
               >
-                Start New Session
+                {t("game.complete.playAgain")}
               </button>
             </div>
           ) : (
@@ -377,7 +381,7 @@ export function MathGame({
                     }}
                     className="px-4 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600"
                   >
-                    End Session
+                    {t("game.complete.endSession")}
                   </button>
                   <button
                     onClick={() => {
@@ -390,15 +394,15 @@ export function MathGame({
                     }}
                     className="px-4 py-2 bg-yellow-500 text-white rounded-lg font-medium hover:bg-yellow-600"
                   >
-                    Restart
+                    {t("game.complete.restart")}
                   </button>
                 </div>
               </div>
 
               <div className="text-center mb-6">
-                <Score score={score} showAnimation={feedback.includes("Correct")} />
+                <Score score={sessionScore} total={questionsAnswered} time={formatTime(sessionDuration)} />
                 <div className="text-lg text-gray-600 mt-2">
-                  Session Progress: {questionsAnswered}/{questionsPerSession} questions
+                  {t("game.progress")}: {questionsAnswered}/{questionsPerSession} {t("game.questions")}
                 </div>
                 <div className="w-full max-w-md mx-auto mt-2 bg-gray-200 rounded-full h-2.5">
                   <div 
@@ -407,11 +411,11 @@ export function MathGame({
                   />
                 </div>
                 <div className="text-lg text-gray-600 mt-1">
-                  Time: {formatTime(sessionDuration)}
+                  {t("game.time")}: {formatTime(sessionDuration)}
                 </div>
                 {isAdaptiveMode && (
                   <div className="text-sm text-purple-600 mt-1">
-                    Current Level: {difficulty === 1 ? "Easy" : difficulty === 2 ? "Medium" : "Hard"}
+                    {t("game.currentLevel")}: {difficulty === 1 ? t("game.level1") : difficulty === 2 ? t("game.level2") : t("game.level3")}
                   </div>
                 )}
               </div>
@@ -441,7 +445,7 @@ export function MathGame({
                     onClick={() => setShowExplanation(!showExplanation)}
                     className="text-blue-500 underline hover:text-blue-700"
                   >
-                    {showExplanation ? "Hide" : "Show"} Hints
+                    {showExplanation ? t("game.hideHint") : t("game.showHint")}
                   </button>
                 </div>
 
@@ -470,7 +474,7 @@ export function MathGame({
             </>
           )}
         </div>
-      </div>
+      </main>
     </div>
   );
 }

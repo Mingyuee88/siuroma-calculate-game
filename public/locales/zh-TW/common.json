@@ -1,0 +1,108 @@
+{
+  "title": "數學探險家",
+  "description": "計算你的遊戲垂直統計數據",
+  "language": "語言",
+  "calculate": "計算",
+  "reset": "重置",
+  "result": "結果",
+  "input": {
+    "placeholder": "輸入你的數據",
+    "submit": "提交"
+  },
+  "menu": {
+    "language": "切換語言",
+    "settings": "遊戲設定",
+    "stats": "我的統計",
+    "ranking": "我的排名",
+    "adminRanking": "所有排名"
+  },
+  "game": {
+    "settings": {
+      "difficulty": "難度等級",
+      "gameMode": "遊戲模式",
+      "addition": "加法",
+      "subtraction": "減法",
+      "visualStyle": "視覺樣式",
+      "blocks": "方塊",
+      "animals": "動物",
+      "shapes": "形狀",
+      "numberLine": "數線",
+      "questionsPerSession": "每輪題目數",
+      "adaptiveMode": "自適應模式"
+    },
+    "welcome": {
+      "title": "數學探險家",
+      "description": "歡迎來到數學探險家！準備開始一場精彩的數學冒險吧。",
+      "startButton": "開始遊戲",
+      "gameMode": "遊戲模式",
+      "ageLevel": "年齡等級（難度）",
+      "adaptiveMode": "自適應（自動調整）",
+      "level1": "3-4歲 (1-10)",
+      "level2": "4-5歲 (1-20)",
+      "level3": "5-6歲 (1-50)",
+      "questions": "題目數量",
+      "perSession": "每輪",
+      "visualAid": "視覺輔助"
+    },
+    "feedback": {
+      "correct": "答對了！太棒了！",
+      "incorrect": "不太對喔，再試試看！",
+      "levelUp": "你做得太好了！讓我們試試更難的題目吧！"
+    },
+    "question": {
+      "title": "第 {{current}} 題，共 {{total}} 題",
+      "add": "{{first}} + {{second}} 等於多少？",
+      "subtract": "{{first}} - {{second}} 等於多少？"
+    },
+    "complete": {
+      "title": "本輪完成！",
+      "score": "你的得分：{{score}}/{{total}}",
+      "time": "用時：{{time}}",
+      "accuracy": "準確率：{{accuracy}}%",
+      "statistics": "你的統計",
+      "totalCorrect": "總答對題數",
+      "totalAttempts": "總嘗試題數",
+      "currentRank": "當前排名",
+      "playAgain": "再玩一次",
+      "endSession": "結束本輪",
+      "restart": "重新開始"
+    },
+    "stats": {
+      "performance": "我的表現",
+      "correctAnswers": "答對題數",
+      "totalQuestions": "總題目數",
+      "accuracy": "準確率"
+    },
+    "ranking": {
+      "topPlayers": "最佳玩家"
+    },
+    "progress": "本輪進度",
+    "questions": "題",
+    "time": "時間",
+    "currentLevel": "當前等級",
+    "level1": "簡單",
+    "level2": "中等",
+    "level3": "困難",
+    "showHint": "顯示提示",
+    "hideHint": "隱藏提示"
+  },
+  "login": {
+    "title": "請登入以繼續",
+    "email": "電子郵件",
+    "password": "密碼",
+    "emailLogin": "電子郵件登入",
+    "phoneLogin": "手機號碼登入",
+    "googleLogin": "使用 Google 登入",
+    "forgotPassword": "忘記密碼？",
+    "noAccount": "還沒有帳號？",
+    "register": "立即註冊",
+    "loading": "登入中...",
+    "error": {
+      "invalidCredentials": "使用者名稱或密碼錯誤",
+      "general": "登入失敗，請稍後再試。",
+      "emailRequired": "請輸入電子郵件以接收重設密碼郵件",
+      "resetFailed": "無法發送重設郵件，請檢查電子郵件是否正確或稍後再試"
+    },
+    "passwordResetSent": "重設密碼郵件已發送，請查收您的電子郵件。"
+  }
+} 
