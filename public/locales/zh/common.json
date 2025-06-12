@@ -140,6 +140,8 @@
   "phone": {
     "title": "手机号登录",
     "number": "手机号",
+    "numberPlaceholder": "请输入手机号",
+    "numberRequired": "请输入手机号",
     "placeholder": "+852 1234 5678",
     "sendCode": "发送验证码",
     "sending": "发送中...",

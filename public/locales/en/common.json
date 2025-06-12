@@ -140,6 +140,8 @@
   "phone": {
     "title": "Phone Login",
     "number": "Phone Number",
+    "numberPlaceholder": "Enter phone number",
+    "numberRequired": "Please enter your phone number",
     "placeholder": "+852 1234 5678",
     "sendCode": "Send Code",
     "sending": "Sending...",
