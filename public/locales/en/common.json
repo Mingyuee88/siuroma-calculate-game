@@ -140,6 +140,8 @@
   "phone": {
     "title": "Phone Login",
     "number": "Phone Number",
+    "numberPlaceholder": "Enter phone number",
+    "numberRequired": "Please enter your phone number",
     "placeholder": "+852 1234 5678",
     "sendCode": "Send Code",
     "sending": "Sending...",
@@ -148,6 +150,29 @@
     "verify": "Verify Code",
     "verifying": "Verifying...",
     "sendCodeError": "Failed to send verification code, please try again",
-    "verifyCodeError": "Invalid verification code, please try again"
+    "verifyCodeError": "Invalid verification code, please try again",
+    "backToLogin": "Back to Sign In",
+    "otherLoginMethods": "Other login methods"
+  },
+  "register": {
+    "title": "Create Account",
+    "subtitle": "Join us today! Please fill in your details",
+    "email": "Email Address",
+    "emailPlaceholder": "Enter your email",
+    "password": "Password",
+    "passwordPlaceholder": "Create a password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "createAccount": "Create Account",
+    "creating": "Creating Account...",
+    "backToLogin": "Back to Sign In",
+    "alreadyHaveAccount": "Already have an account?",
+    "passwordStrength": "Password strength",
+    "errors": {
+      "passwordMismatch": "Passwords do not match",
+      "emailInUse": "This email is already registered",
+      "weakPassword": "Password is too weak, please use at least 6 characters",
+      "general": "Registration failed, please try again"
+    }
   }
 } 
