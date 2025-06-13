@@ -30,7 +30,9 @@
       "shapes": "Shapes",
       "numberLine": "Number Line",
       "questionsPerSession": "Questions Per Session",
-      "adaptiveMode": "Adaptive Mode"
+      "adaptiveMode": "Adaptive Mode",
+      "mcQuestion": "Multiple Choice",
+      "tfQuestion": "True/False Question"
     },
     "welcome": {
       "title": "Math Explorer",
@@ -44,7 +46,9 @@
       "level3": "5-6 Years (1-50)",
       "questions": "Questions",
       "perSession": "per session",
-      "visualAid": "Visual Aid"
+      "visualAid": "Visual Aid",
+      "Etitle": "English Explorer",
+      "Edescription": "Welcome to English Explorer! Get ready for an exciting English learning adventure."
     },
     "feedback": {
       "correct": "Correct! Great job!",
@@ -73,7 +77,10 @@
       "performance": "My Performance",
       "correctAnswers": "Correct Answers",
       "totalQuestions": "Total Questions",
-      "accuracy": "Accuracy"
+      "accuracy": "Accuracy",
+      "totalCorrect": "Total Correct",
+      "totalAttempts": "Total Attempts",
+      "currentRank": "Current Rank"
     },
     "ranking": {
       "topPlayers": "Top Players",
@@ -116,6 +123,29 @@
       "numberLineAddition": "Start at 0, jump forward {{firstCount}} spots, then jump forward {{secondCount}} more spots",
       "numberLineSubtraction": "Start at {{firstCount}}, jump backward {{secondCount}} spots",
       "whereDoYouLand": "Where do you land? That's your answer!"
+    },
+    "session": {
+      "settings": "Session Settings",
+      "gameModeLabel": "Game Mode",
+      "ageLevel": "Age Level",
+      "questionsLabel": "Questions",
+      "perSession": "per session",
+      "start": "Start Session",
+      "complete": "Session Complete!",
+      "score": "Your score",
+      "timeTaken": "Time taken",
+      "startNew": "Start New Session",
+      "end": "End Session",
+      "restart": "Restart",
+      "progress": "Progress",
+      "questions": "questions",
+      "time": "Time",
+      "currentLevel": "Current Level",
+      "levels": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Hard"
+      }
     }
   },
   "login": {

@@ -30,7 +30,9 @@
       "shapes": "形狀",
       "numberLine": "數線",
       "questionsPerSession": "每輪題目數",
-      "adaptiveMode": "自適應模式"
+      "adaptiveMode": "自適應模式",
+      "mcQuestion": "選擇題",
+      "tfQuestion": "判斷題"
     },
     "welcome": {
       "title": "數學探險家",
@@ -44,7 +46,9 @@
       "level3": "5-6歲 (1-50)",
       "questions": "題目數量",
       "perSession": "每輪",
-      "visualAid": "視覺輔助"
+      "visualAid": "視覺輔助",
+      "Etitle": "英語探險家",
+      "Edescription": "歡迎來到英語探險家！準備開始一場精彩的英語學習冒險吧。"
     },
     "feedback": {
       "correct": "答對了！太棒了！",
@@ -73,7 +77,10 @@
       "performance": "我的表現",
       "correctAnswers": "答對題數",
       "totalQuestions": "總題目數",
-      "accuracy": "準確率"
+      "accuracy": "準確率",
+      "totalCorrect": "總答對題數",
+      "totalAttempts": "總嘗試題數",
+      "currentRank": "當前排名"
     },
     "ranking": {
       "topPlayers": "最佳玩家",
@@ -116,6 +123,29 @@
       "numberLineAddition": "從0開始，向前跳{{firstCount}}格，再向前跳{{secondCount}}格",
       "numberLineSubtraction": "從{{firstCount}}開始，向後跳{{secondCount}}格",
       "whereDoYouLand": "你會落在哪裡？那就是答案！"
+    },
+    "session": {
+      "settings": "會話設置",
+      "gameModeLabel": "遊戲模式",
+      "ageLevel": "年齡等級",
+      "questionsLabel": "題目數量",
+      "perSession": "每輪",
+      "start": "開始會話",
+      "complete": "會話完成！",
+      "score": "你的得分",
+      "timeTaken": "用時",
+      "startNew": "開始新會話",
+      "end": "結束會話",
+      "restart": "重新開始",
+      "progress": "進度",
+      "questions": "題",
+      "time": "時間",
+      "currentLevel": "當前等級",
+      "levels": {
+        "easy": "簡單",
+        "medium": "中等",
+        "hard": "困難"
+      }
     }
   },
   "login": {
