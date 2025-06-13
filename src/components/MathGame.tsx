@@ -385,11 +385,6 @@ export function MathGame({
             : "ml-0"
       }`}>
         <div className="max-w-3xl mx-auto relative">
-          {/* 语言切换器 - 来自 main 分支 */}
-          <div className="absolute top-0 right-0 z-10">
-            <LanguageSwitcher />
-          </div>
-
           {!isSessionStarted ? (
             <div className="bg-white p-8 rounded-lg shadow-md text-center">
               <h1 className="text-3xl font-bold text-purple-700 mb-6 font-gensen">{t("game.welcome.title")}</h1>

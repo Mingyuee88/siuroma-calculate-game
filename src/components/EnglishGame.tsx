@@ -324,10 +324,6 @@ export function EnglishGame({
       {/* Main Content */}
       <div className={`flex-1 p-6 transition-all duration-300 ${isMenuOpen ? "ml-64" : "ml-0"}`}>
         <div className="max-w-3xl mx-auto relative">
-          {/* 语言切换器 - 和 MathGame 保持一致 */}
-          <div className="absolute top-0 right-0 z-10">
-            <LanguageSwitcher />
-          </div>
           <div className="max-w-3xl mx-auto">
             {!isSessionStarted ? (
               <div className="bg-white p-8 rounded-lg shadow-md text-center">

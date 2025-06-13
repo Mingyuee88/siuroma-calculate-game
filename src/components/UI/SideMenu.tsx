@@ -77,7 +77,7 @@ export function SideMenu({
   switchGame
 }: SideMenuProps) {
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // Swipe functionality states
   const [currentPanel, setCurrentPanel] = useState(0);
@@ -172,8 +172,34 @@ export function SideMenu({
     </div>
   );
 
+  const renderLanguageSwitcher = () => (
+    <div>
+      <h2 className="text-lg font-bold text-purple-700 mb-4 font-gensen">{t('language')}</h2>
+      <div className="flex flex-col gap-2">
+        {[
+          { code: 'en', label: 'English' },
+          { code: 'zh', label: '简体中文' },
+          { code: 'zh-TW', label: '繁體中文' }
+        ].map(({ code, label }) => (
+          <button
+            key={code}
+            onClick={() => i18n.changeLanguage(code)}
+            className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${
+              i18n.language === code
+                ? 'bg-purple-500 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+
   const renderSettingsPanel = () => (
     <div className="space-y-8">
+      {renderLanguageSwitcher()}
       {/* 科目选择 */}
       <div>
         <h2 className="text-lg font-bold text-purple-700 mb-4 font-gensen">{t('game.settings.gameMode')}</h2>
