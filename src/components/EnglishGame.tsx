@@ -310,12 +310,12 @@ export function EnglishGame({
       />
 
       {/* Main Content */}
-      <div className="flex-1 p-8">
+      <div className={`flex-1 p-6 transition-all duration-300 ${isMenuOpen ? "ml-64" : "ml-0"}`}>
         <div className="max-w-3xl mx-auto">
           {!isSessionStarted ? (
             <div className="bg-white p-8 rounded-lg shadow-md text-center">
               <h1 className="text-3xl font-bold text-purple-700 mb-6">
-                {t('englishGame.title')}
+                {t('Etitle')}
               </h1>
 
               <div className="mb-8">

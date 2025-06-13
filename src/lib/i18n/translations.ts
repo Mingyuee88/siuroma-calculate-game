@@ -3,7 +3,8 @@ import { MathGame } from "@/components/MathGame";
 export const translations = {
   en: {
     // Header & Navigation
-    title: "Math Explorer",
+    Mtitle: "Math Explorer",
+    Etitle: "English Explorer",
     subtitle: "Math Game for Young Learners",
     language: "Language",
     english: "English",
@@ -138,7 +139,8 @@ export const translations = {
   },
   'zh-TW': {
     // Header & Navigation
-    title: "數學探險家",
+    Mtitle: "數學探險家",
+    Etitle: "英語探險家",
     subtitle: "兒童數學學習遊戲",
     language: "語言",
     english: "英文",
@@ -273,7 +275,8 @@ export const translations = {
   },
   'zh-CN': {
     // Header & Navigation
-    title: "数学探险家",
+    Mtitle: "数学探险家",
+    Etitle: "英语探险家",
     subtitle: "儿童数学学习游戏",
     language: "语言",
     english: "英文",
