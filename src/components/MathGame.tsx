@@ -14,6 +14,8 @@ interface MathGameProps {
   initialDifficulty?: number;
   userId?: string;
   isAdmin?: boolean;
+  currentGame: 'math' | 'english';
+  switchGame: (game: 'math' | 'english') => void;
 }
 
 interface UserStats {
@@ -28,7 +30,9 @@ interface UserStats {
 export function MathGame({ 
   initialDifficulty = 1, 
   userId = 'user123',
-  isAdmin = false 
+  isAdmin = false,
+  currentGame,
+  switchGame
 }: MathGameProps) {
   const { t } = useTranslation();
   
@@ -50,7 +54,7 @@ export function MathGame({
     }));
   }, [t]);
 
-  const [gameMode, setGameMode] = useState<"addition" | "subtraction">("addition");
+  const [gameMode, setGameMode] = useState<"addition" | "subtraction" | "Multiple Choice" | "True/False Question">("addition");
   const [difficulty, setDifficulty] = useState(initialDifficulty);
   const [firstNumber, setFirstNumber] = useState(0);
   const [secondNumber, setSecondNumber] = useState(0);
@@ -104,41 +108,45 @@ export function MathGame({
       maxSum = 100;
     }
     
-    let first, second;
-    if (gameMode === "addition") {
-      first = getRandomNumber(minNumber, maxSum - 1);
-      const maxSecond = maxSum - first;
-      second = getRandomNumber(minNumber, maxSecond);
-    } else {
-      first = getRandomNumber(minNumber, maxSum);
-      second = getRandomNumber(minNumber, first);
+    let first = 1, second = 1;
+    if (gameMode === "addition" || gameMode === "subtraction") {
+      if (gameMode === "addition") {
+        first = getRandomNumber(minNumber, maxSum - 1);
+        const maxSecond = maxSum - first;
+        second = getRandomNumber(minNumber, maxSecond);
+      } else {
+        first = getRandomNumber(minNumber, maxSum);
+        second = getRandomNumber(minNumber, first);
+      }
     }
     
     setFirstNumber(first);
     setSecondNumber(second);
     
     // Generate ABCD options
-    const correct = calculateResult(first, second, gameMode);
-    const optionSet = new Set<number>([correct]);
-    
-    // Generate 3 wrong answers
-    while (optionSet.size < 4) {
-      let distractor = correct + getRandomNumber(-5, 5);
-      if (distractor !== correct && distractor >= 0) {
-        optionSet.add(distractor);
+    if (gameMode === 'addition' || gameMode === 'subtraction') {
+      const correct = calculateResult(first, second, gameMode);
+      const optionSet = new Set<number>([correct]);
+      
+      // Generate 3 wrong answers
+      while (optionSet.size < 4) {
+        let distractor = correct + getRandomNumber(-5, 5);
+        if (distractor !== correct && distractor >= 0) {
+          optionSet.add(distractor);
+        }
       }
+      
+      // Convert to labeled options and shuffle
+      const optionArray = Array.from(optionSet);
+      const shuffledOptions = optionArray.sort(() => Math.random() - 0.5);
+      const labeledOptions = shuffledOptions.map((value, index) => ({
+        label: String.fromCharCode(65 + index), // A, B, C, D
+        value: value
+      }));
+      
+      setCorrectAnswer(correct);
+      setOptions(labeledOptions);
     }
-    
-    // Convert to labeled options and shuffle
-    const optionArray = Array.from(optionSet);
-    const shuffledOptions = optionArray.sort(() => Math.random() - 0.5);
-    const labeledOptions = shuffledOptions.map((value, index) => ({
-      label: String.fromCharCode(65 + index), // A, B, C, D
-      value: value
-    }));
-    
-    setCorrectAnswer(correct);
-    setOptions(labeledOptions);
     setHasTriedThisQuestion(false);
     setFeedback("");
   }, [difficulty, gameMode]);
@@ -233,7 +241,9 @@ export function MathGame({
     const isCorrect = selectedValue === correctAnswer;
     const isFirstTry = !hasTriedThisQuestion;
     
-    updateUserStats(isCorrect, isFirstTry);
+    if (isFirstTry) {
+      updateUserStats(isCorrect, true);
+    }
     
     if (isCorrect) {
       setFeedback(t("game.feedback.correct"));
@@ -271,10 +281,13 @@ export function MathGame({
     }
   };
 
-  const switchGameMode = (mode: "addition" | "subtraction") => {
-    setGameMode(mode);
-    setDifficulty(1);
-    setScore(0);
+  const switchGameMode = (mode: "addition" | "subtraction" | "Multiple Choice" | "True/False Question") => {
+    if (mode === "addition" || mode === "subtraction") {
+      setGameMode(mode);
+      setDifficulty(1);
+      setScore(0);
+    }
+    // 其它模式暂不处理
   };
 
   const setDifficultyLevel = (level: number) => {
@@ -328,6 +341,8 @@ export function MathGame({
         onUserLogin={() => {}}
         onUserLogout={() => {}}
         setCurrentUser={setUserStats}
+        currentGame={currentGame}
+        switchGame={switchGame}
       />
 
       {/* 汉堡菜单按钮 - 始终显示在移动端 */}
@@ -431,7 +446,7 @@ export function MathGame({
                 <p className="font-semibold font-gensen">{t("game.complete.statistics")}:</p>
                 <p className="font-gensen">{t("game.complete.totalCorrect")}: {userStats.correctAnswers}</p>
                 <p className="font-gensen">{t("game.complete.totalAttempts")}: {userStats.totalQuestions}</p>
-                <p className="font-gensen">{t("game.complete.accuracy")}: {Math.round(userStats.accuracy)}%</p>
+                <p className="font-gensen">{t("game.complete.accuracy", { accuracy: Math.round(userStats.accuracy) })}</p>
                 <p className="font-gensen">{t("game.complete.currentRank")}: #{getCurrentUserRank()}</p>
               </div>
               <button
@@ -529,7 +544,7 @@ export function MathGame({
                   setVisualStyle={setVisualStyle}
                   firstNumber={firstNumber}
                   secondNumber={secondNumber}
-                  gameMode={gameMode}
+                  gameMode={gameMode === 'addition' || gameMode === 'subtraction' ? gameMode : 'addition'}
                   showExplanation={showExplanation}
                   showSelector={false}
                 />

@@ -3,10 +3,10 @@
 import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import type { FormEvent } from "react"
-import { auth, signInWithEmailAndPassword, signInWithGoogle, sendPasswordResetEmail } from "../firebase"
+import { auth, signInWithEmailAndPassword, signInWithGoogle, sendPasswordResetEmail, signInAnonymously } from "../firebase"
 import { GoogleAuthProvider } from "firebase/auth"
 import { useTranslation } from "react-i18next"
-import { Globe, Mail, Lock, Phone, Eye, EyeOff } from "lucide-react"
+import { Globe, Mail, Lock, Phone, Eye, EyeOff, User } from "lucide-react"
 
 export default function LoginPage() {
   const { t, i18n } = useTranslation()
@@ -97,6 +97,19 @@ export default function LoginPage() {
     } catch (err: any) {
       console.error("发送重置邮件失败:", err)
       setError(t("login.error.resetFailed"))
+    }
+  }
+
+  const handleAnonymousLogin = async () => {
+    setLoading(true)
+    setError("")
+    try {
+      await signInAnonymously(auth)
+      router.push("/game")
+    } catch (err: any) {
+      setError(t("login.error.general"))
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -272,6 +285,16 @@ export default function LoginPage() {
           >
             <Phone className="w-5 h-5" />
             {t("login.phoneLogin")}
+          </button>
+
+          {/* 访客模式按钮 */}
+          <button
+            onClick={handleAnonymousLogin}
+            className="w-full flex items-center justify-center gap-3 bg-gray-400 hover:bg-gray-500 text-white py-3 px-4 rounded-xl transition-all duration-200 font-medium font-gensen shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            disabled={loading}
+          >
+            <User className="w-5 h-5" />
+            {t("login.guestLogin", "访客模式")}
           </button>
         </div>
 

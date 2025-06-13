@@ -23,8 +23,8 @@ interface SideMenuProps {
   setIsMenuOpen: (isOpen: boolean) => void;
   difficulty: number;
   setDifficulty: (level: number) => void;
-  gameMode: 'addition' | 'subtraction';
-  switchGameMode: (mode: 'addition' | 'subtraction') => void;
+  gameMode: 'addition' | 'subtraction' | 'Multiple Choice' | 'True/False Question';
+  switchGameMode: (mode: 'addition' | 'subtraction' | 'Multiple Choice' | 'True/False Question') => void;
   visualStyle: 'blocks' | 'animals' | 'shapes' | 'numberLine';
   setVisualStyle: (style: 'blocks' | 'animals' | 'shapes' | 'numberLine') => void;
   questionsPerSession: number;
@@ -39,6 +39,8 @@ interface SideMenuProps {
   currentRank: number;
   allUsers: UserStats[];
   setCurrentUser: React.Dispatch<React.SetStateAction<UserStats>>;
+  currentGame: 'math' | 'english';
+  switchGame: (game: 'math' | 'english') => void;
 }
 
 const mockUserStats: UserStats = {
@@ -70,7 +72,9 @@ export function SideMenu({
   onUserLogout = () => {},
   currentRank: _currentRank,
   allUsers,
-  setCurrentUser
+  setCurrentUser,
+  currentGame,
+  switchGame
 }: SideMenuProps) {
   const router = useRouter();
   const { t } = useTranslation();
@@ -170,47 +174,25 @@ export function SideMenu({
 
   const renderSettingsPanel = () => (
     <div className="space-y-8">
+      {/* 科目选择 */}
       <div>
-        <h2 className="text-lg font-bold text-purple-700 mb-4 font-gensen">{t('game.settings.difficulty')}</h2>
+        <h2 className="text-lg font-bold text-purple-700 mb-4 font-gensen">{t('game.settings.gameMode')}</h2>
         <div className="flex flex-col gap-2">
           <button
-            onClick={enableAdaptiveMode}
-            disabled={isSessionActive}
-            className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${
-              isAdaptiveMode
-                ? 'bg-purple-500 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            } ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
+            onClick={() => switchGame('math')}
+            className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${currentGame === 'math' ? 'bg-purple-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
           >
-            {t('game.settings.adaptiveMode')}
+            {t('game.welcome.title')}
+          </button>
+          <button
+            onClick={() => switchGame('english')}
+            className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${currentGame === 'english' ? 'bg-purple-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+          >
+            {t('game.welcome.Etitle')}
           </button>
         </div>
       </div>
-
-      <div>
-        <h2 className="text-lg font-bold text-purple-700 mb-4 font-gensen">{t('game.settings.difficulty')}</h2>
-        <div className="flex flex-col gap-2">
-          {[
-            { level: 1, text: t('game.welcome.level1'), color: 'green' },
-            { level: 2, text: t('game.welcome.level2'), color: 'yellow' },
-            { level: 3, text: t('game.welcome.level3'), color: 'red' }
-          ].map(({ level, text, color }) => (
-            <button
-              key={level}
-              onClick={() => setDifficulty(level)}
-              disabled={isSessionActive}
-              className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${
-                !isAdaptiveMode && difficulty === level
-                  ? `bg-${color}-500 text-white`
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              } ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
-            >
-              {text}
-            </button>
-          ))}
-        </div>
-      </div>
-
+      {/* 题目数量设置 */}
       <div>
         <h2 className="text-lg font-bold text-purple-700 mb-4 font-gensen">{t('game.settings.questionsPerSession')}</h2>
         <div className="flex flex-col gap-2">
@@ -219,64 +201,97 @@ export function SideMenu({
               key={count}
               onClick={() => setQuestionsPerSession(count)}
               disabled={isSessionActive}
-              className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${
-                questionsPerSession === count
-                  ? 'bg-purple-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              } ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${questionsPerSession === count ? 'bg-purple-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'} ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               {count} {t('game.questions')}
             </button>
           ))}
         </div>
       </div>
-
-      <div>
-        <h2 className="text-lg font-bold text-purple-700 mb-4 font-gensen">{t('game.settings.gameMode')}</h2>
-        <div className="flex flex-col gap-2">
-          {[
-            { mode: 'addition' as const, text: t('game.settings.addition') },
-            { mode: 'subtraction' as const, text: t('game.settings.subtraction') }
-          ].map(({ mode, text }) => (
-            <button
-              key={mode}
-              onClick={() => switchGameMode(mode)}
-              disabled={isSessionActive}
-              className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${
-                gameMode === mode
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              } ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
-            >
-              {text}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <h2 className="text-lg font-bold text-purple-700 mb-4 font-gensen">{t('game.settings.visualStyle')}</h2>
-        <div className="grid grid-cols-2 gap-2">
-          {[
-            { style: 'blocks' as const, text: t('game.settings.blocks') },
-            { style: 'animals' as const, text: t('game.settings.animals') },
-            { style: 'shapes' as const, text: t('game.settings.shapes') },
-            { style: 'numberLine' as const, text: t('game.settings.numberLine') }
-          ].map(({ style, text }) => (
-            <button
-              key={style}
-              onClick={() => setVisualStyle(style)}
-              className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${
-                visualStyle === style
-                  ? 'bg-purple-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              {text}
-            </button>
-          ))}
-        </div>
-      </div>
+      {/* 动态内容：数学 or 英语 */}
+      {currentGame === 'math' ? (
+        <>
+          {/* 难度设置 */}
+          <div>
+            <h2 className="text-lg font-bold text-purple-700 mb-4 font-gensen">{t('game.settings.difficulty')}</h2>
+            <div className="flex flex-col gap-2">
+              {[{ level: 1, text: t('game.welcome.level1'), color: 'green' }, { level: 2, text: t('game.welcome.level2'), color: 'yellow' }, { level: 3, text: t('game.welcome.level3'), color: 'red' }].map(({ level, text, color }) => (
+                <button
+                  key={level}
+                  onClick={() => setDifficulty(level)}
+                  disabled={isSessionActive}
+                  className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${!isAdaptiveMode && difficulty === level ? `bg-${color}-500 text-white` : 'bg-gray-100 text-gray-700 hover:bg-gray-200'} ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  {text}
+                </button>
+              ))}
+            </div>
+          </div>
+          {/* 难度模式 */}
+          <div>
+            <h2 className="text-lg font-bold text-purple-700 mb-4 font-gensen">{t('game.settings.difficulty')}</h2>
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={enableAdaptiveMode}
+                disabled={isSessionActive}
+                className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${isAdaptiveMode ? 'bg-purple-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'} ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                {t('game.settings.adaptiveMode')}
+              </button>
+            </div>
+          </div>
+          {/* 游戏模式 */}
+          <div>
+            <h2 className="text-lg font-bold text-purple-700 mb-4 font-gensen">{t('game.settings.gameMode')}</h2>
+            <div className="flex flex-col gap-2">
+              {[{ mode: 'addition', text: t('game.settings.addition') }, { mode: 'subtraction', text: t('game.settings.subtraction') }].map(({ mode, text }) => (
+                <button
+                  key={mode}
+                  onClick={() => switchGameMode(mode as any)}
+                  disabled={isSessionActive}
+                  className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${gameMode === mode ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'} ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  {text}
+                </button>
+              ))}
+            </div>
+          </div>
+          {/* 视觉辅助 */}
+          <div>
+            <h2 className="text-lg font-bold text-purple-700 mb-4 font-gensen">{t('game.settings.visualStyle')}</h2>
+            <div className="grid grid-cols-2 gap-2">
+              {[{ style: 'blocks', text: t('game.settings.blocks') }, { style: 'animals', text: t('game.settings.animals') }, { style: 'shapes', text: t('game.settings.shapes') }, { style: 'numberLine', text: t('game.settings.numberLine') }].map(({ style, text }) => (
+                <button
+                  key={style}
+                  onClick={() => setVisualStyle(style as any)}
+                  className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${visualStyle === style ? 'bg-purple-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                >
+                  {text}
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          {/* 英语题型设置 */}
+          <div>
+            <h2 className="text-lg font-bold text-purple-700 mb-4 font-gensen">{t('game.settings.gameMode')}</h2>
+            <div className="flex flex-col gap-2">
+              {[{ mode: 'Multiple Choice', text: t('game.settings.mcQuestion') }, { mode: 'True/False Question', text: t('game.settings.tfQuestion') }].map(({ mode, text }) => (
+                <button
+                  key={mode}
+                  onClick={() => switchGameMode(mode as any)}
+                  disabled={isSessionActive}
+                  className={`px-3 py-2 rounded-lg text-sm font-medium font-gensen ${gameMode === mode ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'} ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  {text}
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 
@@ -388,7 +403,7 @@ export function SideMenu({
       className={`
         ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} 
         transition-transform duration-300 ease-in-out
-        fixed left-0 top-0 h-full w-80 bg-white shadow-lg z-50
+        fixed left-0 top-0 h-screen w-80 bg-white shadow-lg z-50
         md:relative md:translate-x-0 md:shadow-none md:w-64
       `}
       ref={panelRef}
@@ -427,18 +442,6 @@ export function SideMenu({
             >
               {t("menu.logout")}
             </button>
-          </div>
-
-          {/* Panel Indicators */}
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 bg-white/80 rounded-full px-3 py-2">
-            {panels.map((_, index) => (
-              <div
-                key={index}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  currentPanel === index ? 'bg-purple-500' : 'bg-gray-300'
-                }`}
-              />
-            ))}
           </div>
         </div>
       )}
