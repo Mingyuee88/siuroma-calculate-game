@@ -492,7 +492,12 @@ export function MathGame({
 
 
               <div className="text-center mb-6">
-                <Score score={sessionScore} total={questionsAnswered} time={formatTime(sessionDuration)} />
+                <Score 
+                  score={sessionScore} 
+                  total={questionsAnswered} 
+                  time={formatTime(sessionDuration)} 
+                  showAnimation={feedback.includes('答对') || feedback.includes('Correct')} 
+                />
                 <div className="text-lg text-gray-600 mt-2 font-gensen">
                   {t("game.progress")}: {questionsAnswered}/{questionsPerSession} {t("game.questions")}
                 </div>

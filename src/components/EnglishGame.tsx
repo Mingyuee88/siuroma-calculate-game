@@ -133,6 +133,10 @@ export function EnglishGame({
     ]
   };
 
+  // 选项高亮状态
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+  const [showResults, setShowResults] = useState(false);
+
   const generateQuestion = useCallback(() => {
     if (gameMode === "Multiple Choice" || gameMode === "True/False Question") {
       const questions = questionsDatabase[gameMode];
@@ -221,7 +225,11 @@ export function EnglishGame({
     const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
     const isFirstTry = !hasTriedThisQuestion;
     
-    updateUserStats(isCorrect, isFirstTry);
+    if (isFirstTry) {
+      updateUserStats(isCorrect, true);
+    }
+    setSelectedAnswer(selectedAnswer);
+    setShowResults(true);
     
     if (isCorrect) {
       setFeedback("Correct! Great job!");
@@ -237,6 +245,8 @@ export function EnglishGame({
           setDifficulty(difficulty + 1);
           setConsecutiveCorrect(0);
           setFeedback(t('harderQuestions'));
+          setShowResults(false);
+          setSelectedAnswer(null);
         }, 1500);
       } else {
         setTimeout(() => {
@@ -247,6 +257,8 @@ export function EnglishGame({
             } else {
               generateQuestion();
             }
+            setShowResults(false);
+            setSelectedAnswer(null);
             return newCount;
           });
         }, 1500);
@@ -255,6 +267,10 @@ export function EnglishGame({
       setFeedback("Not quite right. Try again!");
       setHasTriedThisQuestion(true);
       setConsecutiveCorrect(0);
+      setTimeout(() => {
+        setShowResults(false);
+        setSelectedAnswer(null);
+      }, 1500);
     }
   };
 
@@ -454,22 +470,30 @@ export function EnglishGame({
 
                     <div className="mb-6">
                       <div className="grid grid-cols-1 gap-4">
-                        {currentQuestion.options.map((option, index) => (
-                          <button
-                            key={index}
-                            onClick={() => handleAnswerSelect(option)}
-                            disabled={!!feedback && feedback.includes("Correct")}
-                            className={`p-4 rounded-lg text-lg font-medium transition-colors ${
-                              feedback && option === currentQuestion.correctAnswer
-                                ? 'bg-green-500 text-white'
-                                : feedback && option === userAnswer && option !== currentQuestion.correctAnswer
-                                ? 'bg-red-500 text-white'
-                                : 'bg-white hover:bg-purple-100 text-gray-800'
-                            }`}
-                          >
-                            {option}
-                          </button>
-                        ))}
+                        {currentQuestion.options.map((option, index) => {
+                          let btnClass = "p-4 rounded-lg text-lg font-medium transition-colors ";
+                          if (showResults) {
+                            if (option === currentQuestion.correctAnswer) {
+                              btnClass += "bg-green-500 text-white border-green-600 animate-pulse";
+                            } else if (option === selectedAnswer) {
+                              btnClass += "bg-red-500 text-white border-red-600";
+                            } else {
+                              btnClass += "bg-gray-200 text-gray-500 border-gray-300";
+                            }
+                          } else {
+                            btnClass += "bg-white text-gray-800 border-gray-300 hover:border-purple-400 hover:bg-purple-50 cursor-pointer";
+                          }
+                          return (
+                            <button
+                              key={index}
+                              onClick={() => handleAnswerSelect(option)}
+                              disabled={showResults}
+                              className={btnClass}
+                            >
+                              {option}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
 
