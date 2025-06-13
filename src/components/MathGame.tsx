@@ -1,14 +1,13 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-//import { NumberPad } from "./UI/NumberPad";
+import { NumberPad } from "./UI/NumberPad";
 import { Score } from "./UI/Score";
 import { SideMenu } from "./UI/SideMenu";
 import { VisualAid } from "./UI/VisualAid";
 import { getRandomNumber, calculateResult } from "@/lib/utils";
 import { AnswerOptions } from "./UI/AnswerOptions";
 import { useTranslation } from "react-i18next";
-import { LanguageSwitcher } from './UI/LanguageSwitcher';
 
 interface MathGameProps {
   initialDifficulty?: number;
@@ -311,13 +310,6 @@ export function MathGame({
 
   return (
     <div className="flex min-h-screen bg-gray-100 relative">
-      {/* 语言切换器 - 固定在整个应用的右上角 */}
-      <div className={`fixed top-4 right-4 ${
-        isMobile ? 'top-2 right-2 z-10' : 'top-4 right-4 z-50'
-      } ${isMobile && isMenuOpen ? 'z-5' : ''}`}>
-        <LanguageSwitcher />
-      </div>
-  
       {/* 移动端遮罩层 */}
       {isMobile && isMenuOpen && (
         <div 
