@@ -309,9 +309,15 @@ export function MathGame({
     return null;
   }
 
-  // 合并后的 return 语句，结合两个分支的优点：
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100 relative">
+      {/* 语言切换器 - 固定在整个应用的右上角 */}
+      <div className={`fixed top-4 right-4 ${
+        isMobile ? 'top-2 right-2 z-10' : 'top-4 right-4 z-50'
+      } ${isMobile && isMenuOpen ? 'z-5' : ''}`}>
+        <LanguageSwitcher />
+      </div>
+  
       {/* 移动端遮罩层 */}
       {isMobile && isMenuOpen && (
         <div 
@@ -385,6 +391,7 @@ export function MathGame({
             : "ml-0"
       }`}>
         <div className="max-w-3xl mx-auto relative">
+
           {!isSessionStarted ? (
             <div className="bg-white p-8 rounded-lg shadow-md text-center">
               <h1 className="text-3xl font-bold text-purple-700 mb-6 font-gensen">{t("game.welcome.title")}</h1>
