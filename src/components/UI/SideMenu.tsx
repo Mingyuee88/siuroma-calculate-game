@@ -478,18 +478,6 @@ ev
             </button>
           </div>
 
-          {/* Panel Indicators - 固定在底部上方 */}
-          <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex space-x-2 bg-white/90 rounded-full px-3 py-2 shadow-sm">
-            {panels.map((_, index) => (
-              <div
-                key={index}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  currentPanel === index ? 'bg-purple-500' : 'bg-gray-300'
-                }`}
-              />
-            ))}
-          </div>
-
         </div>
       )}
     </div>
