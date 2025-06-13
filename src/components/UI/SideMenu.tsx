@@ -26,8 +26,8 @@ interface SideMenuProps {
   setIsMenuOpen: (isOpen: boolean) => void;
   difficulty: number;
   setDifficulty: (level: number) => void;
-  gameMode: 'addition' | 'subtraction';
-  switchGameMode: (mode: 'addition' | 'subtraction') => void;
+  gameMode: 'addition' | 'subtraction' | 'Multiple Choice' | 'True/False Question';
+  switchGameMode: (mode: 'addition' | 'subtraction' | 'Multiple Choice' | 'True/False Question') => void;
   visualStyle: 'blocks' | 'animals' | 'shapes' | 'numberLine';
   setVisualStyle: (style: 'blocks' | 'animals' | 'shapes' | 'numberLine') => void;
   questionsPerSession: number;
@@ -42,6 +42,8 @@ interface SideMenuProps {
   currentRank: number;
   allUsers: UserStats[];
   setCurrentUser: React.Dispatch<React.SetStateAction<UserStats | null>>;
+  currentGame: 'math' | 'english';
+  switchGame: (game: 'math' | 'english') => void;
 }
 
 const mockUserStats: UserStats = {
@@ -73,7 +75,9 @@ export function SideMenu({
   onUserLogout = () => {},
   currentRank: _currentRank,
   allUsers,
-  setCurrentUser
+  setCurrentUser,
+  currentGame,
+  switchGame
 }: SideMenuProps) {
   const { t, language, setLanguage } = useLanguage();
   const router = useRouter();

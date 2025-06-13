@@ -12,7 +12,7 @@ import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { AnswerOptions } from "./UI/AnswerOptions";
 
 
-interface MathGameProps {
+interface EnglishGameProps {
   initialDifficulty?: number;
   userId?: string;
   isAdmin?: boolean;
@@ -20,6 +20,11 @@ interface MathGameProps {
   switchGame: (game: 'math' | 'english') => void;
 }
 
+interface Question {
+  question: string;
+  options: string[];
+  correctAnswer: string;
+}
 
 interface UserStats {
   userId: string;
@@ -39,18 +44,16 @@ export function EnglishGame({
   isAdmin = false,
   currentGame,
   switchGame
-}: MathGameProps) {
+}: EnglishGameProps) {
   const { t } = useLanguage();
-  const [gameMode, setGameMode] = useState<"addition" | "subtraction">("addition");
+  const [gameMode, setGameMode] = useState<"Multiple Choice" | "True/False Question" | "addition" | "subtraction">("Multiple Choice");
   const [difficulty, setDifficulty] = useState(initialDifficulty);
-  const [firstNumber, setFirstNumber] = useState(0);
-  const [secondNumber, setSecondNumber] = useState(0);
+  const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [userAnswer, setUserAnswer] = useState<string>("");
   const [feedback, setFeedback] = useState("");
   const [score, setScore] = useState(0);
   const [consecutiveCorrect, setConsecutiveCorrect] = useState(0);
   const [showExplanation, setShowExplanation] = useState(false);
-  const [visualStyle, setVisualStyle] = useState<"blocks" | "animals" | "shapes" | "numberLine">("blocks");
   const [isInitialized, setIsInitialized] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(true);
   const [isAdaptiveMode, setIsAdaptiveMode] = useState(false);
@@ -63,10 +66,6 @@ export function EnglishGame({
   const [isSessionStarted, setIsSessionStarted] = useState(false);
   const [sessionStartTime, setSessionStartTime] = useState<number | null>(null);
   const [sessionDuration, setSessionDuration] = useState<number>(0);
-
-  // Answer options for ABCD format
-  const [options, setOptions] = useState<{ label: string; value: number }[]>([]);
-  const [correctAnswer, setCorrectAnswer] = useState(0);
   const [hasTriedThisQuestion, setHasTriedThisQuestion] = useState(false);
 
   // User statistics
@@ -93,55 +92,55 @@ export function EnglishGame({
     { userId: '10', Username: 'Judy', correctAnswers: 14, totalQuestions: 19, accuracy: 73.7, currentrank: 10 },
   ]);
 
-  const generateProblem = useCallback(() => {
-    const minNumber = 1;
-    let maxSum;
-    if (difficulty === 1) {
-      maxSum = 10;
-    } else if (difficulty === 2) {
-      maxSum = 20;
-    } else {
-      maxSum = 100;
+  // Mock questions database
+  const questionsDatabase = {
+    "Multiple Choice": [
+      {
+        question: "What is the past tense of 'go'?",
+        options: ["went", "gone", "goed", "going"],
+        correctAnswer: "went"
+      },
+      {
+        question: "Which word is a synonym for 'happy'?",
+        options: ["sad", "joyful", "angry", "tired"],
+        correctAnswer: "joyful"
+      },
+      {
+        question: "What is the opposite of 'begin'?",
+        options: ["start", "end", "continue", "proceed"],
+        correctAnswer: "end"
+      },
+      // Add more MC questions here
+    ],
+    "True/False Question": [
+      {
+        question: "The word 'cat' has three letters.",
+        options: ["True", "False"],
+        correctAnswer: "True"
+      },
+      {
+        question: "English has more words than any other language.",
+        options: ["True", "False"],
+        correctAnswer: "True"
+      },
+      {
+        question: "The word 'quickly' is a noun.",
+        options: ["True", "False"],
+        correctAnswer: "False"
+      },
+      // Add more T/F questions here
+    ]
+  };
+
+  const generateQuestion = useCallback(() => {
+    if (gameMode === "Multiple Choice" || gameMode === "True/False Question") {
+      const questions = questionsDatabase[gameMode];
+      const randomIndex = Math.floor(Math.random() * questions.length);
+      setCurrentQuestion(questions[randomIndex]);
+      setHasTriedThisQuestion(false);
+      setFeedback("");
     }
-    
-    let first, second;
-    if (gameMode === "addition") {
-      first = getRandomNumber(minNumber, maxSum - 1);
-      const maxSecond = maxSum - first;
-      second = getRandomNumber(minNumber, maxSecond);
-    } else {
-      first = getRandomNumber(minNumber, maxSum);
-      second = getRandomNumber(minNumber, first);
-    }
-    
-    setFirstNumber(first);
-    setSecondNumber(second);
-    
-    // Generate ABCD options
-    const correct = calculateResult(first, second, gameMode);
-    const optionSet = new Set<number>([correct]);
-    
-    // Generate 3 wrong answers
-    while (optionSet.size < 4) {
-      let distractor = correct + getRandomNumber(-5, 5);
-      if (distractor !== correct && distractor >= 0) {
-        optionSet.add(distractor);
-      }
-    }
-    
-    // Convert to labeled options and shuffle
-    const optionArray = Array.from(optionSet);
-    const shuffledOptions = optionArray.sort(() => Math.random() - 0.5);
-    const labeledOptions = shuffledOptions.map((value, index) => ({
-      label: String.fromCharCode(65 + index), // A, B, C, D
-      value: value
-    }));
-    
-    setCorrectAnswer(correct);
-    setOptions(labeledOptions);
-    setHasTriedThisQuestion(false);
-    setFeedback("");
-  }, [difficulty, gameMode]);
+  }, [gameMode]);
 
   const startNewSession = () => {
     setQuestionsAnswered(0);
@@ -152,23 +151,23 @@ export function EnglishGame({
     setConsecutiveCorrect(0);
     setIsSessionStarted(true);
     setSessionStartTime(Date.now());
-    generateProblem();
+    generateQuestion();
   };
 
   // Initialize the game
   useEffect(() => {
     if (!isInitialized) {
-      generateProblem();
+      generateQuestion();
       setIsInitialized(true);
     }
-  }, [isInitialized, generateProblem]);
+  }, [isInitialized, generateQuestion]);
 
-  // Generate new problem when game mode or difficulty changes
+  // Generate new question when game mode or difficulty changes
   useEffect(() => {
     if (isInitialized && !isSessionComplete) {
-      generateProblem();
+      generateQuestion();
     }
-  }, [gameMode, difficulty, generateProblem, isInitialized, isSessionComplete]);
+  }, [gameMode, difficulty, generateQuestion, isInitialized, isSessionComplete]);
 
   // Timer effect
   useEffect(() => {
@@ -215,9 +214,10 @@ export function EnglishGame({
     return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
+  const handleAnswerSelect = (selectedAnswer: string) => {
+    if (!currentQuestion) return;
 
-  const handleAnswerSelect = (selectedValue: number) => {
-    const isCorrect = selectedValue === correctAnswer;
+    const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
     const isFirstTry = !hasTriedThisQuestion;
     
     updateUserStats(isCorrect, isFirstTry);
@@ -230,13 +230,12 @@ export function EnglishGame({
       }
       setConsecutiveCorrect(prev => prev + 1);
 
-
       // Adaptive mode logic
       if (isAdaptiveMode && consecutiveCorrect === 4 && difficulty < 3) {
         setTimeout(() => {
           setDifficulty(difficulty + 1);
           setConsecutiveCorrect(0);
-          setFeedback(t('harderNumbers'));
+          setFeedback(t('harderQuestions'));
         }, 1500);
       } else {
         setTimeout(() => {
@@ -245,39 +244,40 @@ export function EnglishGame({
             if (newCount >= questionsPerSession) {
               setIsSessionComplete(true);
             } else {
-              generateProblem();
+              generateQuestion();
             }
             return newCount;
           });
         }, 1500);
       }
     } else {
-
       setFeedback("Not quite right. Try again!");
       setHasTriedThisQuestion(true);
-
       setConsecutiveCorrect(0);
     }
   };
 
-  const switchGameMode = (mode: "addition" | "subtraction") => {
-    setGameMode(mode);
-    setDifficulty(1);
-    setScore(0);
+  const switchGameMode = (mode: "Multiple Choice" | "True/False Question" | "addition" | "subtraction") => {
+    if (mode === "Multiple Choice" || mode === "True/False Question") {
+      setGameMode(mode);
+      setDifficulty(1);
+      setScore(0);
+      generateQuestion();
+    }
   };
 
   const setDifficultyLevel = (level: number) => {
     setDifficulty(level);
     setIsAdaptiveMode(false);
     setConsecutiveCorrect(0);
-    generateProblem();
+    generateQuestion();
   };
 
   const enableAdaptiveMode = () => {
     setDifficulty(1);
     setIsAdaptiveMode(true);
     setConsecutiveCorrect(0);
-    generateProblem();
+    generateQuestion();
   };
 
   // Don't render anything until initialized
@@ -294,8 +294,8 @@ export function EnglishGame({
         setDifficulty={setDifficultyLevel}
         gameMode={gameMode}
         switchGameMode={switchGameMode}
-        visualStyle={visualStyle}
-        setVisualStyle={setVisualStyle}
+        visualStyle="blocks"
+        setVisualStyle={() => {}}
         questionsPerSession={questionsPerSession}
         setQuestionsPerSession={setQuestionsPerSession}
         isSessionActive={isSessionStarted && !isSessionComplete}
@@ -310,13 +310,12 @@ export function EnglishGame({
       />
 
       {/* Main Content */}
-      <div className={`flex-1 p-6 transition-all duration-300 ${isMenuOpen ? "ml-64" : "ml-0"}`}>
+      <div className="flex-1 p-8">
         <div className="max-w-3xl mx-auto">
           {!isSessionStarted ? (
             <div className="bg-white p-8 rounded-lg shadow-md text-center">
-
               <h1 className="text-3xl font-bold text-purple-700 mb-6">
-                {t('title')}
+                {t('englishGame.title')}
               </h1>
 
               <div className="mb-8">
@@ -325,7 +324,7 @@ export function EnglishGame({
                   <div>
                     <p className="text-gray-600">{t('session.gameModeLabel')}</p>
                     <p className="font-semibold">
-                      {gameMode === "addition" ? t('gameSettings.operations.addition') : t('gameSettings.operations.subtraction')}
+                      {gameMode === "Multiple Choice" ? t('gameSettings.operations.mcQuestion') : t('gameSettings.operations.tfQuestion')}
                     </p>
                   </div>
                   <div>
@@ -345,10 +344,6 @@ export function EnglishGame({
                     <p className="font-semibold">
                       {questionsPerSession} {t('session.perSession')}
                     </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600">{t('session.visualAidLabel')}</p>
-                    <p className="font-semibold capitalize">{t(`gameSettings.visualTypes.${visualStyle}`)}</p>
                   </div>
                 </div>
               </div>
@@ -402,7 +397,7 @@ export function EnglishGame({
                       setUserAnswer("");
                       setFeedback("");
                       setConsecutiveCorrect(0);
-                      generateProblem();
+                      generateQuestion();
                     }}
                     className="px-4 py-2 bg-yellow-500 text-white rounded-lg font-medium hover:bg-yellow-600"
                   >
@@ -436,53 +431,45 @@ export function EnglishGame({
                 )}
               </div>
 
-              <div className="text-6xl font-bold text-center mb-8 text-black">
-                {firstNumber}{" "}
-                <span className="text-black">
-                  {gameMode === "addition" ? "+" : "-"}
-                </span>{" "}
-                {secondNumber} = ?
-              </div>
+              {currentQuestion && (
+                <>
+                  <div className="text-2xl font-bold text-center mb-8 text-black">
+                    {currentQuestion.question}
+                  </div>
 
-              <div className="mb-6">
-                <AnswerOptions
-                  options={options}
-                  correctAnswer={correctAnswer}
-                  onAnswerSelect={handleAnswerSelect}
-                  hasTriedThisQuestion={hasTriedThisQuestion}
-                  disabled={!!feedback && feedback.includes("Correct")}
-                />
-              </div>
+                  <div className="mb-6">
+                    <div className="grid grid-cols-1 gap-4">
+                      {currentQuestion.options.map((option, index) => (
+                        <button
+                          key={index}
+                          onClick={() => handleAnswerSelect(option)}
+                          disabled={!!feedback && feedback.includes("Correct")}
+                          className={`p-4 rounded-lg text-lg font-medium transition-colors ${
+                            feedback && option === currentQuestion.correctAnswer
+                              ? 'bg-green-500 text-white'
+                              : feedback && option === userAnswer && option !== currentQuestion.correctAnswer
+                              ? 'bg-red-500 text-white'
+                              : 'bg-white hover:bg-purple-100 text-gray-800'
+                          }`}
+                        >
+                          {option}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
 
-              <div className="text-center mb-4">
-                <button
-                  onClick={() => setShowExplanation(!showExplanation)}
-                  className="text-blue-500 underline hover:text-blue-700"
-                >
-                  {showExplanation ? t('game.hideHints') : t('game.showHints')}
-                </button>
-              </div>
-
-              <VisualAid
-                visualStyle={visualStyle}
-                setVisualStyle={setVisualStyle}
-                firstNumber={firstNumber}
-                secondNumber={secondNumber}
-                gameMode={gameMode}
-                showExplanation={showExplanation}
-                showSelector={false}
-              />
-
-              {feedback && (
-                <div
-                  className={`mt-4 p-3 rounded-lg text-center font-bold ${
-                    feedback.includes("Correct")
-                      ? "bg-green-100 text-green-700"
-                      : "bg-yellow-100 text-yellow-700"
-                  }`}
-                >
-                  {feedback}
-                </div>
+                  {feedback && (
+                    <div
+                      className={`mt-4 p-3 rounded-lg text-center font-bold ${
+                        feedback.includes("Correct")
+                          ? "bg-green-100 text-green-700"
+                          : "bg-yellow-100 text-yellow-700"
+                      }`}
+                    >
+                      {feedback}
+                    </div>
+                  )}
+                </>
               )}
             </>
           )}
