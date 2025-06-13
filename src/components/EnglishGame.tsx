@@ -371,24 +371,22 @@ export function EnglishGame({
         "flex-1 flex justify-center items-start min-h-screen transition-all duration-300 pt-8"
       }>
         <div className="max-w-3xl w-full">
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-3xl mx-auto relative">
             {!isSessionStarted ? (
               <div className="bg-white p-8 rounded-lg shadow-md text-center">
-                <h1 className="text-3xl font-bold text-purple-700 mb-6">
-                  {t('game.welcome.Etitle')}
-                </h1>
+                <h1 className="text-3xl font-bold text-purple-700 mb-6 font-gensen">{t('game.welcome.Etitle')}</h1>
                 <div className="mb-8">
-                  <h2 className="text-xl font-semibold mb-4">{t('game.session.settings')}</h2>
+                  <h2 className="text-xl font-semibold mb-4 font-gensen">{t('game.welcome.Edescription')}</h2>
                   <div className="grid grid-cols-2 gap-4 text-left mb-6">
                     <div>
-                      <p className="text-gray-600">{t('game.session.gameModeLabel')}</p>
-                      <p className="font-semibold">
+                      <p className="text-gray-600 font-gensen">{t('game.session.gameModeLabel')}</p>
+                      <p className="font-semibold font-gensen">
                         {gameMode === "Multiple Choice" ? t('game.settings.mcQuestion') : t('game.settings.tfQuestion')}
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-600">{t('game.session.ageLevel')}</p>
-                      <p className="font-semibold">
+                      <p className="text-gray-600 font-gensen">{t('game.session.ageLevel')}</p>
+                      <p className="font-semibold font-gensen">
                         {isAdaptiveMode
                           ? t('game.session.adaptiveModeLabel')
                           : difficulty === 1
@@ -399,8 +397,8 @@ export function EnglishGame({
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-600">{t('game.session.questionsLabel')}</p>
-                      <p className="font-semibold">
+                      <p className="text-gray-600 font-gensen">{t('game.session.questionsLabel')}</p>
+                      <p className="font-semibold font-gensen">
                         {questionsPerSession} {t('game.session.perSession')}
                       </p>
                     </div>
@@ -408,21 +406,22 @@ export function EnglishGame({
                 </div>
                 <button
                   onClick={startNewSession}
-                  className="px-8 py-4 bg-purple-600 text-white rounded-lg font-bold text-lg hover:bg-purple-700 transition-colors"
+                  className="px-8 py-4 bg-purple-600 text-white rounded-lg font-bold text-lg hover:bg-purple-700 transition-colors font-gensen"
                 >
                   {t('game.session.start')}
                 </button>
               </div>
             ) : isSessionComplete ? (
               <div className="bg-white p-6 rounded-lg shadow-md mb-6 text-center">
-                <h2 className="text-2xl font-bold mb-4">{t('game.session.complete')}</h2>
-                <p className="text-xl mb-2">{t('game.session.score')} {sessionScore}/{questionsPerSession}</p>
-                <p className="text-lg mb-4">{t('game.session.timeTaken')} {formatTime(sessionDuration)}</p>
+                <h2 className="text-2xl font-bold mb-4 font-gensen">{t('game.session.complete')}</h2>
+                <p className="text-xl mb-2 font-gensen">{t('game.session.score')} {sessionScore}/{questionsPerSession}</p>
+                <p className="text-lg mb-4 font-gensen">{t('game.session.timeTaken')} {formatTime(sessionDuration)}</p>
                 <div className="mb-4 p-4 bg-blue-50 rounded-lg">
-                  <p className="font-semibold">{t('game.stats.totalCorrect')} {userStats.correctAnswers}</p>
-                  <p>{t('game.stats.totalAttempts')} {userStats.totalQuestions}</p>
-                  <p>{t('game.stats.accuracy')} {userStats.accuracy}%</p>
-                  <p>{t('game.stats.currentRank')} #{getCurrentUserRank()}</p>
+                  <p className="font-semibold font-gensen">{t('game.stats.performance')}</p>
+                  <p className="font-gensen">{t('game.stats.totalCorrect')} {userStats.correctAnswers}</p>
+                  <p className="font-gensen">{t('game.stats.totalAttempts')} {userStats.totalQuestions}</p>
+                  <p className="font-gensen">{t('game.stats.accuracy')} {userStats.accuracy}%</p>
+                  <p className="font-gensen">{t('game.stats.currentRank')} #{getCurrentUserRank()}</p>
                 </div>
                 <button
                   onClick={() => {
@@ -430,7 +429,7 @@ export function EnglishGame({
                     setSessionDuration(0);
                     startNewSession();
                   }}
-                  className="px-6 py-3 bg-purple-600 text-white rounded-lg font-bold hover:bg-purple-700"
+                  className="px-6 py-3 bg-purple-600 text-white rounded-lg font-bold hover:bg-purple-700 font-gensen"
                 >
                   {t('game.session.startNew')}
                 </button>
@@ -452,7 +451,6 @@ export function EnglishGame({
                       onClick={() => {
                         setQuestionsAnswered(0);
                         setSessionScore(0);
-                        setUserAnswer("");
                         setFeedback("");
                         setConsecutiveCorrect(0);
                         generateQuestion();
@@ -463,14 +461,15 @@ export function EnglishGame({
                     </button>
                   </div>
                 </div>
-                <div className="text-center mb-8">
+
+                <div className="text-center mb-6">
                   <Score
-                    score={score}
+                    score={sessionScore}
                     total={questionsAnswered}
                     time={formatTime(sessionDuration)}
                     showAnimation={feedback.includes("Correct")}
                   />
-                  <div className="text-lg text-gray-600 mt-2">
+                  <div className="text-lg text-gray-600 mt-2 font-gensen">
                     {t('game.session.progress')} {questionsAnswered}/{questionsPerSession} {t('game.session.questions')}
                   </div>
                   <div className="w-full max-w-md mx-auto mt-2 bg-gray-200 rounded-full h-2.5">
@@ -479,61 +478,64 @@ export function EnglishGame({
                       style={{ width: `${(questionsAnswered / questionsPerSession) * 100}%` }}
                     />
                   </div>
-                  <div className="text-lg text-gray-600 mt-1">
+                  <div className="text-lg text-gray-600 mt-1 font-gensen">
                     {t('game.session.time')} {formatTime(sessionDuration)}
                   </div>
                   {isAdaptiveMode && (
-                    <div className="text-sm text-purple-600 mt-1">
+                    <div className="text-sm text-purple-600 mt-1 font-gensen">
                       {t('game.session.currentLevel')} {difficulty === 1 ? t('game.session.levels.easy') : difficulty === 2 ? t('game.session.levels.medium') : t('game.session.levels.hard')}
                     </div>
                   )}
                 </div>
-                {currentQuestion && (
-                  <>
-                    <div className="text-2xl font-bold text-center mb-8 text-black">
-                      {currentQuestion.question}
-                    </div>
-                    <div className="mb-6">
-                      <div className="grid grid-cols-1 gap-4">
-                        {currentQuestion.options.map((option, index) => {
-                          let btnClass = "p-4 rounded-lg text-lg font-medium transition-colors ";
-                          if (showResults) {
-                            if (option === currentQuestion.correctAnswer) {
-                              btnClass += "bg-green-500 text-white border-green-600 animate-pulse";
-                            } else if (option === selectedAnswer) {
-                              btnClass += "bg-red-500 text-white border-red-600";
+
+                <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+                  {currentQuestion && (
+                    <>
+                      <div className="text-2xl font-bold text-center mb-8 text-black font-gensen">
+                        {currentQuestion.question}
+                      </div>
+                      <div className="mb-6">
+                        <div className="grid grid-cols-1 gap-4">
+                          {currentQuestion.options.map((option, index) => {
+                            let btnClass = "p-4 rounded-lg text-lg font-medium transition-colors ";
+                            if (showResults) {
+                              if (option === currentQuestion.correctAnswer) {
+                                btnClass += "bg-green-500 text-white border-green-600 animate-pulse";
+                              } else if (option === selectedAnswer) {
+                                btnClass += "bg-red-500 text-white border-red-600";
+                              } else {
+                                btnClass += "bg-gray-200 text-gray-500 border-gray-300";
+                              }
                             } else {
-                              btnClass += "bg-gray-200 text-gray-500 border-gray-300";
+                              btnClass += "bg-white text-gray-800 border-gray-300 hover:border-purple-400 hover:bg-purple-50 cursor-pointer";
                             }
-                          } else {
-                            btnClass += "bg-white text-gray-800 border-gray-300 hover:border-purple-400 hover:bg-purple-50 cursor-pointer";
-                          }
-                          return (
-                            <button
-                              key={index}
-                              onClick={() => handleAnswerSelect(option)}
-                              disabled={showResults}
-                              className={btnClass}
-                            >
-                              {option}
-                            </button>
-                          );
-                        })}
+                            return (
+                              <button
+                                key={index}
+                                onClick={() => handleAnswerSelect(option)}
+                                disabled={showResults}
+                                className={btnClass}
+                              >
+                                {option}
+                              </button>
+                            );
+                          })}
+                        </div>
                       </div>
-                    </div>
-                    {feedback && (
-                      <div
-                        className={`mt-4 p-3 rounded-lg text-center font-bold ${
-                          feedback.includes("Correct")
-                            ? "bg-green-100 text-green-700"
-                            : "bg-yellow-100 text-yellow-700"
-                        }`}
-                      >
-                        {feedback}
-                      </div>
-                    )}
-                  </>
-                )}
+                      {feedback && (
+                        <div
+                          className={`mt-4 p-3 rounded-lg text-center font-bold ${
+                            feedback.includes("Correct")
+                              ? "bg-green-100 text-green-700"
+                              : "bg-yellow-100 text-yellow-700"
+                          }`}
+                        >
+                          {feedback}
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
               </>
             )}
           </div>
