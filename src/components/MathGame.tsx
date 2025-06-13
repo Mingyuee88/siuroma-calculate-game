@@ -383,194 +383,186 @@ export function MathGame({
       )}
 
       {/* Main Content */}
-      <div className={`flex-1 p-6 transition-all duration-300 ${
-        isMobile 
-          ? "main-content-mobile" 
-          : isMenuOpen 
-            ? "ml-64" 
-            : "ml-0"
-      }`}>
-        <div className="max-w-3xl mx-auto relative">
-
-          {!isSessionStarted ? (
-            <div className="bg-white p-8 rounded-lg shadow-md text-center">
-              <h1 className="text-3xl font-bold text-purple-700 mb-6 font-gensen">{t("game.welcome.title")}</h1>
-              <div className="mb-8">
-                <h2 className="text-xl font-semibold mb-4 font-gensen">{t("game.welcome.description")}</h2>
-                <div className="grid grid-cols-2 gap-4 text-left mb-6">
-                  <div>
-
-                    <p className="text-gray-600 font-gensen">{t("game.welcome.gameMode")}:</p>
-                    <p className="font-semibold font-gensen">
-                      {gameMode === "addition" ? t("game.settings.addition") : t("game.settings.subtraction")}
-
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600 font-gensen">{t("game.welcome.ageLevel")}:</p>
-                    <p className="font-semibold font-gensen">
-                      {isAdaptiveMode
-                        ? t("game.welcome.adaptiveMode")
-                        : difficulty === 1
-                        ? t("game.welcome.level1")
-                        : difficulty === 2
-                        ? t("game.welcome.level2")
-                        : t("game.welcome.level3")}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600 font-gensen">{t("game.welcome.questions")}:</p>
-                    <p className="font-semibold font-gensen">{questionsPerSession} {t("game.welcome.perSession")}</p>
-                  </div>
-                  <div>
-
-                    <p className="text-gray-600 font-gensen">{t("game.welcome.visualAid")}:</p>
-                    <p className="font-semibold font-gensen capitalize">
-
-                      {t(`game.settings.${visualStyle}`)}
-                    </p>
+      <div className={
+        "flex-1 flex justify-center items-start min-h-screen transition-all duration-300 pt-8"
+      }>
+        <div className="max-w-3xl w-full">
+          <div className="max-w-3xl mx-auto relative">
+            {!isSessionStarted ? (
+              <div className="bg-white p-8 rounded-lg shadow-md text-center">
+                <h1 className="text-3xl font-bold text-purple-700 mb-6 font-gensen">{t("game.welcome.title")}</h1>
+                <div className="mb-8">
+                  <h2 className="text-xl font-semibold mb-4 font-gensen">{t("game.welcome.description")}</h2>
+                  <div className="grid grid-cols-2 gap-4 text-left mb-6">
+                    <div>
+                      <p className="text-gray-600 font-gensen">{t("game.welcome.gameMode")}:</p>
+                      <p className="font-semibold font-gensen">
+                        {gameMode === "addition" ? t("game.settings.addition") : t("game.settings.subtraction")}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 font-gensen">{t("game.welcome.ageLevel")}:</p>
+                      <p className="font-semibold font-gensen">
+                        {isAdaptiveMode
+                          ? t("game.welcome.adaptiveMode")
+                          : difficulty === 1
+                          ? t("game.welcome.level1")
+                          : difficulty === 2
+                          ? t("game.welcome.level2")
+                          : t("game.welcome.level3")}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 font-gensen">{t("game.welcome.questions")}:</p>
+                      <p className="font-semibold font-gensen">{questionsPerSession} {t("game.welcome.perSession")}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 font-gensen">{t("game.welcome.visualAid")}:</p>
+                      <p className="font-semibold font-gensen capitalize">
+                        {t(`game.settings.${visualStyle}`)}
+                      </p>
+                    </div>
                   </div>
                 </div>
+                <button
+                  onClick={startNewSession}
+                  className="px-8 py-4 bg-purple-600 text-white rounded-lg font-bold text-lg hover:bg-purple-700 transition-colors font-gensen"
+                >
+                  {t("game.welcome.startButton")}
+                </button>
               </div>
-              <button
-                onClick={startNewSession}
-                className="px-8 py-4 bg-purple-600 text-white rounded-lg font-bold text-lg hover:bg-purple-700 transition-colors font-gensen"
-              >
-                {t("game.welcome.startButton")}
-              </button>
-            </div>
-          ) : isSessionComplete ? (
-            <div className="bg-white p-6 rounded-lg shadow-md mb-6 text-center">
-              <h2 className="text-2xl font-bold mb-4 font-gensen">{t("game.complete.title")}</h2>
-              <p className="text-xl mb-2 font-gensen">{t("game.complete.score", { score: sessionScore, total: questionsPerSession })}</p>
-              <p className="text-lg mb-4 font-gensen">{t("game.complete.time", { time: formatTime(sessionDuration) })}</p>
-              <div className="mb-4 p-4 bg-blue-50 rounded-lg">
-                <p className="font-semibold font-gensen">{t("game.complete.statistics")}:</p>
-                <p className="font-gensen">{t("game.complete.totalCorrect")}: {userStats.correctAnswers}</p>
-                <p className="font-gensen">{t("game.complete.totalAttempts")}: {userStats.totalQuestions}</p>
-                <p className="font-gensen">{t("game.complete.accuracy", { accuracy: Math.round(userStats.accuracy) })}</p>
-                <p className="font-gensen">{t("game.complete.currentRank")}: #{getCurrentUserRank()}</p>
-              </div>
-              <button
-                onClick={() => {
-                  setIsSessionStarted(false);
-                  setSessionDuration(0);
-                  startNewSession();
-                }}
-                className="px-6 py-3 bg-purple-600 text-white rounded-lg font-bold hover:bg-purple-700 font-gensen"
-              >
-                {t("game.complete.playAgain")}
-              </button>
-            </div>
-          ) : (
-            <>
-              <div className="w-full flex justify-end mb-4">
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => {
-                      setIsSessionComplete(true);
-                      setIsSessionStarted(false);
-                    }}
-                    className="px-4 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600"
-                  >
-                    {t("game.complete.endSession")}
-                  </button>
-                  <button
-                    onClick={() => {
-                      setQuestionsAnswered(0);
-                      setSessionScore(0);
-                      setFeedback("");
-                      setConsecutiveCorrect(0);
-                      generateProblem();
-                    }}
-                    className="px-4 py-2 bg-yellow-500 text-white rounded-lg font-medium hover:bg-yellow-600"
-                  >
-                    {t("game.complete.restart")}
-                  </button>
+            ) : isSessionComplete ? (
+              <div className="bg-white p-6 rounded-lg shadow-md mb-6 text-center">
+                <h2 className="text-2xl font-bold mb-4 font-gensen">{t("game.complete.title")}</h2>
+                <p className="text-xl mb-2 font-gensen">{t("game.complete.score", { score: sessionScore, total: questionsPerSession })}</p>
+                <p className="text-lg mb-4 font-gensen">{t("game.complete.time", { time: formatTime(sessionDuration) })}</p>
+                <div className="mb-4 p-4 bg-blue-50 rounded-lg">
+                  <p className="font-semibold font-gensen">{t("game.complete.statistics")}:</p>
+                  <p className="font-gensen">{t("game.complete.totalCorrect")}: {userStats.correctAnswers}</p>
+                  <p className="font-gensen">{t("game.complete.totalAttempts")}: {userStats.totalQuestions}</p>
+                  <p className="font-gensen">{t("game.complete.accuracy", { accuracy: Math.round(userStats.accuracy) })}</p>
+                  <p className="font-gensen">{t("game.complete.currentRank")}: #{getCurrentUserRank()}</p>
                 </div>
+                <button
+                  onClick={() => {
+                    setIsSessionStarted(false);
+                    setSessionDuration(0);
+                    startNewSession();
+                  }}
+                  className="px-6 py-3 bg-purple-600 text-white rounded-lg font-bold hover:bg-purple-700 font-gensen"
+                >
+                  {t("game.complete.playAgain")}
+                </button>
               </div>
-
-
-              <div className="text-center mb-6">
-                <Score 
-                  score={sessionScore} 
-                  total={questionsAnswered} 
-                  time={formatTime(sessionDuration)} 
-                  showAnimation={feedback.includes('答对') || feedback.includes('Correct')} 
-                />
-                <div className="text-lg text-gray-600 mt-2 font-gensen">
-                  {t("game.progress")}: {questionsAnswered}/{questionsPerSession} {t("game.questions")}
+            ) : (
+              <>
+                <div className="w-full flex justify-end mb-4">
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        setIsSessionComplete(true);
+                        setIsSessionStarted(false);
+                      }}
+                      className="px-4 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600"
+                    >
+                      {t("game.complete.endSession")}
+                    </button>
+                    <button
+                      onClick={() => {
+                        setQuestionsAnswered(0);
+                        setSessionScore(0);
+                        setFeedback("");
+                        setConsecutiveCorrect(0);
+                        generateProblem();
+                      }}
+                      className="px-4 py-2 bg-yellow-500 text-white rounded-lg font-medium hover:bg-yellow-600"
+                    >
+                      {t("game.complete.restart")}
+                    </button>
+                  </div>
                 </div>
-                <div className="w-full max-w-md mx-auto mt-2 bg-gray-200 rounded-full h-2.5">
-                  <div 
-                    className="bg-purple-600 h-2.5 rounded-full transition-all duration-300"
-                    style={{ width: `${(questionsAnswered / questionsPerSession) * 100}%` }}
+
+                <div className="text-center mb-6">
+                  <Score 
+                    score={sessionScore} 
+                    total={questionsAnswered} 
+                    time={formatTime(sessionDuration)} 
+                    showAnimation={feedback.includes('答对') || feedback.includes('Correct')} 
                   />
-                </div>
-                <div className="text-lg text-gray-600 mt-1 font-gensen">
-                  {t("game.time")}: {formatTime(sessionDuration)}
-                </div>
-                {isAdaptiveMode && (
-                  <div className="text-sm text-purple-600 mt-1 font-gensen">
-                    {t("game.currentLevel")}: {difficulty === 1 ? t("game.level1") : difficulty === 2 ? t("game.level2") : t("game.level3")}
+                  <div className="text-lg text-gray-600 mt-2 font-gensen">
+                    {t("game.progress")}: {questionsAnswered}/{questionsPerSession} {t("game.questions")}
                   </div>
-                )}
-              </div>
-
-              <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-                <div className="text-6xl font-bold text-center mb-8 text-black font-gensen">
-                  {firstNumber}{" "}
-                  <span className="text-black">
-                    {gameMode === "addition" ? t("game.symbols.plus") : t("game.symbols.minus")}
-                  </span>{" "}
-                  {secondNumber} = ?
+                  <div className="w-full max-w-md mx-auto mt-2 bg-gray-200 rounded-full h-2.5">
+                    <div 
+                      className="bg-purple-600 h-2.5 rounded-full transition-all duration-300"
+                      style={{ width: `${(questionsAnswered / questionsPerSession) * 100}%` }}
+                    />
+                  </div>
+                  <div className="text-lg text-gray-600 mt-1 font-gensen">
+                    {t("game.time")}: {formatTime(sessionDuration)}
+                  </div>
+                  {isAdaptiveMode && (
+                    <div className="text-sm text-purple-600 mt-1 font-gensen">
+                      {t("game.currentLevel")}: {difficulty === 1 ? t("game.level1") : difficulty === 2 ? t("game.level2") : t("game.level3")}
+                    </div>
+                  )}
                 </div>
 
-                <div className="mb-6">
-                  <AnswerOptions
-                    key={questionKey}
-                    options={options}
-                    correctAnswer={correctAnswer}
-                    onAnswerSelect={handleAnswerSelect}
-                    hasTriedThisQuestion={hasTriedThisQuestion}
-                    disabled={!!feedback && feedback.includes("Correct")}
+                <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+                  <div className="text-6xl font-bold text-center mb-8 text-black font-gensen">
+                    {firstNumber}{" "}
+                    <span className="text-black">
+                      {gameMode === "addition" ? t("game.symbols.plus") : t("game.symbols.minus")}
+                    </span>{" "}
+                    {secondNumber} = ?
+                  </div>
+
+                  <div className="mb-6">
+                    <AnswerOptions
+                      key={questionKey}
+                      options={options}
+                      correctAnswer={correctAnswer}
+                      onAnswerSelect={handleAnswerSelect}
+                      hasTriedThisQuestion={hasTriedThisQuestion}
+                      disabled={!!feedback && feedback.includes("Correct")}
+                    />
+                  </div>
+
+                  <div className="text-center mb-4">
+                    <button
+                      onClick={() => setShowExplanation(!showExplanation)}
+                      className="text-blue-500 underline hover:text-blue-700 font-gensen"
+                    >
+                      {showExplanation ? t("game.hideHint") : t("game.showHint")}
+                    </button>
+                  </div>
+
+                  <VisualAid
+                    visualStyle={visualStyle}
+                    setVisualStyle={setVisualStyle}
+                    firstNumber={firstNumber}
+                    secondNumber={secondNumber}
+                    gameMode={gameMode === 'addition' || gameMode === 'subtraction' ? gameMode : 'addition'}
+                    showExplanation={showExplanation}
+                    showSelector={false}
                   />
+
+                  {feedback && (
+                    <div
+                      className={`mt-4 p-3 rounded-lg text-center font-bold ${
+                        feedback.includes("Correct")
+                          ? "bg-green-100 text-green-700"
+                          : "bg-yellow-100 text-yellow-700"
+                      }`}
+                    >
+                      {feedback}
+                    </div>
+                  )}
                 </div>
 
-                <div className="text-center mb-4">
-                  <button
-                    onClick={() => setShowExplanation(!showExplanation)}
-                    className="text-blue-500 underline hover:text-blue-700 font-gensen"
-                  >
-                    {showExplanation ? t("game.hideHint") : t("game.showHint")}
-                  </button>
-                </div>
-
-                <VisualAid
-                  visualStyle={visualStyle}
-                  setVisualStyle={setVisualStyle}
-                  firstNumber={firstNumber}
-                  secondNumber={secondNumber}
-                  gameMode={gameMode === 'addition' || gameMode === 'subtraction' ? gameMode : 'addition'}
-                  showExplanation={showExplanation}
-                  showSelector={false}
-                />
-
-                {feedback && (
-                  <div
-                    className={`mt-4 p-3 rounded-lg text-center font-bold ${
-                      feedback.includes("Correct")
-                        ? "bg-green-100 text-green-700"
-                        : "bg-yellow-100 text-yellow-700"
-                    }`}
-                  >
-                    {feedback}
-                  </div>
-                )}
-              </div>
-
-            </>
-          )}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

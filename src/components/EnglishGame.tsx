@@ -338,15 +338,16 @@ export function EnglishGame({
       />
 
       {/* Main Content */}
-      <div className={`flex-1 p-6 transition-all duration-300 ${isMenuOpen ? "ml-64" : "ml-0"}`}>
-        <div className="max-w-3xl mx-auto relative">
+      <div className={
+        "flex-1 flex justify-center items-start min-h-screen transition-all duration-300 pt-8"
+      }>
+        <div className="max-w-3xl w-full">
           <div className="max-w-3xl mx-auto">
             {!isSessionStarted ? (
               <div className="bg-white p-8 rounded-lg shadow-md text-center">
                 <h1 className="text-3xl font-bold text-purple-700 mb-6">
                   {t('game.welcome.Etitle')}
                 </h1>
-
                 <div className="mb-8">
                   <h2 className="text-xl font-semibold mb-4">{t('game.session.settings')}</h2>
                   <div className="grid grid-cols-2 gap-4 text-left mb-6">
@@ -394,7 +395,6 @@ export function EnglishGame({
                   <p>{t('game.stats.accuracy')} {userStats.accuracy}%</p>
                   <p>{t('game.stats.currentRank')} #{getCurrentUserRank()}</p>
                 </div>
-
                 <button
                   onClick={() => {
                     setIsSessionStarted(false);
@@ -434,7 +434,6 @@ export function EnglishGame({
                     </button>
                   </div>
                 </div>
-
                 <div className="text-center mb-8">
                   <Score
                     score={score}
@@ -442,7 +441,6 @@ export function EnglishGame({
                     time={formatTime(sessionDuration)}
                     showAnimation={feedback.includes("Correct")}
                   />
-
                   <div className="text-lg text-gray-600 mt-2">
                     {t('game.session.progress')} {questionsAnswered}/{questionsPerSession} {t('game.session.questions')}
                   </div>
@@ -461,13 +459,11 @@ export function EnglishGame({
                     </div>
                   )}
                 </div>
-
                 {currentQuestion && (
                   <>
                     <div className="text-2xl font-bold text-center mb-8 text-black">
                       {currentQuestion.question}
                     </div>
-
                     <div className="mb-6">
                       <div className="grid grid-cols-1 gap-4">
                         {currentQuestion.options.map((option, index) => {
@@ -496,7 +492,6 @@ export function EnglishGame({
                         })}
                       </div>
                     </div>
-
                     {feedback && (
                       <div
                         className={`mt-4 p-3 rounded-lg text-center font-bold ${
