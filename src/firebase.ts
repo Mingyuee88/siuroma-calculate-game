@@ -7,7 +7,8 @@ import {
   signInWithPopup,
   sendPasswordResetEmail,
   RecaptchaVerifier,
-  signInWithPhoneNumber
+  signInWithPhoneNumber,
+  signInAnonymously
 } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -33,4 +34,5 @@ export {
   sendPasswordResetEmail,
   RecaptchaVerifier,
   signInWithPhoneNumber,
+  signInAnonymously,
 };

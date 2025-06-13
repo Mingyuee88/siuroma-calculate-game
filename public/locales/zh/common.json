@@ -30,7 +30,9 @@
       "shapes": "形状",
       "numberLine": "数轴",
       "questionsPerSession": "每轮题目数",
-      "adaptiveMode": "自适应模式"
+      "adaptiveMode": "自适应模式",
+      "mcQuestion": "选择题",
+      "tfQuestion": "判断题"
     },
     "welcome": {
       "title": "数学探险家",
@@ -44,7 +46,9 @@
       "level3": "5-6岁 (1-50)",
       "questions": "题目数量",
       "perSession": "每轮",
-      "visualAid": "视觉辅助"
+      "visualAid": "视觉辅助",
+      "Etitle": "英语探险家",
+      "Edescription": "欢迎来到英语探险家！准备开始一场精彩的英语学习冒险吧。"
     },
     "feedback": {
       "correct": "答对了！太棒了！",
@@ -73,7 +77,10 @@
       "performance": "我的表现",
       "correctAnswers": "答对题数",
       "totalQuestions": "总题目数",
-      "accuracy": "准确率"
+      "accuracy": "准确率",
+      "totalCorrect": "总答对题数",
+      "totalAttempts": "总尝试题数",
+      "currentRank": "当前排名"
     },
     "ranking": {
       "topPlayers": "最佳玩家",
@@ -116,6 +123,29 @@
       "numberLineAddition": "从0开始，向前跳{{firstCount}}格，再向前跳{{secondCount}}格",
       "numberLineSubtraction": "从{{firstCount}}开始，向后跳{{secondCount}}格",
       "whereDoYouLand": "你会落在哪里？那就是答案！"
+    },
+    "session": {
+      "settings": "会话设置",
+      "gameModeLabel": "游戏模式",
+      "ageLevel": "年龄等级",
+      "questionsLabel": "题目数量",
+      "perSession": "每轮",
+      "start": "开始会话",
+      "complete": "会话完成！",
+      "score": "你的得分",
+      "timeTaken": "用时",
+      "startNew": "开始新会话",
+      "end": "结束会话",
+      "restart": "重新开始",
+      "progress": "进度",
+      "questions": "题",
+      "time": "时间",
+      "currentLevel": "当前等级",
+      "levels": {
+        "easy": "简单",
+        "medium": "中等",
+        "hard": "困难"
+      }
     }
   },
   "login": {
