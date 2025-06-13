@@ -138,7 +138,7 @@ export function SideMenu({
   };
 
   const renderLoginForm = () => (
-    <div className="p-4 pt-16">
+    <div className="p-4 pt-16 h-full flex flex-col justify-center">
       <div className="mb-8 text-center">
         <h1 className="text-2xl font-bold text-purple-700 mb-2 font-gensen">{t('title')}</h1>
         <p className="text-sm text-gray-600 font-gensen">{t('login.title')}</p>
@@ -281,7 +281,7 @@ export function SideMenu({
   );
 
   const renderStatsPanel = () => (
-    <div className="space-y-6 pb-16">
+    <div className="space-y-6">
       <div className="text-center">
         <User size={48} className="mx-auto mb-2 text-purple-700" />
         <h2 className="text-xl font-bold text-purple-700 font-gensen">{currentUser?.username}</h2>
@@ -319,7 +319,7 @@ export function SideMenu({
   );
 
   const renderRankingPanel = () => (
-    <div className="space-y-6 pb-16">
+    <div className="space-y-6">
       <div className="text-center">
         <Trophy size={48} className="mx-auto mb-2 text-yellow-500" />
         <h2 className="text-xl font-bold text-purple-700 font-gensen">
@@ -388,8 +388,8 @@ export function SideMenu({
       className={`
         ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} 
         transition-transform duration-300 ease-in-out
-        fixed left-0 top-0 h-full w-80 bg-white shadow-lg z-50
-        md:relative md:translate-x-0 md:shadow-none md:w-64
+        fixed left-0 top-0 h-screen w-80 bg-white shadow-lg z-50
+        md:relative md:translate-x-0 md:shadow-none md:w-64 md:h-screen
       `}
       ref={panelRef}
       onTouchStart={onTouchStart}
@@ -399,7 +399,7 @@ export function SideMenu({
       {showLoginForm ? renderLoginForm() : (
         <div className="h-full flex flex-col">
           {/* Panel Navigation */}
-          <div className="flex border-b border-gray-200 bg-purple-50">
+          <div className="flex border-b border-gray-200 bg-purple-50 flex-shrink-0">
             {panels.map((panel, index) => (
               <button
                 key={panel.id}
@@ -418,19 +418,25 @@ export function SideMenu({
             ))}
           </div>
 
-          {/* Panel Content */}
-          <div className="flex-1 overflow-y-auto p-4">
-            {renderCurrentPanel()}
+          {/* Panel Content - 可滚动区域 */}
+          <div className="flex-1 overflow-y-auto">
+            <div className="p-4 pb-20">
+              {renderCurrentPanel()}
+            </div>
+          </div>
+
+          {/* Logout Button - 固定在底部 */}
+          <div className="flex-shrink-0 p-4 border-t border-gray-200 bg-white">
             <button
               onClick={handleLogout}
-              className="w-full mt-4 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors font-gensen"
+              className="w-full bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors font-gensen"
             >
               {t("menu.logout")}
             </button>
           </div>
 
-          {/* Panel Indicators */}
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 bg-white/80 rounded-full px-3 py-2">
+          {/* Panel Indicators - 固定在底部上方 */}
+          <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex space-x-2 bg-white/90 rounded-full px-3 py-2 shadow-sm">
             {panels.map((_, index) => (
               <div
                 key={index}

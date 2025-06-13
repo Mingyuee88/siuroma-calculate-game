@@ -296,9 +296,15 @@ export function MathGame({
     return null;
   }
 
-  // 合并后的 return 语句，结合两个分支的优点：
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100 relative">
+      {/* 语言切换器 - 固定在整个应用的右上角 */}
+      <div className={`fixed top-4 right-4 ${
+        isMobile ? 'top-2 right-2 z-10' : 'top-4 right-4 z-50'
+      } ${isMobile && isMenuOpen ? 'z-5' : ''}`}>
+        <LanguageSwitcher />
+      </div>
+  
       {/* 移动端遮罩层 */}
       {isMobile && isMenuOpen && (
         <div 
@@ -370,10 +376,6 @@ export function MathGame({
             : "ml-0"
       }`}>
         <div className="max-w-3xl mx-auto relative">
-          {/* 语言切换器 - 来自 main 分支 */}
-          <div className="absolute top-0 right-0 z-10">
-            <LanguageSwitcher />
-          </div>
 
           {!isSessionStarted ? (
             <div className="bg-white p-8 rounded-lg shadow-md text-center">
@@ -431,7 +433,7 @@ export function MathGame({
                 <p className="font-semibold font-gensen">{t("game.complete.statistics")}:</p>
                 <p className="font-gensen">{t("game.complete.totalCorrect")}: {userStats.correctAnswers}</p>
                 <p className="font-gensen">{t("game.complete.totalAttempts")}: {userStats.totalQuestions}</p>
-                <p className="font-gensen">{t("game.complete.accuracy")}: {Math.round(userStats.accuracy)}%</p>
+                <p className="font-gensen">{t("game.complete.accuracy", { accuracy: Math.round(userStats.accuracy) })}</p>
                 <p className="font-gensen">{t("game.complete.currentRank")}: #{getCurrentUserRank()}</p>
               </div>
               <button
