@@ -96,40 +96,69 @@ export function EnglishGame({
   // Mock questions database
   const questionsDatabase = {
     "Multiple Choice": [
-      {
-        question: "What is the past tense of 'go'?",
-        options: ["went", "gone", "goed", "going"],
-        correctAnswer: "went"
-      },
-      {
-        question: "Which word is a synonym for 'happy'?",
-        options: ["sad", "joyful", "angry", "tired"],
-        correctAnswer: "joyful"
-      },
-      {
-        question: "What is the opposite of 'begin'?",
-        options: ["start", "end", "continue", "proceed"],
-        correctAnswer: "end"
-      },
-      // Add more MC questions here
+      { question: "Which animal says 'moo'?", options: ["Cow", "Cat", "Dog", "Duck"], correctAnswer: "Cow"},
+      { question: "What color is a banana?", options: ["Red", "Blue", "Yellow", "Green"], correctAnswer: "Yellow"},
+      { question: "How many eyes do you have?", options: ["One", "Two", "Three", "Four"], correctAnswer: "Two"},
+      { question: "Which shape has three sides?", options: ["Circle", "Square", "Triangle", "Rectangle"], correctAnswer: "Triangle"},
+      { question: "What do you wear on your feet?", options: ["Hat", "Gloves", "Socks", "Shirt"], correctAnswer: "Socks"},
+      { question: "What is the opposite of 'big'?", options: ["small", "tall", "wide", "long"], correctAnswer: "small"},
+      { question: "Which fruit is red and round?", options: ["Banana", "Grape", "Apple", "Orange"], correctAnswer: "Apple"},
+      { question: "How many fingers are on one hand?", options: ["Two", "Three", "Four", "Five"], correctAnswer: "Five"},
+      { question: "What sound does a dog make?", options: ["Meow", "Quack", "Woof", "Oink"], correctAnswer: "Woof"},
+      { question: "Which vehicle has wings?", options: ["Car", "Train", "Airplane", "Boat"], correctAnswer: "Airplane"},
+      { question: "What color is the sky on a sunny day?", options: ["Green", "Blue", "Red", "Yellow"], correctAnswer: "Blue"},
+      { question: "Which meal do you eat in the morning?", options: ["Dinner", "Lunch", "Breakfast", "Snack"], correctAnswer: "Breakfast"},
+      { question: "What do bees make?", options: ["Milk", "Honey", "Bread", "Cheese"], correctAnswer: "Honey"},
+      { question: "Which of these is a vegetable?", options: ["Apple", "Carrot", "Banana", "Grape"], correctAnswer: "Carrot"},
+      { question: "What do you use to write on paper?", options: ["Spoon", "Pen", "Fork", "Cup"], correctAnswer: "Pen"},
+      { question: "Which animal lays eggs?", options: ["Cow", "Chicken", "Dog", "Cat"], correctAnswer: "Chicken"},
+      { question: "How many wheels does a bicycle have?", options: ["One", "Two", "Three", "Four"], correctAnswer: "Two"},
+      { question: "What is a baby cat called?", options: ["Puppy", "Kitten", "Cub", "Chick"], correctAnswer: "Kitten"},
+      { question: "Which season is hot?", options: ["Winter", "Spring", "Summer", "Autumn"], correctAnswer: "Summer"},
+      { question: "What do you wear when it rains?", options: ["Sunglasses", "Scarf", "Raincoat", "Gloves"], correctAnswer: "Raincoat"},
+      { question: "Which hand do you usually use for writing?", options: ["Left", "Right", "Both", "Neither"], correctAnswer: "Right"},
+      { question: "What is the name of our planet?", options: ["Mars", "Venus", "Earth", "Jupiter"], correctAnswer: "Earth"},
+      { question: "Which sense do you use to smell?", options: ["Taste", "Touch", "Sight", "Smell"], correctAnswer: "Smell"},
+      { question: "What is the sound a pig makes?", options: ["Moo", "Bark", "Oink", "Roar"], correctAnswer: "Oink"},
+      { question: "Which number comes after nine?", options: ["Seven", "Eight", "Ten", "Eleven"], correctAnswer: "Ten"},
+      { question: "What color is a stop sign?", options: ["Green", "Blue", "Red", "Yellow"], correctAnswer: "Red"},
+      { question: "What do you use to brush your teeth?", options: ["Comb", "Spoon", "Toothbrush", "Scissors"], correctAnswer: "Toothbrush"},
+      { question: "Which part of a tree is underground?", options: ["Leaves", "Trunk", "Branches", "Roots"], correctAnswer: "Roots"},
+      { question: "What do birds have to fly?", options: ["Legs", "Fins", "Wings", "Antennas"], correctAnswer: "Wings"},
+      { question: "Which is a pet: lion, tiger, cat, bear?", options: ["Lion", "Tiger", "Cat", "Bear"], correctAnswer: "Cat"},
     ],
+
     "True/False Question": [
-      {
-        question: "The word 'cat' has three letters.",
-        options: ["True", "False"],
-        correctAnswer: "True"
-      },
-      {
-        question: "English has more words than any other language.",
-        options: ["True", "False"],
-        correctAnswer: "True"
-      },
-      {
-        question: "The word 'quickly' is a noun.",
-        options: ["True", "False"],
-        correctAnswer: "False"
-      },
-      // Add more T/F questions here
+      { question: "A dog can fly.", options: ["True", "False"], correctAnswer: "False"},
+      { question: "The sun is cold.", options: ["True", "False"], correctAnswer: "False"},
+      { question: "You use your ears to see.", options: ["True", "False"], correctAnswer: "False"},
+      { question: "A cat is a bird.", options: ["True", "False"], correctAnswer: "False" },
+      { question: "Grass is green.", options: ["True", "False"], correctAnswer: "True"},
+      { question: "Birds live in the water.", options: ["True", "False"], correctAnswer: "False"},
+      { question: "A car has two wheels.", options: ["True", "False"], correctAnswer: "False"},
+      { question: "Ice cream is hot.", options: ["True", "False"], correctAnswer: "False"},
+      { question: "You wear a hat on your feet.", options: ["True", "False"], correctAnswer: "False"},
+      { question: "Fish can walk on land.", options: ["True", "False"], correctAnswer: "False"},
+      { question: "The sky is purple.", options: ["True", "False"], correctAnswer: "False"},
+      { question: "Trees have leaves.", options: ["True", "False"], correctAnswer: "True"},
+      { question: "A square has four equal sides.", options: ["True", "False"], correctAnswer: "True"},
+      { question: "Milk comes from chickens.", options: ["True", "False"], correctAnswer: "False"},
+      { question: "You can eat a chair.", options: ["True", "False"], correctAnswer: "False"},
+      { question: "A lion is a small animal.", options: ["True", "False"], correctAnswer: "False"},
+      { question: "Butterflies can fly.", options: ["True", "False"], correctAnswer: "True"},
+      { question: "The moon is a star.", options: ["True", "False"], correctAnswer: "False"},
+      { question: "You use your nose to smell.", options: ["True", "False"], correctAnswer: "True"},
+      { question: "Elephants are very small.", options: ["True", "False"], correctAnswer: "False"},
+      { question: "Water is wet.", options: ["True", "False"], correctAnswer: "True"},
+      { question: "Spiders have eight legs.", options: ["True", "False"], correctAnswer: "True"},
+      { question: "Pigs can fly.", options: ["True", "False"], correctAnswer: "False"},
+      { question: "A circle has no corners.", options: ["True", "False"], correctAnswer: "True" },
+      { question: "A book is for reading.", options: ["True", "False"], correctAnswer: "True"},
+      { question: "Rain falls from the sky.", options: ["True", "False"], correctAnswer: "True"},
+      { question: "A mouse is bigger than an elephant.", options: ["True", "False"], correctAnswer: "False"},
+      { question: "You sleep at night.", options: ["True", "False"], correctAnswer: "True" },
+      { question: "Birds have teeth.", options: ["True", "False"], correctAnswer: "False"},
+      { question: "Chocolate is healthy food.", options: ["True", "False"], correctAnswer: "False"},
     ]
   };
 
