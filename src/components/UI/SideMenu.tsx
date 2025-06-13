@@ -1,7 +1,7 @@
 'use client';
 
-import { Menu, X, User, Trophy, Target, Percent, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState, useRef, useEffect, TouchEvent } from 'react';
+import { Menu, X, User, Trophy, Target} from 'lucide-react';
+import { useState, useRef,TouchEvent } from 'react';
 import { VisualAid } from './VisualAid';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
@@ -215,21 +215,27 @@ export function SideMenu({
         </div>
       </div>
 
-
       <div>
-        <h2 className="text-lg font-bold text-purple-700 mb-4">{t('gameSettings.difficultyMode')}</h2>
+        <h2 className="text-lg font-bold text-purple-700 mb-4">{t('gameSettings.questionsPerSession')}</h2>
         <div className="flex flex-col gap-2">
-          <button
-            onClick={enableAdaptiveMode}
-            disabled={isSessionActive}
-            className={`px-3 py-2 rounded-lg text-sm font-medium ${
-              isAdaptiveMode
-                ? 'bg-purple-500 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            } ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            {t('gameSettings.adaptiveMode')}
-          </button>
+          {[
+            { count: 10, text: t('gameSettings.questionCounts.ten') },
+            { count: 20, text: t('gameSettings.questionCounts.twenty') },
+            { count: 30, text: t('gameSettings.questionCounts.thirty') }
+          ].map(({ count, text }) => (
+            <button
+              key={count}
+              onClick={() => setQuestionsPerSession(count)}
+              disabled={isSessionActive}
+              className={`px-3 py-2 rounded-lg text-sm font-medium ${
+                questionsPerSession === count
+                  ? 'bg-purple-500 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              } ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              {text}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -257,29 +263,25 @@ export function SideMenu({
         </div>
       </div>
 
+
+// These part not visiable in EnglishGame
       <div>
-        <h2 className="text-lg font-bold text-purple-700 mb-4">{t('gameSettings.questionsPerSession')}</h2>
+        <h2 className="text-lg font-bold text-purple-700 mb-4">{t('gameSettings.difficultyMode')}</h2>
         <div className="flex flex-col gap-2">
-          {[
-            { count: 10, text: t('gameSettings.questionCounts.ten') },
-            { count: 20, text: t('gameSettings.questionCounts.twenty') },
-            { count: 30, text: t('gameSettings.questionCounts.thirty') }
-          ].map(({ count, text }) => (
-            <button
-              key={count}
-              onClick={() => setQuestionsPerSession(count)}
-              disabled={isSessionActive}
-              className={`px-3 py-2 rounded-lg text-sm font-medium ${
-                questionsPerSession === count
-                  ? 'bg-purple-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              } ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
-            >
-              {text}
-            </button>
-          ))}
+          <button
+            onClick={enableAdaptiveMode}
+            disabled={isSessionActive}
+            className={`px-3 py-2 rounded-lg text-sm font-medium ${
+              isAdaptiveMode
+                ? 'bg-purple-500 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            } ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
+            {t('gameSettings.adaptiveMode')}
+          </button>
         </div>
       </div>
+
 
       <div>
         <h2 className="text-lg font-bold text-purple-700 mb-4">{t('gameSettings.gameMode')}</h2>
@@ -303,6 +305,36 @@ export function SideMenu({
           ))}
         </div>
       </div>
+
+// These part not visiable in EnglishGame
+
+// visibale in EnglishGame
+
+      <div>
+        <h2 className="text-lg font-bold text-purple-700 mb-4">{t('gameSettings.gameMode')}</h2>
+        <div className="flex flex-col gap-2">
+          {[
+            { mode: 'Multiple Choice' as const, text: t('gameSettings.operations.mcQuestion') },
+            { mode: 'True/False Question' as const, text: t('gameSettings.operations.tfQuestion') }
+          ].map(({ mode, text }) => (
+            <button
+              key={mode}
+              onClick={() => switchGameMode(mode)}
+              disabled={isSessionActive}
+              className={`px-3 py-2 rounded-lg text-sm font-medium ${
+                gameMode === mode
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              } ${isSessionActive ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              {text}
+            </button>
+          ))}
+        </div>
+      </div>
+
+// visibale in EnglishGame
+
 
       {/* Visual Aid section */}
       <div className="mb-16">

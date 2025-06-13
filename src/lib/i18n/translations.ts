@@ -43,7 +43,9 @@ export const translations = {
       operations: {
         addition: "Addition",
         subtraction: "Subtraction",
-        division: "Division"
+        division: "Division",
+        mcQuestion: "Multiple Choice",
+        tfQuestion: "Ture/False Question"
       },
       visualAid: "Visual Aid",
       visualTypes: {
@@ -176,7 +178,9 @@ export const translations = {
       operations: {
         addition: "加法",
         subtraction: "減法",
-        division: "除法"
+        division: "除法",
+        mcQuestion: "複選題",
+        tfQuestion: "判斷題"
       },
       visualAid: "視覺輔助",
       visualTypes: {
@@ -309,7 +313,9 @@ export const translations = {
       operations: {
         addition: "加法",
         subtraction: "减法",
-        division: "除法"
+        division: "除法",
+        mcQuestion: "复选题",
+        tfQuestion: "判断题"
       },
       visualAid: "视觉辅助",
       visualTypes: {
